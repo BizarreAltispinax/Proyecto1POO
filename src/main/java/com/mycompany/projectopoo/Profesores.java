@@ -10,34 +10,30 @@ import java.util.ArrayList;
  *
  * @author Usuario
  */
-public class Profesores extends Usuarios{
-    private String titulosObtenidos;             // hasta 40 caracteres
-    private ArrayList<String> certificacionesEstudios;       // lista de strings (5 a 30 caracteres cada uno)
-
+public class Profesores extends Usuarios {
+    private ArrayList<String> titulosObt;   
+    private ArrayList<String> Certificaciones;   
+    
     public Profesores(String nombre, String apellido1, String apellido2, String identificacion,
-                       String telefono, String correoElectronico, String direccion,String titulosObtenidos, ArrayList<String> certificacionesEstudios,String contrasena){
+                   String telefono, String correoElectronico, String direccion,String contrasena){
         super(nombre,apellido1,apellido2,identificacion,telefono,correoElectronico,direccion,contrasena);
-        this.titulosObtenidos=titulosObtenidos;
-        this.certificacionesEstudios = certificacionesEstudios;
+        this.titulosObt=titulosObt;
+        this.Certificaciones = Certificaciones;
     }
-
-    public String gettitulosObtenidos() {
-        return titulosObtenidos;
-    }
-
-    public String getcertificacionesEstudios() {
-        String temas = "";
-        for (String tema: certificacionesEstudios){
-            temas += tema + " ";
+    public String getTitulos() {
+        String titulos="";
+        for (String titulo: titulosObt){
+            titulos+=titulo+" ";
         }
-        return temas;
+        return titulos;
     }
-
-    public void settitulosObtenidos(String titulosObtenidos) {
-        this.titulosObtenidos = titulosObtenidos;
+    public String getCertificaciones() {
+        String certificaciones="";
+        for (String certificacion: Certificaciones){
+            certificaciones+=certificacion+" ";
+        }
+        return certificaciones;
     }
-
-    public void setcertificacionesEstudios(ArrayList<String> certificacionesEstudios) {
-        this.certificacionesEstudios = certificacionesEstudios;
-    }
+    public void setTitulos(ArrayList<String> titulosObt) { this.titulosObt = titulosObt; }
+    public void setCertificaciones(ArrayList<String> Certificaciones) { this.Certificaciones = Certificaciones; }
 }

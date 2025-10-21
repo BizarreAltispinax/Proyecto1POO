@@ -19,21 +19,15 @@ public class Estudiantes extends Usuarios{
         this.organizacion=organizacion;
         this.temasInteres = temasInteres;
     }
-    public String getOrganizacion() {
-        return organizacion;
-    }
+    public String getOrganizacion() { return organizacion; }
     public String getTemasInteres() {
-        String temas = "";
+        String temas="";
         for (String tema: temasInteres){
-            temas += tema+" ";
+            temas+=tema+" ";
         }
         return temas;
     }
     
-    public void setOrganizacion(String organizacion) {
-        this.organizacion = organizacion;
-    }
-    public void setTemasInteres(ArrayList<String> temasInteres) {
-        this.temasInteres = temasInteres;
-    }
+    public void setOrganizacion(String organizacion) { this.organizacion = organizacion; }
+    public void setTemasInteres(ArrayList<String> temasInteres) { this.temasInteres = temasInteres; }
 }
