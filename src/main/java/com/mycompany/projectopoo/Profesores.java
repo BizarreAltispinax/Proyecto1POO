@@ -11,19 +11,19 @@ import java.util.ArrayList;
  * @author Usuario
  */
 public class Profesores extends Usuarios {
-    private ArrayList<String> titulosObt;   
-    private ArrayList<String> Certificaciones;   
-    
+    private ArrayList<String> titulosObt;
+    private ArrayList<String> Certificaciones;
+
     public Profesores(String nombre, String apellido1, String apellido2, String identificacion,
                    String telefono, String correoElectronico, String direccion,String contrasena){
         super(nombre,apellido1,apellido2,identificacion,telefono,correoElectronico,direccion,contrasena);
-        this.titulosObt=titulosObt;
+        this.titulosObt = titulosObt;
         this.Certificaciones = Certificaciones;
     }
     public String getTitulos() {
         String titulos="";
         for (String titulo: titulosObt){
-            titulos+=titulo+" ";
+            titulos +=titulo+" ";
         }
         return titulos;
     }
