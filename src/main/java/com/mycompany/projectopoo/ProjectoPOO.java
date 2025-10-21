@@ -16,8 +16,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 import jakarta.mail.MessagingException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Ventana de inicio de sesión con opción de restablecer contraseña.
@@ -212,7 +214,7 @@ public class ProjectoPOO extends JFrame {
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setSize(350, 200);
+            setSize(400, 250);
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
             
@@ -222,16 +224,18 @@ public class ProjectoPOO extends JFrame {
             
             add(lblHora);
             
-            JPanel panelBotones = new JPanel(new GridLayout(4, 1, 10, 10));
+            JPanel panelBotones = new JPanel(new GridLayout(5, 1, 10, 10));
             JButton btnEstudiante = new JButton("Estudiante");
             JButton btnProfesor = new JButton("Profesor");
             JButton btnCurso = new JButton("Curso");
+            JButton btnGrupo = new JButton("Grupo");
             JButton btnSalir = new JButton("Salir");
             
             
             panelBotones.add(btnEstudiante);
             panelBotones.add(btnProfesor);
             panelBotones.add(btnCurso);
+            panelBotones.add(btnGrupo);
             panelBotones.add(btnSalir);
 
             add(panelBotones, BorderLayout.CENTER);
@@ -248,11 +252,13 @@ public class ProjectoPOO extends JFrame {
             abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
                 });
         
-        
+        btnGrupo.addActionListener(e -> {
+            this.dispose();
+            abrirAsociarCursoGrupo(ventanaPrincipal,tipoUsuario);
+                });
         
         
           
-
         //btnProfesor.addActionListener(e ->);    
         btnSalir.addActionListener(e -> {
             this.dispose();
@@ -1022,7 +1028,7 @@ public class ProjectoPOO extends JFrame {
             
             
             JLabel lblTipoCurso = new JLabel("Tipo de curso: ");
-            JTextField txtTipoCurso = new JPasswordField();
+            JTextField txtTipoCurso = new JTextField();
             
             
             
@@ -1254,7 +1260,7 @@ public class ProjectoPOO extends JFrame {
             });
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -1487,7 +1493,7 @@ public class ProjectoPOO extends JFrame {
             
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -1550,12 +1556,77 @@ public class ProjectoPOO extends JFrame {
             
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
             });
             
         }
     }
     
+    private void abrirAsociarCursoGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaAsociarCursoGrupo(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaAsociarCursoGrupo extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaAsociarCursoGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            
+            setLayout(new GridLayout(6, 1, 5, 5));
+
+            JLabel lblIdentificacionCurso = new JLabel("Identificacion de curso:");
+            JTextField txtIdentificacionCurso = new JTextField();
+            JLabel lblFechaInicio = new JLabel("Fecha de inicio (dd/MM/yyyy):");
+            JTextField txtFechaInicio = new JTextField();
+            JLabel lblFechaFinal = new JLabel("Fecha de finalizacion (dd/MM/yyyy):");
+            JTextField txtFechaFinal = new JTextField();
+            JButton btnAsociar = new JButton("Asociar");
+            
+
+            add(lblIdentificacionCurso);
+            add(txtIdentificacionCurso);
+            add(lblFechaInicio);
+            add(txtFechaInicio);
+            add(lblFechaFinal);
+            add(txtFechaFinal);
+            add(btnAsociar);
+            
+
+                        
+            
+            btnAsociar.addActionListener(e ->{
+                String identificacionCurso=lblIdentificacionCurso.getText();
+                String fechaInicio = lblFechaInicio.getText();
+                String fechaFinal = lblFechaFinal.getText();
+                try {
+                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate fechaIni = LocalDate.parse(fechaInicio, formato);
+                    LocalDate fechaFin = LocalDate.parse(fechaFinal, formato);
+                    if (sistema.devCursos(identificacionCurso)!=null && fechaIni.isBefore(fechaFin)){
+                        sistema.devCursos(identificacionCurso).crearGrupo(fechaIni, fechaFin);
+                        JOptionPane.showMessageDialog(this, "Asociacion exitosa");
+                        abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Revisar identificacion del curso o fechas");
+                    }
+                    JOptionPane.showMessageDialog(this, "Asociacion exitosa");
+                } catch (DateTimeParseException w) {
+                    JOptionPane.showMessageDialog(this, "Formato inválido. Debe ser dd/MM/yyyy");
+                }
+                
+                
+                
+            });
+            
+
+            
+            
+            
+        }
+    }
     
     
     
