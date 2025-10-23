@@ -13,11 +13,37 @@ import java.util.List;
 import java.time.LocalDate;
 
 public class Cursos {
+    public enum Modalidad {
+        PRESENCIAL("Presencial"),
+        VIRTUAL_SINCRONICO("Virtual sincrónico"),
+        VIRTUAL_ASINCRONICO("Virtual asincrónico"),
+        VIRTUAL_HIBRIDO("Virtual híbrido"),
+        SEMIPRESENCIAL("Semipresencial");
+
+        private final String texto;
+
+        Modalidad(String texto) {
+            this.texto = texto;
+        }
+
+        public String getTexto() {
+            return texto;
+        }
+
+        public static Modalidad desdeTexto(String texto) {
+            for (Modalidad m : Modalidad.values()) {
+                if (m.texto.equalsIgnoreCase(texto)) {
+                    return m;
+                }
+            }
+            return null;
+        }
+    }
     private String identificacion;
     private String nombre;
     private String descripcion;
     private int horasPorDia;
-    private String modalidad;
+    private Modalidad modalidad;
     private int minEstudiantes;
     private int maxEstudiantes;
     private String tipoCurso;
@@ -30,7 +56,11 @@ public class Cursos {
     public Cursos(String identificacion, String nombre, String descripcion, int horasPorDia,
                  String modalidad, int minEstudiantes, int maxEstudiantes,
                  String tipoCurso, int calificacionMinima) {
-
+        this.modalidad = Modalidad.desdeTexto(modalidad);
+        if (this.modalidad == null) {
+            throw new IllegalArgumentException("Modalidad no válida: " + modalidad);
+        }
+        
         if (identificacion == null || identificacion.length() != 6)
             throw new IllegalArgumentException("La identificación debe tener exactamente 6 caracteres.");
         if (nombre == null || nombre.length() < 5 || nombre.length() > 40)
@@ -50,7 +80,7 @@ public class Cursos {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.horasPorDia = horasPorDia;
-        this.modalidad = modalidad;
+        
         this.minEstudiantes = minEstudiantes;
         this.maxEstudiantes = maxEstudiantes;
         this.tipoCurso = tipoCurso;
@@ -74,7 +104,7 @@ public class Cursos {
         return horasPorDia;
     }
 
-    public String getModalidad() {
+    public Modalidad getModalidad() {
         return modalidad;
     }
 
@@ -117,9 +147,12 @@ public class Cursos {
         this.horasPorDia = horasPorDia;
     }
 
-    public void setModalidad(String modalidad) {
-        // Aquí no había restricción en tu ejemplo, pero puedes añadir una si es necesario.
-        this.modalidad = modalidad;
+    public void setModalidad(String modalidadTexto) {
+        Modalidad nueva = Modalidad.desdeTexto(modalidadTexto);
+        if (nueva == null) {
+            throw new IllegalArgumentException("Modalidad no válida: " + modalidadTexto);
+        }
+        this.modalidad = nueva;
     }
 
     public void setMinEstudiantes(int minEstudiantes) {

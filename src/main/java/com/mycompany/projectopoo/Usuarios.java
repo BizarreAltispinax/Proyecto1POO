@@ -152,5 +152,7 @@ public abstract class Usuarios {
     public String getSalt() {
         return salt;
     }
-    
+    public String toString(){
+        return "Nombre: "+nombre+" "+apellido1+" "+apellido2+" "+"Identificaion: "+identificacion+"/n";
+    }
 }

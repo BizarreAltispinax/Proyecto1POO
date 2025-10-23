@@ -3,8 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.projectopoo;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.util.Comparator;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 /**
  *
  * @author Usuario
@@ -253,5 +261,104 @@ public class Sistema {
         }
         return null;
     }
-    
+    public void ReporteEstudiantesCurso(){
+        
+        Document documento = new Document();
+
+        try {
+            PdfWriter.getInstance(documento, new FileOutputStream("ListaEstudiantes.pdf"));
+            documento.open();
+            documento.add(new Paragraph("Lista de estudiantes:"));
+            for (Cursos c : cursos){
+                documento.add(new Paragraph("Lista de estudiantes del curso "+c.getIdentificacion()));
+                for (Grupos g : c.getGrupos()) {
+                    if (g.getFechaFin().isAfter(LocalDate.now()) && g.getFechaInicio().isBefore(LocalDate.now())){
+                        documento.add(new Paragraph("Lista de estudiantes del grupo "+g.getIdGrupo()));
+                        ArrayList<Estudiantes> copia = new ArrayList<>(g.getEstudiantes());
+                        copia.sort(Comparator
+                            .comparing(Estudiantes::getApellido1, String.CASE_INSENSITIVE_ORDER)
+                            .thenComparing(Estudiantes::getApellido2, String.CASE_INSENSITIVE_ORDER)
+                            .thenComparing(Estudiantes::getNombre, String.CASE_INSENSITIVE_ORDER)
+                        );
+                        for (Estudiantes est : copia){
+                            documento.add(new Paragraph(est.toString()));
+                        }
+                    }
+
+                }
+            }
+            documento.close();
+            
+        } catch (FileNotFoundException | DocumentException e) {
+            e.printStackTrace();
+        }
+        
+
+    }
+    public void ReporteEstadistica(int opcion, String idCurso, String idGrupo,LocalDate fechavigencia){
+        Document documento = new Document();
+        int contador=0;
+        switch (opcion) {
+            case 1:
+                try{
+                    PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
+                    documento.open();   
+                    for (Cursos c:cursos){
+                        for (Grupos g:grupos){
+                            if (fechavigencia.isAfter(g.getFechaInicio()) && fechavigencia.isBefore(g.getFechaFin())){
+                                contador=contador+g.getCantidadEstudiantes();
+                            }
+                            
+                        }
+                    }
+                    documento.add(new Paragraph("El total de estudiantes por todos los cursos y grupos es de: "+contador));
+                    documento.close();
+                }catch(FileNotFoundException | DocumentException e) {
+                    e.printStackTrace();
+                }
+                return;     
+            case 2:
+                try{
+                    PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
+                    documento.open();
+                    for (Cursos c:cursos){
+                        if (c.getIdentificacion().equals(idCurso)){
+                            for (Grupos g:grupos){
+                                contador=contador+g.getCantidadEstudiantes();
+                            }
+                        }
+
+                    }
+                    documento.add(new Paragraph("El total de estudiantes en el curso "+idCurso+" es: "+contador));
+                    documento.close();
+                }catch(FileNotFoundException | DocumentException e) {
+                    e.printStackTrace();
+                }
+                return;
+                        
+            case 3:
+                int idG=Integer.parseInt(idGrupo);
+                try{
+                    PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
+                    documento.open();
+                    for (Cursos c:cursos){
+                        if (c.getIdentificacion().equals(idCurso)){
+                            for (Grupos g:grupos){
+                                if (g.getIdGrupo()==idG){
+                                    contador=contador+g.getCantidadEstudiantes();
+                                }
+
+                            }
+                        }
+
+                    }
+                    documento.add(new Paragraph("El total de estudiantes para el grupo "+idCurso+" y para el grupo "+idG+" es: "+contador));
+                    documento.close();
+                }catch(FileNotFoundException | DocumentException e) {
+                    e.printStackTrace();
+                }
+                return;
+                
+        }
+    } 
 }

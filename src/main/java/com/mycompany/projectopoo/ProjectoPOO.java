@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Ventana de inicio de sesión con opción de restablecer contraseña.
@@ -224,10 +226,11 @@ public class ProjectoPOO extends JFrame {
             
             add(lblHora);
             
-            JPanel panelBotones = new JPanel(new GridLayout(5, 1, 10, 10));
+            JPanel panelBotones = new JPanel(new GridLayout(6, 1, 10, 10));
             JButton btnEstudiante = new JButton("Estudiante");
             JButton btnProfesor = new JButton("Profesor");
             JButton btnCurso = new JButton("Curso");
+            JButton btnReporte = new JButton("Reportes");
             JButton btnGrupo = new JButton("Grupo");
             JButton btnSalir = new JButton("Salir");
             
@@ -236,6 +239,7 @@ public class ProjectoPOO extends JFrame {
             panelBotones.add(btnProfesor);
             panelBotones.add(btnCurso);
             panelBotones.add(btnGrupo);
+            panelBotones.add(btnReporte);
             panelBotones.add(btnSalir);
 
             add(panelBotones, BorderLayout.CENTER);
@@ -256,7 +260,10 @@ public class ProjectoPOO extends JFrame {
             this.dispose();
             abrirAsociarCursoGrupo(ventanaPrincipal,tipoUsuario);
                 });
-        
+        btnReporte.addActionListener(e -> {
+            this.dispose();
+            abrirReportes(ventanaPrincipal,tipoUsuario);
+                });
         
           
         //btnProfesor.addActionListener(e ->);    
@@ -395,45 +402,45 @@ public class ProjectoPOO extends JFrame {
                 String nombre=txtNombre.getText();
                 if (nombre.length() < 2 || nombre.length() > 20) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres1");
+                    JOptionPane.showMessageDialog(this, "Error, el nombre debe de tener entre 2 y 20 caracteres");
                 }
                 
                 String apellido1=txtPrimerapellido.getText();
                 if (apellido1.length() < 2 || apellido1.length() > 20) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres2");
+                    JOptionPane.showMessageDialog(this, "Error, el primer apellido debe de tener entre 2 y 20 caracteres");
                 }
                 
                 String apellido2=txtSegundoapellido.getText();
                 if (apellido2.length() < 2 || apellido2.length() > 20) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres3");
+                    JOptionPane.showMessageDialog(this, "Error, el segundo apellido debe de tener entre 2 y 20 caracteres");
                 }
                 
                 String identificacion=txtIdentificacion.getText();
                 
                 if (identificacion.length() < 9 || sistema.todasIdentificaciones(identificacion)) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres4");
+                    JOptionPane.showMessageDialog(this, "Error, la identificacion debe de tener 9 o mas caracteres");
                 }
                 
                 String telefono=txtTelefono.getText();
                 if (telefono.length() <8) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres5");
+                    JOptionPane.showMessageDialog(this, "Error, el numero de telefono debe de tener 9 o mas caracteres");
                 }
                 
                 String correo=txtCorreoElectronico.getText();
                 String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
                 if (!correo.matches(regex) || sistema.todosCorreos(correo)==false) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres6");
+                    JOptionPane.showMessageDialog(this, "No cumple con la estructura de un correo");
                 }
                 
                 String direccion=txtDireccion.getText();
                 if (direccion.length() < 5 || direccion.length() > 60) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres7");
+                    JOptionPane.showMessageDialog(this, "Error, la direccion debe de tener entre 5 y 60 caracteres");
                 }
                 
                 String contraseña=txtContraseña.getText();
@@ -442,13 +449,13 @@ public class ProjectoPOO extends JFrame {
                 boolean tieneEspecial  = contraseña.matches(".*[^a-zA-Z0-9].*");
                 if (contraseña.length() < 8 && !tieneMayuscula && !tieneNumero && !tieneEspecial) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres8");
+                    JOptionPane.showMessageDialog(this, "Error, la contraseña debe de tener 8 o mas caracteres y tener mayuscula, numero y caracter especial");
                 }
                 
                 String organizacion=txtOrganizacion.getText();
-                if (organizacion.length() >= 40) {
+                if (organizacion.length() > 40) {
                     verificador=false;
-                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres9");
+                    JOptionPane.showMessageDialog(this, "Error, la organizacion debe de tener hasta 40 caracteres");
                 }
                 
                 
@@ -467,7 +474,7 @@ public class ProjectoPOO extends JFrame {
                     for (String interes : listaIntereses) {
                         if (interes.length() < 5 || interes.length() > 30 ) {
                             verificador=false;
-                            JOptionPane.showMessageDialog(this, "Debe ingresar al menos 3 caracteres");
+                            JOptionPane.showMessageDialog(this, "Error, cada interes debe de tener entre 5 y 30 caracteres");
                         }
                     }
                 }
@@ -633,7 +640,7 @@ public class ProjectoPOO extends JFrame {
             });
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -846,7 +853,7 @@ public class ProjectoPOO extends JFrame {
             
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -910,7 +917,7 @@ public class ProjectoPOO extends JFrame {
             
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -1074,37 +1081,39 @@ public class ProjectoPOO extends JFrame {
             
             
             btnCrear.addActionListener(e -> {
-                int horas=Integer.parseInt(txtHorasporDia.getText());
-                int min=Integer.parseInt(txtminEstudiantes.getText());
-                int max=Integer.parseInt(txtmaxEstudiantes.getText());
-                int cal=Integer.parseInt(txtcalMinima.getText());
-                String nombre = txtNombre.getText();
-                String identificacion = txtIdentificacion.getText();
-                String descripcion = txtDescripcion.getText();
-                String modalidad = txtModalidad.getText();
-                String tipoCurso = txtTipoCurso.getText();
                 
-                try{
-                    Cursos cur = new Cursos(identificacion,nombre,descripcion,horas,modalidad,min,max,tipoCurso,cal);
-                    sistema.agregarCursos(cur);
-                    this.dispose();
-                    abrirAdministrador(ventanaPrincipal,tipoUsuario);
-                } catch(IllegalArgumentException ex){
-                    JOptionPane.showMessageDialog(this,
-                                "Error:\n" + ex.getMessage(),
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                }
-                
-                
-                
-                
-                
-                
-                    
-                    
-                    
-                
-                
+                String nombre = txtNombre.getText().trim();
+                String identificacion = txtIdentificacion.getText().trim();
+                String descripcion = txtDescripcion.getText().trim();
+                String modalidad = txtModalidad.getText().trim();
+                String tipoCurso = txtTipoCurso.getText().trim();
+                String horasTxt = txtHorasporDia.getText().trim();
+                String minTxt = txtminEstudiantes.getText().trim();
+                String maxTxt = txtmaxEstudiantes.getText().trim();
+                String calTxt = txtcalMinima.getText().trim();
+
+                if (nombre.isEmpty() || identificacion.isEmpty() || descripcion.isEmpty() ||
+                    modalidad.isEmpty() || tipoCurso.isEmpty() || horasTxt.isEmpty() ||
+                    minTxt.isEmpty() || maxTxt.isEmpty() || calTxt.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(this, "Debe completar todos los campos antes de continuar.");
+                    return; // salir del método para evitar errores
+                }else{
+                    int horas = Integer.parseInt(horasTxt);
+                    int min = Integer.parseInt(minTxt);
+                    int max = Integer.parseInt(maxTxt);
+                    int cal = Integer.parseInt(calTxt);
+                    try{
+                        Cursos cur = new Cursos(identificacion,nombre,descripcion,horas,modalidad,min,max,tipoCurso,cal);
+                        sistema.agregarCursos(cur);
+                        this.dispose();
+                        abrirAdministrador(ventanaPrincipal,tipoUsuario);
+                    } catch(IllegalArgumentException ex){
+                        JOptionPane.showMessageDialog(this,
+                                    "Error:\n" + ex.getMessage(),
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } 
             });
         }
     }
@@ -1260,7 +1269,7 @@ public class ProjectoPOO extends JFrame {
             });
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -1493,7 +1502,7 @@ public class ProjectoPOO extends JFrame {
             
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -1556,7 +1565,7 @@ public class ProjectoPOO extends JFrame {
             
             btnSalir.addActionListener(e ->{
                 this.dispose();
-                abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
             });
             
         }
@@ -1598,17 +1607,17 @@ public class ProjectoPOO extends JFrame {
                         
             
             btnAsociar.addActionListener(e ->{
-                String identificacionCurso=lblIdentificacionCurso.getText();
-                String fechaInicio = lblFechaInicio.getText();
-                String fechaFinal = lblFechaFinal.getText();
+                String identificacionCurso=txtIdentificacionCurso.getText();
+                String fechaInicio = txtFechaInicio.getText();
+                String fechaFinal = txtFechaFinal.getText();
                 try {
                     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate fechaIni = LocalDate.parse(fechaInicio, formato);
                     LocalDate fechaFin = LocalDate.parse(fechaFinal, formato);
                     if (sistema.devCursos(identificacionCurso)!=null && fechaIni.isBefore(fechaFin)){
                         sistema.devCursos(identificacionCurso).crearGrupo(fechaIni, fechaFin);
-                        JOptionPane.showMessageDialog(this, "Asociacion exitosa");
-                        abrirAdministradorCurso(ventanaPrincipal,tipoUsuario);
+                        this.dispose();
+                        abrirAdministrador(ventanaPrincipal,tipoUsuario);
                     }else{
                         JOptionPane.showMessageDialog(this, "Revisar identificacion del curso o fechas");
                     }
@@ -1629,6 +1638,173 @@ public class ProjectoPOO extends JFrame {
     }
     
     
+    private void abrirReportes(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaReportes(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaReportes extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaReportes(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            
+            setLayout(new GridLayout(3, 1, 5, 5));
+
+            JButton btnLista = new JButton("Lista de estudiantes");
+            JButton btnEsta = new JButton("Estadistica de matricula");
+            JButton btnSalir = new JButton("Salir");
+            
+
+            
+            add(btnLista);
+            add(btnEsta);
+            add(btnSalir);
+            
+
+                        
+            
+            btnLista.addActionListener(e ->{
+                try{
+                    sistema.ReporteEstudiantesCurso();
+                    JOptionPane.showMessageDialog(this, "Reporte realizado correctamente");
+                }catch (Exception r){
+                    JOptionPane.showMessageDialog(this, "Error");
+                }
+                
+            });
+            
+            btnEsta.addActionListener(e ->{
+                
+                JFrame ventana = new JFrame("Seleccionar Fecha y Opciones");
+                ventana.setSize(400, 300);
+                ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                ventana.setLayout(null);
+
+                // Campo de fecha
+                JLabel lblFecha = new JLabel("Fecha (dd/MM/yyyy):");
+                lblFecha.setBounds(20, 20, 150, 25);
+                ventana.add(lblFecha);
+
+                JTextField txtFecha = new JTextField();
+                txtFecha.setBounds(180, 20, 150, 25);
+                ventana.add(txtFecha);
+
+                // Radio buttons
+                JRadioButton rbTodos = new JRadioButton("Todos");
+                rbTodos.setBounds(20, 60, 150, 25);
+                ventana.add(rbTodos);
+
+                JRadioButton rbCurso = new JRadioButton("Curso específico");
+                rbCurso.setBounds(20, 90, 150, 25);
+                ventana.add(rbCurso);
+
+                JRadioButton rbGrupo = new JRadioButton("Grupo específico");
+                rbGrupo.setBounds(20, 120, 150, 25);
+                ventana.add(rbGrupo);
+
+                // Agrupar para que solo se pueda seleccionar uno
+                ButtonGroup grupoOpciones = new ButtonGroup();
+                grupoOpciones.add(rbTodos);
+                grupoOpciones.add(rbCurso);
+                grupoOpciones.add(rbGrupo);
+
+                // Campos para identificaciones
+                JLabel lblCurso = new JLabel("ID Curso:");
+                lblCurso.setBounds(200, 90, 100, 25);
+                ventana.add(lblCurso);
+                JTextField txtCurso = new JTextField();
+                txtCurso.setBounds(260, 90, 100, 25);
+                ventana.add(txtCurso);
+
+                JLabel lblGrupo = new JLabel("ID Grupo:");
+                lblGrupo.setBounds(200, 120, 100, 25);
+                ventana.add(lblGrupo);
+                JTextField txtGrupo = new JTextField();
+                txtGrupo.setBounds(260, 120, 100, 25);
+                ventana.add(txtGrupo);
+
+                // Inicialmente deshabilitados
+                txtCurso.setEnabled(false);
+                txtGrupo.setEnabled(false);
+                lblCurso.setEnabled(false);
+                lblGrupo.setEnabled(false);
+
+                // Listeners para habilitar campos según radio button
+                rbTodos.addActionListener(w -> {
+                    txtCurso.setEnabled(false);
+                    txtGrupo.setEnabled(false);
+                    lblCurso.setEnabled(false);
+                    lblGrupo.setEnabled(false);
+                });
+
+                rbCurso.addActionListener(w -> {
+                    txtCurso.setEnabled(true);
+                    lblCurso.setEnabled(true);
+                    txtGrupo.setEnabled(false);
+                    lblGrupo.setEnabled(false);
+                });
+
+                rbGrupo.addActionListener(w -> {
+                    txtCurso.setEnabled(true);
+                    lblCurso.setEnabled(true);
+                    txtGrupo.setEnabled(true);
+                    lblGrupo.setEnabled(true);
+                });
+
+                // Botón de acción
+                JButton btnAceptar = new JButton("Aceptar");
+                btnAceptar.setBounds(150, 200, 100, 30);
+                ventana.add(btnAceptar);
+                
+                
+                ventana.setVisible(true);
+                btnAceptar.addActionListener(w -> {
+                    String fechaStr = txtFecha.getText();
+                    
+                    
+                    try {
+                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate fechaIni = LocalDate.parse(fechaStr, formato);
+                        if (rbTodos.isSelected()) {
+                            sistema.ReporteEstadistica(1,null,null,fechaIni);
+                            JOptionPane.showMessageDialog(ventana, "Reporte realizado correctamente");
+                        } else if (rbCurso.isSelected()) {
+                            String idCurso = txtCurso.getText();
+                            sistema.ReporteEstadistica(2,idCurso,null,fechaIni);
+                            JOptionPane.showMessageDialog(ventana, "Reporte realizado correctamente");
+                        } else if (rbGrupo.isSelected()) {
+                            String idCurso = txtCurso.getText();
+                            String idGrupo = txtGrupo.getText();
+                            sistema.ReporteEstadistica(3,idCurso,idGrupo,fechaIni);
+                            JOptionPane.showMessageDialog(ventana, "Reporte realizado correctamente");
+                        } else {
+                            JOptionPane.showMessageDialog(ventana, "Seleccione una opción");
+                        }
+                        ventana.dispose();
+                    } catch (DateTimeParseException ex) {
+                        
+                        JOptionPane.showMessageDialog(ventana, "Fecha inválida");
+                        
+                    }
+
+                    
+                });
+
+                ventana.setVisible(true);
+            });
+            
+
+            
+            
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
+            });
+        }
+    }
     
     
     
