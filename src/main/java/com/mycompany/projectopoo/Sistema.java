@@ -104,6 +104,16 @@ public class Sistema {
         }
         return false;
     }
+    public boolean todasIdentificacionesProfe(String identificacion){
+        
+        for(Profesores profe : profesores){
+            if(profe.getIdentificacion().equals(identificacion)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     
     public boolean todosCorreos(String correo){
         for(Estudiantes estudiante : estudiantes){
@@ -166,17 +176,7 @@ public class Sistema {
     }
     
     public boolean devolverCurso(int opcion,String identificacion,String atributo,int atributoInt){
-        /*            
-            private String identificacion;
-            private String nombre;
-            private String descripcion;
-            private int horasPorDia;
-            private String modalidad;
-            private int minEstudiantes;
-            private int maxEstudiantes;
-            private String tipoCurso;
-            private int calificacionMinima;
-            */
+        
         for (Cursos e : cursos) {
             if(e.getIdentificacion().equals(identificacion)){
                 switch (opcion) {
@@ -249,6 +249,14 @@ public class Sistema {
         for (Estudiantes est : estudiantes){
             if(est.getIdentificacion().equals(identificacion)){
                 return est;
+            }
+        }
+        return null;
+    }
+    public Profesores devProfesor(String identificacion){
+        for (Profesores prof : profesores){
+            if(prof.getIdentificacion().equals(identificacion)){
+                return prof;
             }
         }
         return null;

@@ -89,12 +89,12 @@ public class ProjectoPOO extends JFrame {
 
         btnEstudiante.addActionListener(e -> {
             
-            abrirLogin("Estudiante");
+            abrirLogin(this,"Estudiante");
             
                 });
         btnProfesor.addActionListener(e -> {
             
-            abrirLogin("Profesor");
+            //abrirLogin("Profesor");
             
                 });
         
@@ -107,8 +107,8 @@ public class ProjectoPOO extends JFrame {
      *
      * @param tipoUsuario Tipo de usuario que intenta iniciar sesión ("Estudiante" o "Profesor").
      */
-    private void abrirLogin(String tipoUsuario) {
-        new VentanaLogin(tipoUsuario).setVisible(true);
+    private void abrirLogin(ProjectoPOO ProjectoPOO,String tipoUsuario) {
+        new VentanaLogin(ProjectoPOO,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
 
@@ -119,35 +119,45 @@ public class ProjectoPOO extends JFrame {
      * </p>
      */
     private class VentanaLogin extends JFrame {
+        private ProjectoPOO ventanaPrincipal;
 
-        public VentanaLogin(String tipoUsuario) {
+            
+        public VentanaLogin(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+            this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Inicio de sesión - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setSize(350, 250);
             setLocationRelativeTo(null);
             setLayout(new GridLayout(6, 1, 5, 5));
 
-            JLabel lblUsuario = new JLabel("Usuario:");
-            JTextField txtUsuario = new JTextField();
+            JLabel lblUsuario = new JLabel("Identificacion:");
+            JTextField txtIdentificacion = new JTextField();
             JLabel lblContrasena = new JLabel("Contraseña:");
             JPasswordField txtContrasena = new JPasswordField();
             JButton btnIngresar = new JButton("Ingresar");
             JButton btnRestablecer = new JButton("Restablecer contraseña");
-
+            String tempPassword = generarContrasenaTemporal();
             add(lblUsuario);
-            add(txtUsuario);
+            add(txtIdentificacion);
             add(lblContrasena);
             add(txtContrasena);
             add(btnIngresar);
             add(btnRestablecer);
-            String tempPassword = generarContrasenaTemporal();
+            
             // Acción para ingresar
             btnIngresar.addActionListener(e -> {
-                String usuario = txtUsuario.getText();
+                String identificacion = txtIdentificacion.getText();
                 String contrasena = new String(txtContrasena.getPassword());
 
-                if (!usuario.isEmpty() && (!contrasena.isEmpty()||contrasena.equals(tempPassword))) {
-                    JOptionPane.showMessageDialog(this, "Bienvenido: " + usuario);
+                if ((!identificacion.isEmpty() && sistema.devEstudiante(identificacion)!=null) && (!contrasena.isEmpty() && (sistema.devEstudiante(identificacion).verificarContraseña(contrasena)))) {
+                    JOptionPane.showMessageDialog(this, "Bienvenido: " + sistema.devEstudiante(identificacion).getNombre());
+                    if(tipoUsuario.equals("Estudiante")){
+                        JOptionPane.showMessageDialog(this, "Ah entrado como estudiante");
+                    }else{
+                        if(tipoUsuario.equals("Profesor")){
+                            JOptionPane.showMessageDialog(this, "Ah entrado como profesor");
+                        }
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(this,
@@ -158,34 +168,25 @@ public class ProjectoPOO extends JFrame {
 
             // Acción para restablecer contraseña
             btnRestablecer.addActionListener(e -> {
-                String correo = JOptionPane.showInputDialog(this,
-                        "Ingrese su correo Outlook para restablecer la contraseña:");
-
-                if (correo != null && !correo.isEmpty()) {
-
-
-                    try {
-                        // Enviar correo real con Outlook
-                        EnviadorCorreo.enviarCorreoOutlook(
-                                "andrehiva6@gmail.com",     // tu correo Outlook
-                                "iang gigc rlvr uimy",    // no pongas tu contraseña normal
-                                correo,
-                                "Restablecimiento de contraseña",
-                                "Tu nueva contraseña temporal es: " + tempPassword
-                        );
-
-                        JOptionPane.showMessageDialog(this,
-                                "Se ha enviado un correo a " + correo +
-                                        "\ncon tu nueva contraseña temporal.");
-
-                    } catch (MessagingException ex) {
-                        JOptionPane.showMessageDialog(this,
-                                "Error al enviar el correo:\n" + ex.getMessage(),
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                String identificacion = JOptionPane.showInputDialog(this,
+                        "Ingrese su identificacion:");
+               
+                
+                if (identificacion != null && !identificacion.isEmpty() && ((tipoUsuario.equals("Estudiante") && sistema.todasIdentificaciones(identificacion))|| (tipoUsuario.equals("Profesor")&&sistema.todasIdentificacionesProfe(identificacion)))) {
+                    if(tipoUsuario.equals("Estudiante")){
+                        correoRestablecer(sistema.devEstudiante(identificacion).getCorreoElectronico(),this,tempPassword);
+                        abrirRestablecerCon(ventanaPrincipal,sistema.devEstudiante(identificacion),tempPassword);
+                    }else{
+                        if(tipoUsuario.equals("Profesor")){
+                            correoRestablecer(sistema.devProfesor(identificacion).getCorreoElectronico(),this,tempPassword);
+                            abrirRestablecerCon(ventanaPrincipal,sistema.devProfesor(identificacion),tempPassword);
+                        }
                     }
+                    
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this,
-                            "Debe ingresar un correo válido.",
+                            "Debe ingresar una identificacion existente segun el tipo de usuario.",
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
@@ -196,16 +197,63 @@ public class ProjectoPOO extends JFrame {
          *
          * @return Contraseña generada
          */
-        private String generarContrasenaTemporal() {
-            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            Random random = new Random();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 8; i++) {
-                sb.append(chars.charAt(random.nextInt(chars.length())));
-            }
-            return sb.toString();
+        
+    }
+    
+    private void abrirRestablecerCon(ProjectoPOO ventanaPrincipal,Usuarios tipoUsuario,String contraTemp) {
+        new VentanaRestablecerCon(ventanaPrincipal,tipoUsuario,contraTemp).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaRestablecerCon extends JFrame {
+        private ProjectoPOO ventanaPrincipal;
+
+            
+        public VentanaRestablecerCon(ProjectoPOO ventanaPrincipal,Usuarios tipoUsuario,String contraTemp) {
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Inicio de sesión - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(350, 250);
+            setLocationRelativeTo(null);
+            setLayout(new GridLayout(3, 1, 5, 5));
+            JLabel lblContrasenaTemp = new JLabel("Contraseña temporal enviada al correo:");
+            JTextField txtContrasenaTemp = new JTextField();
+            JLabel lblContrasena = new JLabel("Nueva Contraseña:");
+            JTextField txtContrasena = new JTextField();
+            JButton btnRestablecer = new JButton("Restablecer");
+
+            add(lblContrasenaTemp);
+            add(txtContrasenaTemp);
+            add(lblContrasena);
+            add(txtContrasena);
+            add(btnRestablecer);
+            
+            btnRestablecer.addActionListener(e -> {
+                String ingContraTemp = txtContrasenaTemp.getText();
+                String contraseña = txtContrasena.getText();
+                if (ingContraTemp.equals(contraTemp)){
+                    
+                    boolean tieneMayuscula = contraseña.matches(".*[A-Z].*");
+                    boolean tieneNumero    = contraseña.matches(".*[0-9].*");
+                    boolean tieneEspecial  = contraseña.matches(".*[^a-zA-Z0-9].*");
+                    if (contraseña.length() < 8 && !tieneMayuscula && !tieneNumero && !tieneEspecial) {
+                        
+                        JOptionPane.showMessageDialog(this, "Error, la contraseña debe de tener 8 o mas caracteres y tener mayuscula, numero y caracter especial");
+                    }else{
+                        tipoUsuario.setContraseña(contraseña);
+                        abrirLogin(ventanaPrincipal,"Estudiante");
+                        this.dispose();
+                    }
+                    
+                }else{
+                    JOptionPane.showMessageDialog(this, "Error, la contraseña ingresada no es igual a la temporal");
+                }
+                
+            });
+
         }
     }
+    
+    
     private void abrirAdministrador(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
         new VentanaAdministrador(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.setVisible(false); // Cierra la ventana principal
@@ -1873,6 +1921,38 @@ public class ProjectoPOO extends JFrame {
 
                     } catch (MessagingException ex) {
                         JOptionPane.showMessageDialog(VentanaEliminarEstudiante,
+                                "Error al enviar el correo:\n" + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+    }
+    public String generarContrasenaTemporal() {
+            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            Random random = new Random();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 8; i++) {
+                sb.append(chars.charAt(random.nextInt(chars.length())));
+            }
+            return sb.toString();
+        }
+    public void correoRestablecer(String correo, VentanaLogin VentanaLogin,String tempPassword){
+        
+        
+        try {
+                        // Enviar correo real con Outlook
+                        EnviadorCorreo.enviarCorreoOutlook(
+                                "andrehiva6@gmail.com",     // tu correo Outlook
+                                "iang gigc rlvr uimy",    // no pongas tu contraseña normal
+                                correo,
+                                "Restablecimiento de contraseña",
+                                "Tu nueva contraseña temporal es: " + tempPassword
+                        );
+
+                        JOptionPane.showMessageDialog(this,
+                                "Se ha enviado un correo a " + correo +
+                                        "\ncon tu nueva contraseña temporal.");
+
+                    } catch (MessagingException ex) {
+                        JOptionPane.showMessageDialog(this,
                                 "Error al enviar el correo:\n" + ex.getMessage(),
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
