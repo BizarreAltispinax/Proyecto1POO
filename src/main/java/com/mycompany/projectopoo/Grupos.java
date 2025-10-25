@@ -16,6 +16,7 @@ public class Grupos {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private ArrayList<Estudiantes> estudiantes;
+    private Profesores profesor;
 
     public Grupos(int idGrupo, LocalDate fechaInicio, LocalDate fechaFin) {
         if (fechaInicio == null || fechaFin == null || fechaFin.isBefore(fechaInicio))
@@ -24,7 +25,7 @@ public class Grupos {
         this.idGrupo = idGrupo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        
+        this.estudiantes = new ArrayList<>();
     }
 
     public int getIdGrupo() { return idGrupo; }
@@ -32,7 +33,7 @@ public class Grupos {
     public LocalDate getFechaFin() { return fechaFin; }
     public ArrayList<Estudiantes> getEstudiantes() { return estudiantes; }
     public int getCantidadEstudiantes() { return estudiantes.size(); }
-
+    public Profesores getProfesor() { return profesor; }
     // Incrementa los estudiantes (por matrícula)
     public void agregarEstudiantes(Estudiantes est){
         if (est!=null){
@@ -40,6 +41,13 @@ public class Grupos {
         }
         
     }
+    
+    public void asignarProfesor(Profesores profe){
+        if (profe!=null){
+            this.profesor = profe; 
+        }
+    }
+    
 
     @Override
     public String toString() {

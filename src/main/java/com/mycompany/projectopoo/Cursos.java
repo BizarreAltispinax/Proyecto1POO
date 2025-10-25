@@ -94,7 +94,14 @@ public class Cursos {
     public ArrayList<Grupos> getGrupos() { return grupos; }
 
 
-    
+    public Grupos devGrupos(int idGrupo){
+        for (Grupos g : grupos){
+            if(g.getIdGrupo()==idGrupo){
+                return g;
+            }
+        }
+        return null;
+    }
 
     public String getDescripcion() {
         return descripcion;

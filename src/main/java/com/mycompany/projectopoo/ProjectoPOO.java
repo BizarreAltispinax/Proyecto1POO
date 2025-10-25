@@ -1686,6 +1686,74 @@ public class ProjectoPOO extends JFrame {
     }
     
     
+    
+    private void abrirAsociarProfesorGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaAsociarProfesorGrupo(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaAsociarProfesorGrupo extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaAsociarProfesorGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            
+            setLayout(new GridLayout(7, 1, 5, 5));
+
+            JLabel lblIdentificacionCurso = new JLabel("Identificacion de curso:");
+            JTextField txtIdentificacionCurso = new JTextField();
+            JLabel lblIdentificacionGrupo = new JLabel("Identificacion de grupo:");
+            JTextField txtIdentificacionGrupo = new JTextField();
+            JLabel lblIdentificacionProfesor = new JLabel("Identificaion del profesor:");
+            JTextField txtIdentificacionProfesor = new JTextField();
+            JButton btnAsociar = new JButton("Asociar");
+            
+            add(lblIdentificacionCurso);
+            add(txtIdentificacionCurso);
+            add(lblIdentificacionGrupo);
+            add(txtIdentificacionGrupo);
+            add(lblIdentificacionProfesor);
+            add(txtIdentificacionProfesor);
+
+            add(btnAsociar);
+            
+
+                        
+            
+            btnAsociar.addActionListener(e ->{
+                String identificacionCurso=txtIdentificacionCurso.getText();
+                String identificacionGrupo=txtIdentificacionGrupo.getText();
+                String identificacionProfesor=txtIdentificacionProfesor.getText();
+                
+
+                try {
+                    int idGrupo= Integer.parseInt(identificacionGrupo);
+                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devProfesor(identificacionProfesor)!=null ){
+                        sistema.devCursos(identificacionCurso).devGrupos(idGrupo).asignarProfesor(sistema.devProfesor(identificacionProfesor));
+                        this.dispose();
+                        abrirAdministrador(ventanaPrincipal,tipoUsuario);
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Revisar identificacion del curso o fechas");
+                    }
+                    JOptionPane.showMessageDialog(this, "Asociacion exitosa");
+                } catch (NumberFormatException w) {
+                    JOptionPane.showMessageDialog(this, "Formato inválido de la identificacion de grupo");
+                }
+                
+                
+                
+            });
+            
+
+            
+            
+            
+        }
+    }
+    
+    
     private void abrirReportes(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
         new VentanaReportes(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
