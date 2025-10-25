@@ -1730,12 +1730,12 @@ public class ProjectoPOO extends JFrame {
 
                 try {
                     int idGrupo= Integer.parseInt(identificacionGrupo);
-                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devProfesor(identificacionProfesor)!=null ){
+                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devProfesor(identificacionProfesor)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getProfesor()==null){
                         sistema.devCursos(identificacionCurso).devGrupos(idGrupo).asignarProfesor(sistema.devProfesor(identificacionProfesor));
                         this.dispose();
                         abrirAdministrador(ventanaPrincipal,tipoUsuario);
                     }else{
-                        JOptionPane.showMessageDialog(this, "Revisar identificacion del curso o fechas");
+                        JOptionPane.showMessageDialog(this, "Revisar identificaciones o el grupo ya contiene un profesor");
                     }
                     JOptionPane.showMessageDialog(this, "Asociacion exitosa");
                 } catch (NumberFormatException w) {
