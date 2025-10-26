@@ -10,13 +10,14 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.io.*;
 
 
 /**
  *
  * @author Usuario
  */
-public abstract class Usuarios {
+public abstract class Usuarios implements Serializable{
     private String nombre;                   // 2 a 20 caracteres
     private String apellido1;                // 2 a 20 caracteres
     private String apellido2;                // 2 a 20 caracteres
@@ -153,6 +154,6 @@ public abstract class Usuarios {
         return salt;
     }
     public String toString(){
-        return "Nombre: "+nombre+" "+apellido1+" "+apellido2+" "+"Identificaion: "+identificacion+"/n";
+        return "Nombre: "+nombre+" "+apellido1+" "+apellido2+" "+"\nIdentificaion: "+identificacion+"\n"+"Telefono: "+telefono+"\n"+"Correo electronico: "+correoElectronico+"\n"+"Direccion: "+direccion+"\n";
     }
 }

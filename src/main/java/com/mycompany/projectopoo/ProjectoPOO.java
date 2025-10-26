@@ -28,7 +28,8 @@ import java.text.SimpleDateFormat;
  * Envía un correo real usando Outlook (SMTP).
  */
 public class ProjectoPOO extends JFrame {
-    Sistema sistema = new Sistema();
+    Sistema sistema = Sistema.getInstancia();
+
     /**
      * Constructor de la clase VentanaPrincipal.
      * <p>
@@ -54,9 +55,11 @@ public class ProjectoPOO extends JFrame {
                     "¿Desea salir del programa?",
                     "Confirmar salida",
                     JOptionPane.YES_NO_OPTION
+                    
                 );
 
                 if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
                     System.out.println("Cerrando aplicación...");
                     System.exit(0); // 🔹 Cierra completamente el programa
                 }
@@ -129,6 +132,27 @@ public class ProjectoPOO extends JFrame {
             setSize(350, 250);
             setLocationRelativeTo(null);
             setLayout(new GridLayout(6, 1, 5, 5));
+            addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    //guardarInformacionAlCerrar();
+
+                    // 🔹 Mostramos confirmación opcional
+                    int opcion = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Desea salir del programa?",
+                        "Confirmar salida",
+                        JOptionPane.YES_NO_OPTION
+
+                    );
+
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        sistema.guardar();
+                        System.out.println("Cerrando aplicación...");
+                        System.exit(0); // 🔹 Cierra completamente el programa
+                    }
+                }
+            });
 
             JLabel lblUsuario = new JLabel("Identificacion:");
             JTextField txtIdentificacion = new JTextField();
@@ -153,6 +177,24 @@ public class ProjectoPOO extends JFrame {
                     JOptionPane.showMessageDialog(this, "Bienvenido: " + sistema.devEstudiante(identificacion).getNombre());
                     if(tipoUsuario.equals("Estudiante")){
                         JOptionPane.showMessageDialog(this, "Ah entrado como estudiante");
+                        JFrame ventana = new JFrame("Seleccionar Fecha y Opciones");
+                        ventana.setSize(400, 300);
+                        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        ventana.setLayout(null);
+
+                        // Campo de fecha
+                        
+                        JTextArea lblFecha = new JTextArea(10, 50); // Ejemplo: 10 filas de alto, 30 columnas de ancho
+
+
+                        lblFecha.setText(sistema.devEstudiante(identificacion).toString());
+                   
+                        lblFecha.setEditable(false);
+                        
+                        lblFecha.setBounds(20, 20, 350, 170);
+                        lblFecha.setBackground(ventana.getBackground());
+                        ventana.add(lblFecha);
+                        ventana.setVisible(true);
                     }else{
                         if(tipoUsuario.equals("Profesor")){
                             JOptionPane.showMessageDialog(this, "Ah entrado como profesor");
@@ -215,6 +257,30 @@ public class ProjectoPOO extends JFrame {
             setSize(350, 250);
             setLocationRelativeTo(null);
             setLayout(new GridLayout(3, 1, 5, 5));
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    //guardarInformacionAlCerrar();
+
+                    // 🔹 Mostramos confirmación opcional
+                    int opcion = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Desea salir del programa?",
+                        "Confirmar salida",
+                        JOptionPane.YES_NO_OPTION
+
+                    );
+
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        sistema.guardar();
+                        System.out.println("Cerrando aplicación...");
+                        System.exit(0); // 🔹 Cierra completamente el programa
+                    }
+                }
+            });
+            
+            
             JLabel lblContrasenaTemp = new JLabel("Contraseña temporal enviada al correo:");
             JTextField txtContrasenaTemp = new JTextField();
             JLabel lblContrasena = new JLabel("Nueva Contraseña:");
@@ -267,6 +333,28 @@ public class ProjectoPOO extends JFrame {
             setSize(400, 250);
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
             LocalDateTime ahora = LocalDateTime.now();
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -335,6 +423,28 @@ public class ProjectoPOO extends JFrame {
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
             
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
             JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
             JButton btnCrear = new JButton("Crear");
             JButton btnConsultar = new JButton("Consultar");
@@ -388,6 +498,28 @@ public class ProjectoPOO extends JFrame {
             setSize(1000, 850);
             setLocationRelativeTo(null);
             setLayout(new GridLayout(21, 1, 5, 5));
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
             JLabel lblNombre = new JLabel("Nombre:");
             JTextField txtNombre = new JTextField();
@@ -580,7 +712,27 @@ public class ProjectoPOO extends JFrame {
             setLayout(new BorderLayout());
             
             
-            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
 
             JPanel panelIdentificacion = new JPanel(new BorderLayout());
@@ -708,7 +860,27 @@ public class ProjectoPOO extends JFrame {
             setLayout(new BorderLayout());
             
             
-            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
 
             JPanel panelIdentificacion = new JPanel(new BorderLayout());
@@ -924,7 +1096,27 @@ public class ProjectoPOO extends JFrame {
             setLayout(new BorderLayout());
             
             
-            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
 
             JPanel panelIdentificacion = new JPanel(new BorderLayout());
@@ -1005,6 +1197,28 @@ public class ProjectoPOO extends JFrame {
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
             
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
             JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
             JButton btnCrear = new JButton("Crear");
             JButton btnConsultar = new JButton("Consultar");
@@ -1060,6 +1274,27 @@ public class ProjectoPOO extends JFrame {
             setLayout(new GridLayout(21, 1, 5, 5));
             
             
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
             
             JLabel lblIdentificacion = new JLabel("Identificacion: ");
@@ -1184,7 +1419,27 @@ public class ProjectoPOO extends JFrame {
             setLayout(new BorderLayout());
             
             
-            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
 
             JPanel panelIdentificacion = new JPanel(new BorderLayout());
@@ -1337,7 +1592,27 @@ public class ProjectoPOO extends JFrame {
             setLayout(new BorderLayout());
             
             
-            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
 
             JPanel panelIdentificacion = new JPanel(new BorderLayout());
@@ -1572,7 +1847,27 @@ public class ProjectoPOO extends JFrame {
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
             
-            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             
             
 
@@ -1634,6 +1929,28 @@ public class ProjectoPOO extends JFrame {
             
             setLayout(new GridLayout(6, 1, 5, 5));
 
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
             JLabel lblIdentificacionCurso = new JLabel("Identificacion de curso:");
             JTextField txtIdentificacionCurso = new JTextField();
             JLabel lblFechaInicio = new JLabel("Fecha de inicio (dd/MM/yyyy):");
@@ -1663,7 +1980,7 @@ public class ProjectoPOO extends JFrame {
                     LocalDate fechaIni = LocalDate.parse(fechaInicio, formato);
                     LocalDate fechaFin = LocalDate.parse(fechaFinal, formato);
                     if (sistema.devCursos(identificacionCurso)!=null && fechaIni.isBefore(fechaFin)){
-                        sistema.devCursos(identificacionCurso).crearGrupo(fechaIni, fechaFin);
+                        sistema.devCursos(identificacionCurso).crearGrupo(fechaIni, fechaFin,sistema.devCursos(identificacionCurso));
                         this.dispose();
                         abrirAdministrador(ventanaPrincipal,tipoUsuario);
                     }else{
@@ -1702,6 +2019,30 @@ public class ProjectoPOO extends JFrame {
             
             setLayout(new GridLayout(7, 1, 5, 5));
 
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            
             JLabel lblIdentificacionCurso = new JLabel("Identificacion de curso:");
             JTextField txtIdentificacionCurso = new JTextField();
             JLabel lblIdentificacionGrupo = new JLabel("Identificacion de grupo:");
@@ -1769,6 +2110,30 @@ public class ProjectoPOO extends JFrame {
             
             setLayout(new GridLayout(3, 1, 5, 5));
 
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            
             JButton btnLista = new JButton("Lista de estudiantes");
             JButton btnEsta = new JButton("Estadistica de matricula");
             JButton btnSalir = new JButton("Salir");
@@ -1959,7 +2324,7 @@ public class ProjectoPOO extends JFrame {
                                 "andrehiva6@gmail.com",     // tu correo Outlook
                                 "iang gigc rlvr uimy",    // no pongas tu contraseña normal
                                 correo,
-                                "Consulta de usuario ("+"dato"+")",
+                                "Consulta de usuario ("+dato+")",
                                 "Se han consultado datos del usuario con correo " + correo
                         );
 

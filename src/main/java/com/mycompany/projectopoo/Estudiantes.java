@@ -5,11 +5,12 @@
 package com.mycompany.projectopoo;
 
 import java.util.ArrayList;
+import java.io.*;
 /**
  *
  * @author Usuario
  */
-public class Estudiantes extends Usuarios{
+public class Estudiantes extends Usuarios implements Serializable{
     private String organizacion;             // hasta 40 caracteres
     private ArrayList<String> temasInteres;       // lista de strings (5 a 30 caracteres cada uno)
     
@@ -23,11 +24,14 @@ public class Estudiantes extends Usuarios{
     public String getTemasInteres() {
         String temas="";
         for (String tema: temasInteres){
-            temas+=tema+" ";
+            temas+=tema+", ";
         }
         return temas;
     }
     
     public void setOrganizacion(String organizacion) { this.organizacion = organizacion; }
     public void setTemasInteres(ArrayList<String> temasInteres) { this.temasInteres = temasInteres; }
+    public String toString(){
+        return super.toString()+"Organizacion: "+organizacion+"\n"+"Temas de interes: "+this.getTemasInteres();
+    }
 }

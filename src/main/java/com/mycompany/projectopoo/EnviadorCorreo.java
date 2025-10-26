@@ -11,11 +11,12 @@ package com.mycompany.projectopoo;
 import java.util.Properties;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import java.io.Serializable;
 
 /**
  * Clase encargada de enviar correos mediante Outlook usando Jakarta Mail.
  */
-public class EnviadorCorreo {
+public class EnviadorCorreo implements Serializable{
 
     /**
      * Envía un correo electrónico con Outlook (SMTP).

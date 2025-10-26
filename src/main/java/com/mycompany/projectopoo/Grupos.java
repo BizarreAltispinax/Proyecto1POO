@@ -10,13 +10,15 @@ package com.mycompany.projectopoo;
  */
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.io.*;
 
-public class Grupos {
+public class Grupos implements Serializable{
     private int idGrupo;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private ArrayList<Estudiantes> estudiantes;
     private Profesores profesor;
+    private Cursos curso;
 
     public Grupos(int idGrupo, LocalDate fechaInicio, LocalDate fechaFin) {
         if (fechaInicio == null || fechaFin == null || fechaFin.isBefore(fechaInicio))
@@ -47,7 +49,9 @@ public class Grupos {
             this.profesor = profe; 
         }
     }
-    
+    public void asignarCurso(Cursos curso){
+        this.curso=curso;
+    }
 
     @Override
     public String toString() {
