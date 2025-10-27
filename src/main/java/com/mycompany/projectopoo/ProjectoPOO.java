@@ -970,27 +970,660 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
+
+
+
+    private void abrirAdministradorProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaAdministradorProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaAdministradorProfesor extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaAdministradorProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(350, 200);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+
+            JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
+            JButton btnCrear = new JButton("Crear");
+            JButton btnConsultar = new JButton("Consultar");
+            JButton btnModificar = new JButton("Modificar");
+            JButton btnEliminar = new JButton("Eliminar");
+
+
+
+
+            panelBotones.add(btnCrear);
+            panelBotones.add(btnConsultar);
+            panelBotones.add(btnModificar);
+            panelBotones.add(btnEliminar);
+
+
+            add(panelBotones, BorderLayout.CENTER);
+
+            btnCrear.addActionListener(e -> {
+                this.dispose();
+                abrirCrearProfesor(ventanaPrincipal,tipoUsuario);
+            });
+
+            btnConsultar.addActionListener(e -> {
+                this.dispose();
+                abrirMostrarProfesor(ventanaPrincipal,tipoUsuario);
+            });
+
+            btnModificar.addActionListener(e -> {
+                this.dispose();
+                abrirModificarProfesor(ventanaPrincipal,tipoUsuario);
+            });
+
+            btnEliminar.addActionListener(e -> {
+                this.dispose();
+                abrirEliminarProfesor(ventanaPrincipal,tipoUsuario);
+            });
+
+
+        }
+    }
+    private void abrirCrearProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaCrearProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaCrearProfesor extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaCrearProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            setLayout(new GridLayout(21, 1, 5, 5));
+
+            JLabel lblNombre = new JLabel("Nombre:");
+            JTextField txtNombre = new JTextField();
+            JLabel lblPrimerapellido = new JLabel("Primer apellido: ");
+            JTextField txtPrimerapellido = new JTextField();
+            JLabel lblSegundoapellido = new JLabel("Segundo apellido: ");
+            JTextField txtSegundoapellido = new JTextField();
+            JLabel lblIdentificacion = new JLabel("Identificacion: ");
+            JTextField txtIdentificacion = new JTextField();
+            JLabel lblTelefono = new JLabel("Telefono:");
+            JTextField txtTelefono = new JTextField();
+            JLabel lblCorreoElectronico = new JLabel("Correo Electronico: ");
+            JTextField txtCorreoElectronico = new JTextField();
+            JLabel lblDireccion = new JLabel("Direccion: ");
+            JTextField txtDireccion = new JTextField();
+            JLabel lblContraseña = new JLabel("Contraseña: ");
+            JPasswordField txtContraseña = new JPasswordField();
+            JLabel lblOrganizacion = new JLabel("Organizacion: ");
+            JTextField txtOrganizacion = new JTextField();
+            JLabel lblTitulos = new JLabel("Titulos del profesor: ");
+            JTextField txtTitulos = new JTextField();
+            JButton btnCrear = new JButton("Crear");
+
+
+
+
+
+            add(lblNombre);
+            add(txtNombre);
+            add(lblPrimerapellido);
+            add(txtPrimerapellido);
+            add(lblSegundoapellido);
+            add(txtSegundoapellido);
+            add(lblIdentificacion);
+            add(txtIdentificacion);
+            add(lblTelefono);
+            add(txtTelefono);
+            add(lblCorreoElectronico);
+            add(txtCorreoElectronico);
+            add(lblDireccion);
+            add(txtDireccion);
+            add(lblContraseña);
+            add(txtContraseña);
+            add(lblOrganizacion);
+            add(txtOrganizacion);
+            add(lblTitulos);
+            add(txtTitulos);
+
+
+            add(btnCrear);
+
+
+
+
+
+
+            btnCrear.addActionListener(e -> {
+                boolean verificador=true;
+
+                String nombre=txtNombre.getText();
+                if (nombre.length() < 2 || nombre.length() > 20) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, el nombre debe de tener entre 2 y 20 caracteres");
+                }
+
+                String apellido1=txtPrimerapellido.getText();
+                if (apellido1.length() < 2 || apellido1.length() > 20) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, el primer apellido debe de tener entre 2 y 20 caracteres");
+                }
+
+                String apellido2=txtSegundoapellido.getText();
+                if (apellido2.length() < 2 || apellido2.length() > 20) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, el segundo apellido debe de tener entre 2 y 20 caracteres");
+                }
+
+                String identificacion=txtIdentificacion.getText();
+
+                if (identificacion.length() < 9 || sistema.todasIdentificaciones(identificacion)) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, la identificacion debe de tener 9 o mas caracteres");
+                }
+
+                String telefono=txtTelefono.getText();
+                if (telefono.length() <8) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, el numero de telefono debe de tener 9 o mas caracteres");
+                }
+
+                String correo=txtCorreoElectronico.getText();
+                String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
+                if (!correo.matches(regex) || sistema.todosCorreos(correo)==false) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "No cumple con la estructura de un correo");
+                }
+
+                String direccion=txtDireccion.getText();
+                if (direccion.length() < 5 || direccion.length() > 60) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, la direccion debe de tener entre 5 y 60 caracteres");
+                }
+
+                String contraseña=txtContraseña.getText();
+                boolean tieneMayuscula = contraseña.matches(".*[A-Z].*");
+                boolean tieneNumero    = contraseña.matches(".*[0-9].*");
+                boolean tieneEspecial  = contraseña.matches(".*[^a-zA-Z0-9].*");
+                if (contraseña.length() < 8 && !tieneMayuscula && !tieneNumero && !tieneEspecial) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, la contraseña debe de tener 8 o mas caracteres y tener mayuscula, numero y caracter especial");
+                }
+
+                String organizacion=txtOrganizacion.getText();
+                if (organizacion.length() > 40) {
+                    verificador=false;
+                    JOptionPane.showMessageDialog(this, "Error, la organizacion debe de tener hasta 40 caracteres");
+                }
+
+
+                String titulos=txtTitulos.getText();
+
+                ArrayList<String> listaTitulos = new ArrayList<String>();
+
+                if (titulos.isEmpty()){
+
+                    JOptionPane.showMessageDialog(this, "Debe ingresar los titulos");
+                }else{
+                    String[] arregloTitulos = titulos.split("\\s*,\\s*");
+                    for (int i = 0; i < arregloTitulos.length; i++) {
+                        listaTitulos.add(arregloTitulos[i]);
+                    }
+                    for (String sTitulos : listaTitulos) {
+                        if (sTitulos.length() < 5 || sTitulos.length() > 40 ) {
+                            verificador=false;
+                            JOptionPane.showMessageDialog(this, "Error, cada titulo debe de tener entre 5 y 40 caracteres");
+                        }
+                    }
+                }
+
+
+
+
+
+                if(verificador==true){
+                    Profesores prf = new Profesores(nombre,apellido1,apellido2,identificacion,telefono,correo,direccion,certificaciones,listaTitulos,contraseña);
+                    sistema.agregarProfesores(prf);
+                    try {
+                        // Enviar correo real con Outlook
+                        EnviadorCorreo.enviarCorreoOutlook(
+                                "andrehiva6@gmail.com",     // tu correo Outlook
+                                "iang gigc rlvr uimy",    // no pongas tu contraseña normal
+                                correo,
+                                "Creacion de usuario",
+                                "Un usuario con el correo " + correo + " se ah creado"
+                        );
+
+                        JOptionPane.showMessageDialog(this,
+                                "Se ha enviado un correo a " + correo);
+
+                    } catch (MessagingException ex) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error al enviar el correo:\n" + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+
+                    this.dispose();
+                    abrirAdministrador(ventanaPrincipal,tipoUsuario);
+                }
+
+            });
+        }
+    }
+
+
+
+
+    private void abrirMostrarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaMostrarProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaMostrarProfesor extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaMostrarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+
+
+
+
+
+            JPanel panelIdentificacion = new JPanel(new BorderLayout());
+            JLabel lblIdentificacion = new JLabel("Identificacion del profesor: ", SwingConstants.CENTER);
+            lblIdentificacion.setFont(new Font("Arial", Font.BOLD, 16));
+
+            JTextField txtIdentificacion = new JTextField();
+
+            panelIdentificacion.add(lblIdentificacion, BorderLayout.NORTH);
+            panelIdentificacion.add(txtIdentificacion, BorderLayout.CENTER);
+            panelIdentificacion.setBorder(BorderFactory.createEmptyBorder(50, 200, 0, 200));
+            add(panelIdentificacion, BorderLayout.NORTH);
+
+            JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
+            JButton btnNombre = new JButton("Nombre");
+
+            JButton btnPrimerApellido = new JButton("Primer Apellido");
+            JButton btnSegundoApellido = new JButton("Segundo Apellido");
+
+            JButton btnTelefono = new JButton("Telefono");
+            JButton btnCorreo = new JButton("Correo");
+            JButton btnDireccion = new JButton("Direccion");
+            JButton btnOrganizacion = new JButton("Organizacion");
+            JButton btnTitulos = new JButton("Titulos del profesor");
+            JButton btnSalir = new JButton("Salir");
+
+            panelBotones.add(btnNombre);
+            panelBotones.add(btnPrimerApellido);
+            panelBotones.add(btnSegundoApellido);
+            panelBotones.add(btnTelefono);
+            panelBotones.add(btnCorreo);
+            panelBotones.add(btnDireccion);
+            panelBotones.add(btnOrganizacion);
+            panelBotones.add(btnTitulos);
+            panelBotones.add(btnSalir);
+            panelBotones.setBorder(BorderFactory.createEmptyBorder(100, 200, 100, 200));
+            add(panelBotones, BorderLayout.CENTER);
+
+
+
+
+            btnNombre.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(1,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Nombre");
+                }
+
+            });
+
+            btnPrimerApellido.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(2,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Primer apellido");
+                }
+            });
+
+            btnSegundoApellido.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(3,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Segundo apellido");
+                }
+            });
+
+            btnTelefono.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(4,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Telefono");
+                }
+            });
+
+            btnCorreo.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(5,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Correo");
+                }
+            });
+
+            btnDireccion.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(6,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Direccion");
+                }
+            });
+
+            btnOrganizacion.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(7,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Organizacion");
+                }
+            });
+
+            btnTitulos.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(8,identificacion));
+                if (sistema.todasIdentificaciones(identificacion)){
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Titulos");
+                }
+            });
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
+            });
+
+        }
+    }
+    private void abrirModificarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaModificarProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaModificarProfesor extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaModificarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+
+            JPanel panelIdentificacion = new JPanel(new BorderLayout());
+            JLabel lblIdentificacion = new JLabel("Identificacion del profesor: ", SwingConstants.CENTER);
+            lblIdentificacion.setFont(new Font("Arial", Font.BOLD, 16));
+
+            JTextField txtIdentificacion = new JTextField();
+
+            panelIdentificacion.add(lblIdentificacion, BorderLayout.NORTH);
+            panelIdentificacion.add(txtIdentificacion, BorderLayout.CENTER);
+            panelIdentificacion.setBorder(BorderFactory.createEmptyBorder(50, 200, 0, 200));
+            add(panelIdentificacion, BorderLayout.NORTH);
+
+            JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
+            JButton btnIdentificacion = new JButton("Identificacion");
+            JButton btnNombre = new JButton("Nombre");
+
+            JButton btnPrimerApellido = new JButton("Primer Apellido");
+            JButton btnSegundoApellido = new JButton("Segundo Apellido");
+
+            JButton btnTelefono = new JButton("Telefono");
+            JButton btnCorreo = new JButton("Correo");
+            JButton btnDireccion = new JButton("Direccion");
+            JButton btnOrganizacion = new JButton("Organizacion");
+            JButton btnTtitulos = new JButton("Temas de interes");
+            JButton btnContraseña = new JButton("Contraseña");
+            JButton btnSalir = new JButton("Salir");
+
+            panelBotones.add(btnNombre);
+            panelBotones.add(btnIdentificacion);
+            panelBotones.add(btnPrimerApellido);
+            panelBotones.add(btnSegundoApellido);
+            panelBotones.add(btnTelefono);
+            panelBotones.add(btnCorreo);
+            panelBotones.add(btnDireccion);
+            panelBotones.add(btnOrganizacion);
+            panelBotones.add(btnTtitulos);
+            panelBotones.add(btnContraseña);
+            panelBotones.add(btnSalir);
+            panelBotones.setBorder(BorderFactory.createEmptyBorder(100, 200, 100, 200));
+            add(panelBotones, BorderLayout.CENTER);
+
+
+
+
+            btnNombre.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Nnombre = JOptionPane.showInputDialog(this,
+                        "Ingrese el nuevo nombre del profesor:");
+                if (Nnombre.length() >= 2 && Nnombre.length() <= 20 && sistema.devolverProfesor(1, identificacion, Nnombre, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Nombre");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+
+            });
+
+            btnIdentificacion.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Nidentificacion = JOptionPane.showInputDialog(this,
+                        "Ingrese la nueva identificacion del profesor:");
+                if (Nidentificacion.length() >= 9 && sistema.todasIdentificaciones(Nidentificacion)==false && sistema.devolverProfesor(10, identificacion, Nidentificacion, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,Nidentificacion),this,"Identificacion");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+
+            });
+
+            btnPrimerApellido.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Napellido1 = JOptionPane.showInputDialog(this,
+                        "Ingrese el nuevo primer apellido del profesor:");
+                if (Napellido1.length() >= 2 && Napellido1.length() <= 20 && sistema.devolverProfesor(2, identificacion, Napellido1, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Primer Apellido");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+            });
+
+            btnSegundoApellido.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Napellido2 = JOptionPane.showInputDialog(this,
+                        "Ingrese el segundo apellido del profesor:");
+                if (Napellido2.length() >= 2 && Napellido2.length() <= 20 && sistema.devolverProfesor(3, identificacion, Napellido2, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Segundo Apellido");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+            });
+
+            btnTelefono.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Ntelefono = JOptionPane.showInputDialog(this,
+                        "Ingrese el telefono del profesor:");
+                if (Ntelefono.length() >= 8 && sistema.devolverProfesor(4, identificacion, Ntelefono, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Telefono");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+            });
+
+            btnCorreo.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
+                String Ncorreo = JOptionPane.showInputDialog(this,
+                        "Ingrese el telefono del profesor:");
+                if (Ncorreo.matches(regex) && sistema.devolverProfesor(5, identificacion, Ncorreo, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Correo");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+            });
+
+            btnDireccion.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Ndireccion = JOptionPane.showInputDialog(this,
+                        "Ingrese el segundo apellido del profesor:");
+                if (Ndireccion.length() >= 5 && Ndireccion.length() <= 60 && sistema.devolverProfesor(6, identificacion, Ndireccion, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Direccion");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+            });
+
+            btnOrganizacion.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Norganizacion = JOptionPane.showInputDialog(this,
+                        "Ingrese el segundo apellido del profesor:");
+                if (Norganizacion.length() <= 40 && sistema.devolverProfesor(7, identificacion, Norganizacion, null)==true){
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Organizacion");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+            });
+
+            btnTtitulos.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                String Ntitulos = JOptionPane.showInputDialog(this,
+                        "Ingrese los temas de interes del profesor:");
+
+                ArrayList<String> listaTitulos = new ArrayList<String>();
+
+                if (Ntitulos.isEmpty()){
+
+                    JOptionPane.showMessageDialog(this, "Debe ingresar los titulos");
+                }else{
+                    String[] arregloTitulos = Ntitulos.split("\\s*,\\s*");
+                    for (int i = 0; i < arregloTitulos.length; i++) {
+                        listaTitulos.add(arregloTitulos[i]);
+                    }
+                    for (String interes : listaTitulos) {
+                        if (interes.length() >= 5 && interes.length() <= 30 && sistema.devolverProfesor(8, identificacion, null, listaTitulos)==true) {
+
+                            JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                            correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Temas de interes");
+                        }else{
+                            JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                        }
+                    }
+                }
+            });
+
+            btnContraseña.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+
+                String NContraseña = JOptionPane.showInputDialog(this,
+                        "Ingrese el segundo apellido del profesor:");
+                boolean tieneMayuscula = NContraseña.matches(".*[A-Z].*");
+                boolean tieneNumero    = NContraseña.matches(".*[0-9].*");
+                boolean tieneEspecial  = NContraseña.matches(".*[^a-zA-Z0-9].*");
+                if (NContraseña.length() >= 8 && tieneMayuscula && tieneNumero && tieneEspecial && sistema.devolverProfesor(9, identificacion, NContraseña, null)==true){
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Contraseña");
+                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                }
+            });
+
+
+
+
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
+            });
+
+        }
+    }
+
+
+
+    private void abrirEliminarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaEliminarProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaEliminarProfesor extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaEliminarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+
+
+
+
+
+            JPanel panelIdentificacion = new JPanel(new BorderLayout());
+            JLabel lblIdentificacion = new JLabel("Identificacion del profesor: ", SwingConstants.CENTER);
+            lblIdentificacion.setFont(new Font("Arial", Font.BOLD, 16));
+
+            JTextField txtIdentificacion = new JTextField();
+
+            panelIdentificacion.add(lblIdentificacion, BorderLayout.NORTH);
+            panelIdentificacion.add(txtIdentificacion, BorderLayout.CENTER);
+
+            panelIdentificacion.setBorder(BorderFactory.createEmptyBorder(50, 200, 0, 200));
+            add(panelIdentificacion, BorderLayout.NORTH);
+
+            JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
+            JButton btnEliminar = new JButton("Eliminar");
+            JButton btnSalir = new JButton("Salir");
+
+            panelBotones.add(btnEliminar);
+            panelBotones.add(btnSalir);
+            panelBotones.setBorder(BorderFactory.createEmptyBorder(100, 200, 100, 200));
+            add(panelBotones, BorderLayout.CENTER);
+
+
+            btnEliminar.addActionListener(e ->{
+                String identificacion=txtIdentificacion.getText();
+                if (sistema.todasIdentificaciones(identificacion)){
+                    sistema.eliminarProfesores(identificacion);
+                    JOptionPane.showMessageDialog(this, "Eliminacion exitosa");
+                    correoEliminar(sistema.encontrarProfesor(5,identificacion),this);
+                }else{
+                    JOptionPane.showMessageDialog(this, "No se encontro al profesor");
+                }
+
+            });
+
+
+
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirAdministrador(ventanaPrincipal,tipoUsuario);
+            });
+
+        }
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
     private void abrirAdministradorCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
         new VentanaAdministradorCurso(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal

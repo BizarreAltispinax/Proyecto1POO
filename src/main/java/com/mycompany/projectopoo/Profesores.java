@@ -20,6 +20,7 @@ public class Profesores extends Usuarios {
         this.titulosObt = titulosObt;
         this.Certificaciones = Certificaciones;
     }
+
     public String getTitulos() {
         String titulos="";
         for (String titulo: titulosObt){
@@ -27,6 +28,7 @@ public class Profesores extends Usuarios {
         }
         return titulos;
     }
+
     public String getCertificaciones() {
         String certificaciones="";
         for (String certificacion: Certificaciones){
@@ -34,6 +36,13 @@ public class Profesores extends Usuarios {
         }
         return certificaciones;
     }
-    public void setTitulos(ArrayList<String> titulosObt) { this.titulosObt = titulosObt; }
-    public void setCertificaciones(ArrayList<String> Certificaciones) { this.Certificaciones = Certificaciones; }
+
+    public void setTitulos(ArrayList<String> titulosObt) {
+        this.titulosObt = titulosObt;
+    }
+
+    public void setCertificaciones(ArrayList<String> Certificaciones) {
+        this.Certificaciones = Certificaciones;
+    }
 }
+

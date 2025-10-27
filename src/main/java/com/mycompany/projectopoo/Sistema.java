@@ -93,6 +93,44 @@ public class Sistema {
         return "No se encontro al estudiante";
     }
 
+    public String encontrarProfesor(int opcion,String identificacion){
+
+        for (Profesores e : profesores) {
+            if(e.getIdentificacion().equals(identificacion)){
+                switch (opcion) {
+                    case 1:
+                        return e.getNombre();
+
+                    case 2:
+                        return e.getApellido1();
+
+                    case 3:
+                        return e.getApellido2();
+
+                    case 4:
+                        return e.getTelefono();
+
+                    case 5:
+                        return e.getCorreoElectronico();
+
+                    case 6:
+                        return e.getDireccion();
+
+                    case 7:
+                        return e.getTitulos();
+
+                    case 8:
+                        return e.getCertificaciones();
+
+                    default:
+                        return "Opción no válida";
+                }
+            }
+
+        }
+        return "No se encontro al profesor";
+    }
+
     
     
     public boolean todasIdentificaciones(String identificacion){
@@ -123,7 +161,7 @@ public class Sistema {
         }
         return true;
     }
-    public boolean devolverEstudiante(int opcion,String identificacion,String atributo,ArrayList<String> temas){
+    public boolean devolverEstudiante(int opcion,String identificacion,String atributo,ArrayList<String> temas) {
         
         for (Estudiantes e : estudiantes) {
             if(e.getIdentificacion().equals(identificacion)){
@@ -171,6 +209,57 @@ public class Sistema {
                 }    
             }
             
+        }
+        return false;
+    }
+
+    public boolean devolverProfesor(int opcion,String identificacion,String atributo,ArrayList<String> titulos,ArrayList<String> certificaciones){
+        for (Profesores e : profesores) {
+            if(e.getIdentificacion().equals(identificacion)){
+                switch (opcion) {
+                    case 1:
+                        e.setNombre(atributo);
+                        return true;
+
+                    case 2:
+                        e.setApellido1(atributo);
+                        return true;
+
+                    case 3:
+                        e.setApellido2(atributo);
+                        return true;
+
+                    case 4:
+                        e.setTelefono(atributo);
+                        return true;
+
+                    case 5:
+                        e.setCorreoElectronico(atributo);
+                        return true;
+
+                    case 6:
+                        e.setDireccion(atributo);
+                        return true;
+
+                    case 7:
+                        e.setTitulos(titulos);
+                        return true;
+
+                    case 8:
+                        e.setCertificaciones(certificaciones);
+                        return true;
+                    case 9:
+                        e.setContraseña(atributo);
+                        return true;
+                    case 10:
+                        e.setIdentificacion(atributo);
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+
         }
         return false;
     }
@@ -232,6 +321,18 @@ public class Sistema {
         for (Cursos c : cursos) {
             for (Grupos g : c.getGrupos()) {
                 g.getEstudiantes().removeIf(e -> e.getIdentificacion().equals(identificacion));
+            }
+        }
+    }
+
+
+    public void eliminarProfesores(String identificacion){
+
+        profesores.removeIf(est -> est.getIdentificacion().equals(identificacion));
+
+        for (Cursos c : cursos) {
+            for (Grupos g : c.getGrupos()) {
+                g.getProfesores().removeIf(e -> e.getIdentificacion().equals(identificacion));
             }
         }
     }

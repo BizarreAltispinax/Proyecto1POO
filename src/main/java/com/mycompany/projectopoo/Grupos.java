@@ -16,6 +16,7 @@ public class Grupos {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private ArrayList<Estudiantes> estudiantes;
+    private ArrayList<Profesores> profesores;
 
     public Grupos(int idGrupo, LocalDate fechaInicio, LocalDate fechaFin) {
         if (fechaInicio == null || fechaFin == null || fechaFin.isBefore(fechaInicio))
@@ -31,6 +32,7 @@ public class Grupos {
     public LocalDate getFechaInicio() { return fechaInicio; }
     public LocalDate getFechaFin() { return fechaFin; }
     public ArrayList<Estudiantes> getEstudiantes() { return estudiantes; }
+    public ArrayList<Profesores> getProfesores() { return profesores; }
     public int getCantidadEstudiantes() { return estudiantes.size(); }
 
     // Incrementa los estudiantes (por matrícula)
