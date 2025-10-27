@@ -90,9 +90,17 @@ public class Cursos implements Serializable{
 
     }
 
-    public String getIdentificacion() { return identificacion; }
-    public String getNombre() { return nombre; }
-    public ArrayList<Grupos> getGrupos() { return grupos; }
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public ArrayList<Grupos> getGrupos() {
+        return grupos;
+    }
 
 
     public Grupos devGrupos(int idGrupo){
@@ -130,7 +138,8 @@ public class Cursos implements Serializable{
 
     public double getCalificacionMinima() {
         return calificacionMinima;
-    }    
+    }
+
     public void setIdentificacion(String identificacion) {
     if (identificacion == null || identificacion.length() != 6)
         throw new IllegalArgumentException("La identificación debe tener exactamente 6 caracteres.");

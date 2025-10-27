@@ -95,10 +95,11 @@ public class ProjectoPOO extends JFrame {
             abrirLogin(this,"Estudiante");
             
                 });
+
         btnProfesor.addActionListener(e -> {
-            
-            //abrirLogin("Profesor");
-            
+
+            abrirLogin(this,"Profesor");
+
                 });
         
         
@@ -384,6 +385,11 @@ public class ProjectoPOO extends JFrame {
         btnEstudiante.addActionListener(e -> {
             this.dispose();
             abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                });
+
+        btnProfesor.addActionListener(e -> {
+            this.dispose();
+            abrirAdministradorProfesor(ventanaPrincipal,tipoUsuario);
                 });
         
         
@@ -778,7 +784,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(1,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Nombre");
+                    correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Nombre");
                 }
                 
             });
@@ -787,7 +793,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(2,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Primer apellido");
+                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Primer apellido");
                 }
             });
             
@@ -795,7 +801,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(3,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Segundo apellido");
+                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Segundo apellido");
                 }
             });
             
@@ -803,7 +809,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(4,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Telefono");
+                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Telefono");
                 }
             });
             
@@ -811,7 +817,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(5,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Correo");
+                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Correo");
                 }
             });
             
@@ -819,7 +825,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(6,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Direccion");
+                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Direccion");
                 }
             });
             
@@ -827,7 +833,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(7,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Organizacion");
+                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Organizacion");
                 }
             });
             
@@ -835,7 +841,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarEstudiante(8,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,"Temas de interes");
+                correoConsulta(sistema.encontrarEstudiante(5,identificacion),this,null,"Temas de interes");
                 }
             });
             btnSalir.addActionListener(e ->{
@@ -932,7 +938,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese el nuevo nombre del estudiante:");
                 if (Nnombre.length() >= 2 && Nnombre.length() <= 20 && sistema.devolverEstudiante(1, identificacion, Nnombre, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Nombre");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Nombre");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -945,7 +951,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese la nueva identificacion del estudiante:");
                 if (Nidentificacion.length() >= 9 && sistema.todasIdentificaciones(Nidentificacion)==false && sistema.devolverEstudiante(10, identificacion, Nidentificacion, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,Nidentificacion),this,"Identificacion");
+                    correoModificacion(sistema.encontrarEstudiante(5,Nidentificacion),this,null,"Identificacion");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -958,7 +964,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese el nuevo primer apellido del estudiante:");
                 if (Napellido1.length() >= 2 && Napellido1.length() <= 20 && sistema.devolverEstudiante(2, identificacion, Napellido1, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Primer Apellido");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Primer Apellido");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -970,7 +976,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese el segundo apellido del estudiante:");
                 if (Napellido2.length() >= 2 && Napellido2.length() <= 20 && sistema.devolverEstudiante(3, identificacion, Napellido2, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Segundo Apellido");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Segundo Apellido");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -982,7 +988,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese el telefono del estudiante:");
                 if (Ntelefono.length() >= 8 && sistema.devolverEstudiante(4, identificacion, Ntelefono, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Telefono");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Telefono");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -995,7 +1001,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese el telefono del estudiante:");
                 if (Ncorreo.matches(regex) && sistema.devolverEstudiante(5, identificacion, Ncorreo, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Correo");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Correo");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1007,7 +1013,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese el segundo apellido del estudiante:");
                 if (Ndireccion.length() >= 5 && Ndireccion.length() <= 60 && sistema.devolverEstudiante(6, identificacion, Ndireccion, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Direccion");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Direccion");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1019,7 +1025,7 @@ public class ProjectoPOO extends JFrame {
                         "Ingrese el segundo apellido del estudiante:");
                 if (Norganizacion.length() <= 40 && sistema.devolverEstudiante(7, identificacion, Norganizacion, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Organizacion");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Organizacion");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1044,7 +1050,7 @@ public class ProjectoPOO extends JFrame {
                         if (interes.length() >= 5 && interes.length() <= 30 && sistema.devolverEstudiante(8, identificacion, null, listaIntereses)==true) {
                            
                             JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                            correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Temas de interes");
+                            correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,null,"Temas de interes");
                         }else{
                             JOptionPane.showMessageDialog(this, "Modificacion erronea");
                         }
@@ -1061,7 +1067,7 @@ public class ProjectoPOO extends JFrame {
                 boolean tieneNumero    = NContraseña.matches(".*[0-9].*");
                 boolean tieneEspecial  = NContraseña.matches(".*[^a-zA-Z0-9].*");
                 if (NContraseña.length() >= 8 && tieneMayuscula && tieneNumero && tieneEspecial && sistema.devolverEstudiante(9, identificacion, NContraseña, null)==true){
-                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this,"Contraseña");
+                    correoModificacion(sistema.encontrarEstudiante(5,identificacion),this, null,"Contraseña");
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
@@ -1146,7 +1152,7 @@ public class ProjectoPOO extends JFrame {
                 if (sistema.todasIdentificaciones(identificacion)){
                     sistema.eliminarEstudiantes(identificacion);
                     JOptionPane.showMessageDialog(this, "Eliminacion exitosa");
-                    correoEliminar(sistema.encontrarEstudiante(5,identificacion),this);
+                    correoEliminar(sistema.encontrarEstudiante(5,identificacion),this, null);
                 }else{
                     JOptionPane.showMessageDialog(this, "No se encontro al estudiante");
                 }
@@ -1162,6 +1168,7 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
+
 
 
 
@@ -1249,8 +1256,8 @@ public class ProjectoPOO extends JFrame {
             JTextField txtDireccion = new JTextField();
             JLabel lblContraseña = new JLabel("Contraseña: ");
             JPasswordField txtContraseña = new JPasswordField();
-            JLabel lblOrganizacion = new JLabel("Organizacion: ");
-            JTextField txtOrganizacion = new JTextField();
+            JLabel lblCertificaciones = new JLabel("Certificaciones del profesor: ");
+            JTextField txtCertificaciones = new JTextField();
             JLabel lblTitulos = new JLabel("Titulos del profesor: ");
             JTextField txtTitulos = new JTextField();
             JButton btnCrear = new JButton("Crear");
@@ -1275,8 +1282,8 @@ public class ProjectoPOO extends JFrame {
             add(txtDireccion);
             add(lblContraseña);
             add(txtContraseña);
-            add(lblOrganizacion);
-            add(txtOrganizacion);
+            add(lblCertificaciones);
+            add(txtCertificaciones);
             add(lblTitulos);
             add(txtTitulos);
 
@@ -1344,12 +1351,25 @@ public class ProjectoPOO extends JFrame {
                     JOptionPane.showMessageDialog(this, "Error, la contraseña debe de tener 8 o mas caracteres y tener mayuscula, numero y caracter especial");
                 }
 
-                String organizacion=txtOrganizacion.getText();
-                if (organizacion.length() > 40) {
-                    verificador=false;
-                    JOptionPane.showMessageDialog(this, "Error, la organizacion debe de tener hasta 40 caracteres");
-                }
+                String certificaciones=txtCertificaciones.getText();
 
+                ArrayList<String> listaCertifiaciones = new ArrayList<String>();
+
+                if (certificaciones.isEmpty()){
+
+                    JOptionPane.showMessageDialog(this, "Debe ingresar las certificaciones");
+                }else{
+                    String[] arregloCertificaciones = certificaciones.split("\\s*,\\s*");
+                    for (int i = 0; i < arregloCertificaciones.length; i++) {
+                        listaCertifiaciones.add(arregloCertificaciones[i]);
+                    }
+                    for (String sCertificaciones : listaCertifiaciones) {
+                        if (sCertificaciones.length() < 5 || sCertificaciones.length() > 40 ) {
+                            verificador=false;
+                            JOptionPane.showMessageDialog(this, "Error, cada certificacion debe de tener entre 5 y 40 caracteres");
+                        }
+                    }
+                }
 
                 String titulos=txtTitulos.getText();
 
@@ -1376,7 +1396,7 @@ public class ProjectoPOO extends JFrame {
 
 
                 if(verificador==true){
-                    Profesores prf = new Profesores(nombre,apellido1,apellido2,identificacion,telefono,correo,direccion,certificaciones,listaTitulos,contraseña);
+                    Profesores prf = new Profesores(nombre,apellido1,apellido2,identificacion,telefono,correo,direccion,contraseña,listaCertifiaciones,listaTitulos);
                     sistema.agregarProfesores(prf);
                     try {
                         // Enviar correo real con Outlook
@@ -1447,7 +1467,7 @@ public class ProjectoPOO extends JFrame {
             JButton btnTelefono = new JButton("Telefono");
             JButton btnCorreo = new JButton("Correo");
             JButton btnDireccion = new JButton("Direccion");
-            JButton btnOrganizacion = new JButton("Organizacion");
+            JButton btnCertificaciones = new JButton("Certificaciones del profesor");
             JButton btnTitulos = new JButton("Titulos del profesor");
             JButton btnSalir = new JButton("Salir");
 
@@ -1457,7 +1477,7 @@ public class ProjectoPOO extends JFrame {
             panelBotones.add(btnTelefono);
             panelBotones.add(btnCorreo);
             panelBotones.add(btnDireccion);
-            panelBotones.add(btnOrganizacion);
+            panelBotones.add(btnCertificaciones);
             panelBotones.add(btnTitulos);
             panelBotones.add(btnSalir);
             panelBotones.setBorder(BorderFactory.createEmptyBorder(100, 200, 100, 200));
@@ -1470,7 +1490,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(1,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Nombre");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Nombre");
                 }
 
             });
@@ -1479,7 +1499,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(2,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Primer apellido");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Primer apellido");
                 }
             });
 
@@ -1487,7 +1507,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(3,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Segundo apellido");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Segundo apellido");
                 }
             });
 
@@ -1495,7 +1515,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(4,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Telefono");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Telefono");
                 }
             });
 
@@ -1503,7 +1523,7 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(5,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Correo");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Correo");
                 }
             });
 
@@ -1511,15 +1531,15 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(6,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Direccion");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Direccion");
                 }
             });
 
-            btnOrganizacion.addActionListener(e ->{
+            btnCertificaciones.addActionListener(e ->{
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(7,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Organizacion");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Certificaciones");
                 }
             });
 
@@ -1527,9 +1547,10 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 JOptionPane.showMessageDialog(this, sistema.encontrarProfesor(8,identificacion));
                 if (sistema.todasIdentificaciones(identificacion)){
-                    correoConsulta(sistema.encontrarProfesor(5,identificacion),this,"Titulos");
+                    correoConsulta(sistema.encontrarProfesor(5,identificacion),null, this,"Titulos");
                 }
             });
+
             btnSalir.addActionListener(e ->{
                 this.dispose();
                 abrirAdministrador(ventanaPrincipal,tipoUsuario);
@@ -1572,8 +1593,8 @@ public class ProjectoPOO extends JFrame {
             JButton btnTelefono = new JButton("Telefono");
             JButton btnCorreo = new JButton("Correo");
             JButton btnDireccion = new JButton("Direccion");
-            JButton btnOrganizacion = new JButton("Organizacion");
-            JButton btnTtitulos = new JButton("Temas de interes");
+            JButton btnCertificaciones = new JButton("Certificaciones");
+            JButton btnTtitulos = new JButton("Titulos");
             JButton btnContraseña = new JButton("Contraseña");
             JButton btnSalir = new JButton("Salir");
 
@@ -1584,7 +1605,7 @@ public class ProjectoPOO extends JFrame {
             panelBotones.add(btnTelefono);
             panelBotones.add(btnCorreo);
             panelBotones.add(btnDireccion);
-            panelBotones.add(btnOrganizacion);
+            panelBotones.add(btnCertificaciones);
             panelBotones.add(btnTtitulos);
             panelBotones.add(btnContraseña);
             panelBotones.add(btnSalir);
@@ -1598,9 +1619,9 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 String Nnombre = JOptionPane.showInputDialog(this,
                         "Ingrese el nuevo nombre del profesor:");
-                if (Nnombre.length() >= 2 && Nnombre.length() <= 20 && sistema.devolverProfesor(1, identificacion, Nnombre, null)==true){
+                if (Nnombre.length() >= 2 && Nnombre.length() <= 20 && sistema.devolverProfesor(1, identificacion, Nnombre, null, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Nombre");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Nombre");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1611,9 +1632,9 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 String Nidentificacion = JOptionPane.showInputDialog(this,
                         "Ingrese la nueva identificacion del profesor:");
-                if (Nidentificacion.length() >= 9 && sistema.todasIdentificaciones(Nidentificacion)==false && sistema.devolverProfesor(10, identificacion, Nidentificacion, null)==true){
+                if (Nidentificacion.length() >= 9 && sistema.todasIdentificaciones(Nidentificacion)==false && sistema.devolverProfesor(10, identificacion, Nidentificacion, null, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,Nidentificacion),this,"Identificacion");
+                    correoModificacion(sistema.encontrarProfesor(5,Nidentificacion),null, this,"Identificacion");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1624,9 +1645,9 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 String Napellido1 = JOptionPane.showInputDialog(this,
                         "Ingrese el nuevo primer apellido del profesor:");
-                if (Napellido1.length() >= 2 && Napellido1.length() <= 20 && sistema.devolverProfesor(2, identificacion, Napellido1, null)==true){
+                if (Napellido1.length() >= 2 && Napellido1.length() <= 20 && sistema.devolverProfesor(2, identificacion, Napellido1, null, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Primer Apellido");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Primer Apellido");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1636,9 +1657,9 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 String Napellido2 = JOptionPane.showInputDialog(this,
                         "Ingrese el segundo apellido del profesor:");
-                if (Napellido2.length() >= 2 && Napellido2.length() <= 20 && sistema.devolverProfesor(3, identificacion, Napellido2, null)==true){
+                if (Napellido2.length() >= 2 && Napellido2.length() <= 20 && sistema.devolverProfesor(3, identificacion, Napellido2, null, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Segundo Apellido");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Segundo Apellido");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1648,9 +1669,9 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 String Ntelefono = JOptionPane.showInputDialog(this,
                         "Ingrese el telefono del profesor:");
-                if (Ntelefono.length() >= 8 && sistema.devolverProfesor(4, identificacion, Ntelefono, null)==true){
+                if (Ntelefono.length() >= 8 && sistema.devolverProfesor(4, identificacion, Ntelefono, null, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Telefono");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Telefono");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1661,9 +1682,9 @@ public class ProjectoPOO extends JFrame {
                 String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
                 String Ncorreo = JOptionPane.showInputDialog(this,
                         "Ingrese el telefono del profesor:");
-                if (Ncorreo.matches(regex) && sistema.devolverProfesor(5, identificacion, Ncorreo, null)==true){
+                if (Ncorreo.matches(regex) && sistema.devolverProfesor(5, identificacion, Ncorreo, null, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Correo");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Correo");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
@@ -1673,30 +1694,45 @@ public class ProjectoPOO extends JFrame {
                 String identificacion=txtIdentificacion.getText();
                 String Ndireccion = JOptionPane.showInputDialog(this,
                         "Ingrese el segundo apellido del profesor:");
-                if (Ndireccion.length() >= 5 && Ndireccion.length() <= 60 && sistema.devolverProfesor(6, identificacion, Ndireccion, null)==true){
+                if (Ndireccion.length() >= 5 && Ndireccion.length() <= 60 && sistema.devolverProfesor(6, identificacion, Ndireccion, null, null)==true){
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Direccion");
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Direccion");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
                 }
             });
 
-            btnOrganizacion.addActionListener(e ->{
+            btnCertificaciones.addActionListener(e ->{
                 String identificacion=txtIdentificacion.getText();
-                String Norganizacion = JOptionPane.showInputDialog(this,
-                        "Ingrese el segundo apellido del profesor:");
-                if (Norganizacion.length() <= 40 && sistema.devolverProfesor(7, identificacion, Norganizacion, null)==true){
-                    JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Organizacion");
+                String Ncertificaciones = JOptionPane.showInputDialog(this,
+                        "Ingrese las certificaciones del profesor:");
+
+                ArrayList<String> listaCertificaciones = new ArrayList<String>();
+
+                if (Ncertificaciones.isEmpty()){
+
+                    JOptionPane.showMessageDialog(this, "Debe ingresar las certificaciones");
                 }else{
-                    JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                    String[] arregloTitulos = Ncertificaciones.split("\\s*,\\s*");
+                    for (int i = 0; i < arregloTitulos.length; i++) {
+                        listaCertificaciones.add(arregloTitulos[i]);
+                    }
+                    for (String certificaciones : listaCertificaciones) {
+                        if (certificaciones.length() >= 5 && certificaciones.length() <= 40 && sistema.devolverProfesor(8, identificacion, null, listaCertificaciones, null)==true) {
+
+                            JOptionPane.showMessageDialog(this, "Modificacion exitosa");
+                            correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Certificaciones");
+                        }else{
+                            JOptionPane.showMessageDialog(this, "Modificacion erronea");
+                        }
+                    }
                 }
             });
 
             btnTtitulos.addActionListener(e ->{
                 String identificacion=txtIdentificacion.getText();
                 String Ntitulos = JOptionPane.showInputDialog(this,
-                        "Ingrese los temas de interes del profesor:");
+                        "Ingrese los titulos del profesor:");
 
                 ArrayList<String> listaTitulos = new ArrayList<String>();
 
@@ -1708,11 +1744,11 @@ public class ProjectoPOO extends JFrame {
                     for (int i = 0; i < arregloTitulos.length; i++) {
                         listaTitulos.add(arregloTitulos[i]);
                     }
-                    for (String interes : listaTitulos) {
-                        if (interes.length() >= 5 && interes.length() <= 30 && sistema.devolverProfesor(8, identificacion, null, listaTitulos)==true) {
+                    for (String titulos : listaTitulos) {
+                        if (titulos.length() >= 5 && titulos.length() <= 40 && sistema.devolverProfesor(8, identificacion, null, null, listaTitulos)==true) {
 
                             JOptionPane.showMessageDialog(this, "Modificacion exitosa");
-                            correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Temas de interes");
+                            correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Titulos");
                         }else{
                             JOptionPane.showMessageDialog(this, "Modificacion erronea");
                         }
@@ -1728,8 +1764,8 @@ public class ProjectoPOO extends JFrame {
                 boolean tieneMayuscula = NContraseña.matches(".*[A-Z].*");
                 boolean tieneNumero    = NContraseña.matches(".*[0-9].*");
                 boolean tieneEspecial  = NContraseña.matches(".*[^a-zA-Z0-9].*");
-                if (NContraseña.length() >= 8 && tieneMayuscula && tieneNumero && tieneEspecial && sistema.devolverProfesor(9, identificacion, NContraseña, null)==true){
-                    correoModificacion(sistema.encontrarProfesor(5,identificacion),this,"Contraseña");
+                if (NContraseña.length() >= 8 && tieneMayuscula && tieneNumero && tieneEspecial && sistema.devolverProfesor(9, identificacion, NContraseña, null,null)==true){
+                    correoModificacion(sistema.encontrarProfesor(5,identificacion),null, this,"Contraseña");
                     JOptionPane.showMessageDialog(this, "Modificacion exitosa");
                 }else{
                     JOptionPane.showMessageDialog(this, "Modificacion erronea");
@@ -1792,9 +1828,9 @@ public class ProjectoPOO extends JFrame {
             btnEliminar.addActionListener(e ->{
                 String identificacion=txtIdentificacion.getText();
                 if (sistema.todasIdentificaciones(identificacion)){
-                    sistema.eliminarProfesores(identificacion);
+                    sistema.eliminarProfesor(identificacion);
                     JOptionPane.showMessageDialog(this, "Eliminacion exitosa");
-                    correoEliminar(sistema.encontrarProfesor(5,identificacion),this);
+                    correoEliminar(sistema.encontrarProfesor(5,identificacion),null, this);
                 }else{
                     JOptionPane.showMessageDialog(this, "No se encontro al profesor");
                 }
@@ -1810,7 +1846,8 @@ public class ProjectoPOO extends JFrame {
 
         }
     }
-    
+
+
 
 
 
@@ -2929,7 +2966,7 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    public static void correoModificacion(String correo, VentanaModificarEstudiante VentanaModificarEstudiante, String dato){
+    public static void correoModificacion(String correo, VentanaModificarEstudiante VentanaModificarEstudiante, VentanaModificarProfesor VentanaModificarProfesor, String dato){
         try {
                         // Enviar correo real con Outlook
                         EnviadorCorreo.enviarCorreoOutlook(
@@ -2950,7 +2987,7 @@ public class ProjectoPOO extends JFrame {
                     }
     }
     
-    public static void correoConsulta(String correo, VentanaMostrarEstudiante VentanaMostrarEstudiante, String dato){
+    public static void correoConsulta(String correo, VentanaMostrarEstudiante VentanaMostrarEstudiante, VentanaMostrarProfesor VentanaMostrarProfesor, String dato){
         try {
                         // Enviar correo real con Outlook
                         EnviadorCorreo.enviarCorreoOutlook(
@@ -2971,7 +3008,7 @@ public class ProjectoPOO extends JFrame {
                     }
     }
     
-    public static void correoEliminar(String correo, VentanaEliminarEstudiante VentanaEliminarEstudiante){
+    public static void correoEliminar(String correo, VentanaEliminarEstudiante VentanaEliminarEstudiante, VentanaEliminarProfesor VentanaEliminarProfesor){
         try {
                         // Enviar correo real con Outlook
                         EnviadorCorreo.enviarCorreoOutlook(
@@ -2991,6 +3028,7 @@ public class ProjectoPOO extends JFrame {
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
     }
+
     public String generarContrasenaTemporal() {
             String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             Random random = new Random();
@@ -3000,6 +3038,7 @@ public class ProjectoPOO extends JFrame {
             }
             return sb.toString();
         }
+
     public void correoRestablecer(String correo, VentanaLogin VentanaLogin,String tempPassword){
         
         

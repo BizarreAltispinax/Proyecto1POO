@@ -31,11 +31,27 @@ public class Grupos implements Serializable{
     }
 
     public int getIdGrupo() { return idGrupo; }
-    public LocalDate getFechaInicio() { return fechaInicio; }
-    public LocalDate getFechaFin() { return fechaFin; }
-    public ArrayList<Estudiantes> getEstudiantes() { return estudiantes; }
-    public int getCantidadEstudiantes() { return estudiantes.size(); }
-    public Profesores getProfesor() { return profesor; }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public ArrayList<Estudiantes> getEstudiantes() {
+        return estudiantes;
+    }
+
+    public int getCantidadEstudiantes() {
+        return estudiantes.size();
+    }
+
+    public Profesores getProfesor() {
+        return profesor;
+    }
+
     // Incrementa los estudiantes (por matrícula)
     public void agregarEstudiantes(Estudiantes est){
         if (est!=null){
@@ -49,6 +65,7 @@ public class Grupos implements Serializable{
             this.profesor = profe; 
         }
     }
+
     public void asignarCurso(Cursos curso){
         this.curso=curso;
     }

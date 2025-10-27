@@ -289,9 +289,11 @@ public class Sistema implements Serializable{
                     case 8:
                         e.setCertificaciones(certificaciones);
                         return true;
+
                     case 9:
                         e.setContraseña(atributo);
                         return true;
+
                     case 10:
                         e.setIdentificacion(atributo);
                         return true;
@@ -367,13 +369,16 @@ public class Sistema implements Serializable{
     }
 
 
-    public void eliminarProfesores(String identificacion){
+    public void eliminarProfesor(String identificacion){
 
-        profesores.removeIf(est -> est.getIdentificacion().equals(identificacion));
+        profesores.removeIf(prf -> prf.getIdentificacion().equals(identificacion));
 
         for (Cursos c : cursos) {
             for (Grupos g : c.getGrupos()) {
-                g.getProfesores().removeIf(e -> e.getIdentificacion().equals(identificacion));
+                Profesores prof = g.getProfesor();
+                if (prof != null && prof.getIdentificacion().equals(identificacion)) {
+                    g.asignarProfesor(null);
+                }
             }
         }
     }
