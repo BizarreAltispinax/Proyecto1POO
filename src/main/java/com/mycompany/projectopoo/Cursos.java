@@ -11,8 +11,9 @@ package com.mycompany.projectopoo;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import java.io.*;
 
-public class Cursos {
+public class Cursos implements Serializable{
     public enum Modalidad {
         PRESENCIAL("Presencial"),
         VIRTUAL_SINCRONICO("Virtual sincrónico"),
@@ -94,7 +95,14 @@ public class Cursos {
     public ArrayList<Grupos> getGrupos() { return grupos; }
 
 
-    
+    public Grupos devGrupos(int idGrupo){
+        for (Grupos g : grupos){
+            if(g.getIdGrupo()==idGrupo){
+                return g;
+            }
+        }
+        return null;
+    }
 
     public String getDescripcion() {
         return descripcion;
@@ -193,9 +201,10 @@ public class Cursos {
     
     
     // --- Crear un nuevo grupo vacío ---
-    public void crearGrupo(LocalDate inicio, LocalDate fin) {
+    public void crearGrupo(LocalDate inicio, LocalDate fin,Cursos curso) {
         int nuevoId = grupos.size() + 1;
         Grupos nuevo = new Grupos(nuevoId, inicio, fin);
+        nuevo.asignarCurso(curso);
         grupos.add(nuevo);
     }
     

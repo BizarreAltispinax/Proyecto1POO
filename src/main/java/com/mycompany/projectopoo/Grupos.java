@@ -10,13 +10,15 @@ package com.mycompany.projectopoo;
  */
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.io.*;
 
-public class Grupos {
+public class Grupos implements Serializable{
     private int idGrupo;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private ArrayList<Estudiantes> estudiantes;
-    private ArrayList<Profesores> profesores;
+    private Profesores profesor;
+    private Cursos curso;
 
     public Grupos(int idGrupo, LocalDate fechaInicio, LocalDate fechaFin) {
         if (fechaInicio == null || fechaFin == null || fechaFin.isBefore(fechaInicio))
@@ -25,22 +27,30 @@ public class Grupos {
         this.idGrupo = idGrupo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        
+        this.estudiantes = new ArrayList<>();
     }
 
     public int getIdGrupo() { return idGrupo; }
     public LocalDate getFechaInicio() { return fechaInicio; }
     public LocalDate getFechaFin() { return fechaFin; }
     public ArrayList<Estudiantes> getEstudiantes() { return estudiantes; }
-    public ArrayList<Profesores> getProfesores() { return profesores; }
     public int getCantidadEstudiantes() { return estudiantes.size(); }
-
+    public Profesores getProfesor() { return profesor; }
     // Incrementa los estudiantes (por matrícula)
     public void agregarEstudiantes(Estudiantes est){
         if (est!=null){
             estudiantes.add(est);
         }
         
+    }
+    
+    public void asignarProfesor(Profesores profe){
+        if (profe!=null){
+            this.profesor = profe; 
+        }
+    }
+    public void asignarCurso(Cursos curso){
+        this.curso=curso;
     }
 
     @Override

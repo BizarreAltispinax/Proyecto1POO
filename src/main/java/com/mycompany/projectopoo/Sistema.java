@@ -13,16 +13,22 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.util.Comparator;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.*;
 /**
  *
  * @author Usuario
  */
-public class Sistema {
+public class Sistema implements Serializable{
+    private static final long serialVersionUID = 1L;
+
+
+    private static final String RUTA_ARCHIVO = "sistema.dat";
     private ArrayList<Estudiantes> estudiantes;
     private ArrayList<Profesores> profesores;
     
     private ArrayList<Grupos> grupos;
     private ArrayList<Cursos> cursos;
+    private static Sistema instancia;
     /*
     private ArrayList<Evaluaciones> evaluaciones;
     */
@@ -54,6 +60,41 @@ public class Sistema {
         estudiantes.add(evaluacion);
     }
     */
+    
+    public static Sistema getInstancia() {
+        if (instancia == null) {
+            instancia = cargar();
+        }
+        return instancia;
+    }
+
+    
+    public void guardar() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(RUTA_ARCHIVO))) {
+            oos.writeObject(this);
+            System.out.println("✅ Sistema guardado correctamente.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    private static Sistema cargar() {
+        File archivo = new File(RUTA_ARCHIVO);
+        if (archivo.exists()) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
+                Sistema sistemaCargado = (Sistema) ois.readObject();
+                System.out.println("📂 Sistema cargado correctamente.");
+                return sistemaCargado;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("⚠️ No se encontró archivo, creando nuevo sistema.");
+        return new Sistema();
+    }
+    
+    
     
     public String encontrarEstudiante(int opcion,String identificacion){
         
