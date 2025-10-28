@@ -2765,6 +2765,97 @@ public class ProjectoPOO extends JFrame {
     }
     
     
+    private void abrirMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaMatriculaEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaMatriculaEstudiante extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            
+            setLayout(new GridLayout(7, 1, 5, 5));
+
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            
+            JLabel lblIdentificacionCurso = new JLabel("Identificacion de curso:");
+            JTextField txtIdentificacionCurso = new JTextField();
+            JLabel lblIdentificacionGrupo = new JLabel("Identificacion de grupo:");
+            JTextField txtIdentificacionGrupo = new JTextField();
+            JLabel lblIdentificacionProfesor = new JLabel("Identificaion del estudiante:");
+            JTextField txtIdentificacionEstudiante = new JTextField();
+            JButton btnAsociar = new JButton("Asociar");
+            
+            add(lblIdentificacionCurso);
+            add(txtIdentificacionCurso);
+            add(lblIdentificacionGrupo);
+            add(txtIdentificacionGrupo);
+            add(lblIdentificacionProfesor);
+            add(txtIdentificacionEstudiante);
+
+            add(btnAsociar);
+            
+
+                        
+            
+            btnAsociar.addActionListener(e ->{
+                String identificacionCurso=txtIdentificacionCurso.getText();
+                String identificacionGrupo=txtIdentificacionGrupo.getText();
+                String identificacionEstudiante=txtIdentificacionEstudiante.getText();
+                
+
+                try {
+                    int idGrupo= Integer.parseInt(identificacionGrupo);
+                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devEstudiante(identificacionEstudiante)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().contains(sistema.devEstudiante(identificacionEstudiante))){
+                        sistema.devCursos(identificacionCurso).devGrupos(idGrupo).agregarEstudiantes(sistema.devEstudiante(identificacionEstudiante));
+                        this.dispose();
+                        abrirAdministrador(ventanaPrincipal,tipoUsuario);
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Revisar identificaciones o el grupo ya contiene ese estudiante");
+                    }
+                    JOptionPane.showMessageDialog(this, "Asociacion exitosa");
+                } catch (NumberFormatException w) {
+                    JOptionPane.showMessageDialog(this, "Formato inválido de la identificacion de grupo");
+                }
+                
+                
+                
+            });
+            
+
+            
+            
+            
+        }
+    }
+    
+    
     private void abrirReportes(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
         new VentanaReportes(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
