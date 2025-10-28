@@ -39,11 +39,11 @@ public class ProjectoPOO extends JFrame {
      */
     public ProjectoPOO() {
         setTitle("Sistema de Inicio");
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
         setSize(350, 200);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -415,6 +415,94 @@ public class ProjectoPOO extends JFrame {
                 });
         }
     }
+    
+    private void abrirEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.setVisible(false); // Cierra la ventana principal
+    }
+    private class VentanaEstudiante extends JFrame {
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(400, 250);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            
+            
+            JPanel panelBotones = new JPanel(new GridLayout(6, 1, 10, 10));
+            JButton btninfo = new JButton("Informacion general");
+            JButton btnMatricula = new JButton("Matricula");
+            JButton btnEvaluaciones = new JButton("Evaluaciones asignadas");
+            JButton btnDesempeño = new JButton("Desempeño personal");
+            
+            JButton btnSalir = new JButton("Salir");
+            
+            
+            panelBotones.add(btninfo);
+            panelBotones.add(btnMatricula);
+            panelBotones.add(btnEvaluaciones);
+            panelBotones.add(btnDesempeño);
+            panelBotones.add(btnSalir);
+
+            add(panelBotones, BorderLayout.CENTER);
+
+        // Acción para cada botón
+        btninfo.addActionListener(e -> {
+            this.dispose();
+            abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+                });
+
+        btnMatricula.addActionListener(e -> {
+            this.dispose();
+            abrirMatriculaEstudiante(ventanaPrincipal,tipoUsuario);
+                });
+        
+        
+        btnEvaluaciones.addActionListener(e -> {
+            this.dispose();
+            
+                });
+        
+        btnDesempeño.addActionListener(e -> {
+            this.dispose();
+            
+                });
+
+        
+          
+        //btnProfesor.addActionListener(e ->);    
+        btnSalir.addActionListener(e -> {
+            this.dispose();
+            ventanaPrincipal.setVisible(true); // Muestra ventana principal
+                });
+        }
+    }
+    
     private void abrirAdministradorEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
         new VentanaAdministradorEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
@@ -1181,10 +1269,32 @@ public class ProjectoPOO extends JFrame {
         public VentanaAdministradorProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
             setSize(350, 200);
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    //guardarInformacionAlCerrar();
+
+                    // 🔹 Mostramos confirmación opcional
+                    int opcion = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Desea salir del programa?",
+                        "Confirmar salida",
+                        JOptionPane.YES_NO_OPTION
+
+                    );
+
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        sistema.guardar();
+                        System.out.println("Cerrando aplicación...");
+                        System.exit(0); // 🔹 Cierra completamente el programa
+                    }
+                }
+            });
 
             JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
             JButton btnCrear = new JButton("Crear");
@@ -1235,9 +1345,31 @@ public class ProjectoPOO extends JFrame {
         public VentanaCrearProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
             setSize(1000, 850);
             setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             setLayout(new GridLayout(21, 1, 5, 5));
 
             JLabel lblNombre = new JLabel("Nombre:");
@@ -1438,11 +1570,32 @@ public class ProjectoPOO extends JFrame {
         public VentanaMostrarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
             setSize(1000, 850);
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
 
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
 
 
 
@@ -1567,9 +1720,31 @@ public class ProjectoPOO extends JFrame {
         public VentanaModificarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
             setSize(1000, 850);
             setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
             setLayout(new BorderLayout());
 
             JPanel panelIdentificacion = new JPanel(new BorderLayout());
@@ -1794,11 +1969,32 @@ public class ProjectoPOO extends JFrame {
         public VentanaEliminarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
             setSize(1000, 850);
             setLocationRelativeTo(null);
             setLayout(new BorderLayout());
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
 
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
 
 
 
@@ -3058,13 +3254,14 @@ public class ProjectoPOO extends JFrame {
     
     
     public static void correoModificacion(String correo, VentanaModificarEstudiante VentanaModificarEstudiante, VentanaModificarProfesor VentanaModificarProfesor, String dato){
-        try {
+        if(VentanaModificarProfesor==null){
+            try {
                         // Enviar correo real con Outlook
                         EnviadorCorreo.enviarCorreoOutlook(
                                 "andrehiva6@gmail.com",     // tu correo Outlook
                                 "iang gigc rlvr uimy",    // no pongas tu contraseña normal
                                 correo,
-                                "Modificacion de usuario ("+"dato"+")",
+                                "Modificacion de usuario ("+dato+")",
                                 "Se han modificado datos del usuario con correo " + correo
                         );
 
@@ -3076,10 +3273,32 @@ public class ProjectoPOO extends JFrame {
                                 "Error al enviar el correo:\n" + ex.getMessage(),
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
+        }else{
+            try {
+                        // Enviar correo real con Outlook
+                        EnviadorCorreo.enviarCorreoOutlook(
+                                "andrehiva6@gmail.com",     // tu correo Outlook
+                                "iang gigc rlvr uimy",    // no pongas tu contraseña normal
+                                correo,
+                                "Modificacion de usuario ("+dato+")",
+                                "Se han modificado datos del usuario con correo " + correo
+                        );
+
+                        JOptionPane.showMessageDialog(VentanaModificarProfesor,
+                                "Se ha enviado un correo a " + correo);
+
+                    } catch (MessagingException ex) {
+                        JOptionPane.showMessageDialog(VentanaModificarProfesor,
+                                "Error al enviar el correo:\n" + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+        }
+        
     }
     
     public static void correoConsulta(String correo, VentanaMostrarEstudiante VentanaMostrarEstudiante, VentanaMostrarProfesor VentanaMostrarProfesor, String dato){
-        try {
+        if(VentanaMostrarProfesor==null){
+            try {
                         // Enviar correo real con Outlook
                         EnviadorCorreo.enviarCorreoOutlook(
                                 "andrehiva6@gmail.com",     // tu correo Outlook
@@ -3097,10 +3316,32 @@ public class ProjectoPOO extends JFrame {
                                 "Error al enviar el correo:\n" + ex.getMessage(),
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
+        }else{
+            try {
+                        // Enviar correo real con Outlook
+                        EnviadorCorreo.enviarCorreoOutlook(
+                                "andrehiva6@gmail.com",     // tu correo Outlook
+                                "iang gigc rlvr uimy",    // no pongas tu contraseña normal
+                                correo,
+                                "Consulta de usuario ("+dato+")",
+                                "Se han consultado datos del usuario con correo " + correo
+                        );
+
+                        JOptionPane.showMessageDialog(VentanaMostrarProfesor,
+                                "Se ha enviado un correo a " + correo);
+
+                    } catch (MessagingException ex) {
+                        JOptionPane.showMessageDialog(VentanaMostrarProfesor,
+                                "Error al enviar el correo:\n" + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+        }
+        
     }
     
     public static void correoEliminar(String correo, VentanaEliminarEstudiante VentanaEliminarEstudiante, VentanaEliminarProfesor VentanaEliminarProfesor){
-        try {
+        if(VentanaEliminarProfesor==null){
+                    try {
                         // Enviar correo real con Outlook
                         EnviadorCorreo.enviarCorreoOutlook(
                                 "andrehiva6@gmail.com",     // tu correo Outlook
@@ -3118,6 +3359,27 @@ public class ProjectoPOO extends JFrame {
                                 "Error al enviar el correo:\n" + ex.getMessage(),
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
+        }else{
+            try {
+                        // Enviar correo real con Outlook
+                        EnviadorCorreo.enviarCorreoOutlook(
+                                "andrehiva6@gmail.com",     // tu correo Outlook
+                                "iang gigc rlvr uimy",    // no pongas tu contraseña normal
+                                correo,
+                                "Eliminacion de usuario",
+                                "Se ah eliminado el usuario con correo " + correo
+                        );
+
+                        JOptionPane.showMessageDialog(VentanaEliminarProfesor,
+                                "Se ha enviado un correo a " + correo);
+
+                    } catch (MessagingException ex) {
+                        JOptionPane.showMessageDialog(VentanaEliminarProfesor,
+                                "Error al enviar el correo:\n" + ex.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+        }
+
     }
 
     public String generarContrasenaTemporal() {
