@@ -174,31 +174,21 @@ public class ProjectoPOO extends JFrame {
                 String identificacion = txtIdentificacion.getText();
                 String contrasena = new String(txtContrasena.getPassword());
 
-                if ((!identificacion.isEmpty() && sistema.devEstudiante(identificacion)!=null) && (!contrasena.isEmpty() && (sistema.devEstudiante(identificacion).verificarContraseña(contrasena)))) {
-                    JOptionPane.showMessageDialog(this, "Bienvenido: " + sistema.devEstudiante(identificacion).getNombre());
-                    if(tipoUsuario.equals("Estudiante")){
+                if ((!identificacion.isEmpty()) && (!contrasena.isEmpty())) {
+                    
+                    if(tipoUsuario.equals("Estudiante")&& sistema.devEstudiante(identificacion)!=null && sistema.devEstudiante(identificacion).verificarContraseña(contrasena)){
+                        JOptionPane.showMessageDialog(this, "Bienvenido: " + sistema.devEstudiante(identificacion).getNombre());
                         JOptionPane.showMessageDialog(this, "Ah entrado como estudiante");
-                        JFrame ventana = new JFrame("Seleccionar Fecha y Opciones");
-                        ventana.setSize(400, 300);
-                        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        ventana.setLayout(null);
-
-                        // Campo de fecha
-                        
-                        JTextArea lblFecha = new JTextArea(10, 50); // Ejemplo: 10 filas de alto, 30 columnas de ancho
-
-
-                        lblFecha.setText(sistema.devEstudiante(identificacion).toString());
-                   
-                        lblFecha.setEditable(false);
-                        
-                        lblFecha.setBounds(20, 20, 350, 170);
-                        lblFecha.setBackground(ventana.getBackground());
-                        ventana.add(lblFecha);
-                        ventana.setVisible(true);
+                        abrirEstudiante(ventanaPrincipal,tipoUsuario,sistema.devEstudiante(identificacion));
+                        this.dispose();
                     }else{
-                        if(tipoUsuario.equals("Profesor")){
+                        if(tipoUsuario.equals("Profesor")&& sistema.devProfesor(identificacion)!=null&& sistema.devProfesor(identificacion).verificarContraseña(contrasena)){
+                            JOptionPane.showMessageDialog(this, "Bienvenido: " + sistema.devProfesor(identificacion).getNombre());
                             JOptionPane.showMessageDialog(this, "Ah entrado como profesor");
+                        }else{
+                            JOptionPane.showMessageDialog(this,
+                            "No se encontro el usuario",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
 
@@ -416,13 +406,13 @@ public class ProjectoPOO extends JFrame {
         }
     }
     
-    private void abrirEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
-        new VentanaEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
+    private void abrirEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario, Estudiantes est) {
+        new VentanaEstudiante(ventanaPrincipal,tipoUsuario,est).setVisible(true);
         this.setVisible(false); // Cierra la ventana principal
     }
     private class VentanaEstudiante extends JFrame {
         private ProjectoPOO ventanaPrincipal;
-        public VentanaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        public VentanaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -473,13 +463,36 @@ public class ProjectoPOO extends JFrame {
 
         // Acción para cada botón
         btninfo.addActionListener(e -> {
-            this.dispose();
-            abrirAdministradorEstudiante(ventanaPrincipal,tipoUsuario);
+            
+            JFrame ventana = new JFrame("Informacion general");
+            ventana.setSize(400, 300);
+            ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            ventana.setLayout(null);
+
+            // Campo de fecha
+            JTextArea lblFecha = new JTextArea(10, 50);
+            lblFecha.setText(est.toString());
+            lblFecha.setEditable(false);
+            lblFecha.setBounds(20, 20, 350, 170);
+            lblFecha.setBackground(ventana.getBackground());
+            ventana.add(lblFecha);
+
+            // Botón para cerrar la ventana
+            JButton btnCerrar = new JButton("Cerrar");
+            btnCerrar.setBounds(150, 210, 100, 30); // posición y tamaño del botón
+            btnCerrar.addActionListener(w -> ventana.dispose());
+            ventana.add(btnCerrar);
+
+            ventana.setVisible(true);
+                        
+                        
+                        
+                        
                 });
 
         btnMatricula.addActionListener(e -> {
             this.dispose();
-            abrirMatriculaEstudiante(ventanaPrincipal,tipoUsuario);
+            abrirMatriculaEstudiante(ventanaPrincipal,tipoUsuario,est);
                 });
         
         
@@ -501,6 +514,8 @@ public class ProjectoPOO extends JFrame {
             ventanaPrincipal.setVisible(true); // Muestra ventana principal
                 });
         }
+        
+        
     }
     
     private void abrirAdministradorEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
@@ -2961,13 +2976,13 @@ public class ProjectoPOO extends JFrame {
     }
     
     
-    private void abrirMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
-        new VentanaMatriculaEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
+    private void abrirMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est) {
+        new VentanaMatriculaEstudiante(ventanaPrincipal,tipoUsuario,est).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaMatriculaEstudiante extends JFrame{
         private ProjectoPOO ventanaPrincipal;
-        public VentanaMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        public VentanaMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3004,38 +3019,39 @@ public class ProjectoPOO extends JFrame {
             JTextField txtIdentificacionCurso = new JTextField();
             JLabel lblIdentificacionGrupo = new JLabel("Identificacion de grupo:");
             JTextField txtIdentificacionGrupo = new JTextField();
-            JLabel lblIdentificacionProfesor = new JLabel("Identificaion del estudiante:");
-            JTextField txtIdentificacionEstudiante = new JTextField();
+            
             JButton btnAsociar = new JButton("Asociar");
+            JButton btnAtras = new JButton("Atras");
+            
             
             add(lblIdentificacionCurso);
             add(txtIdentificacionCurso);
             add(lblIdentificacionGrupo);
             add(txtIdentificacionGrupo);
-            add(lblIdentificacionProfesor);
-            add(txtIdentificacionEstudiante);
+            
 
             add(btnAsociar);
             
-
+            add(btnAtras);
                         
             
             btnAsociar.addActionListener(e ->{
                 String identificacionCurso=txtIdentificacionCurso.getText();
                 String identificacionGrupo=txtIdentificacionGrupo.getText();
-                String identificacionEstudiante=txtIdentificacionEstudiante.getText();
+                
                 
 
                 try {
                     int idGrupo= Integer.parseInt(identificacionGrupo);
-                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devEstudiante(identificacionEstudiante)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().contains(sistema.devEstudiante(identificacionEstudiante))){
-                        sistema.devCursos(identificacionCurso).devGrupos(idGrupo).agregarEstudiantes(sistema.devEstudiante(identificacionEstudiante));
+                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && est!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().contains(est)==false){
+                        sistema.devCursos(identificacionCurso).devGrupos(idGrupo).agregarEstudiantes(est);
+                        JOptionPane.showMessageDialog(this, "Asociacion exitosa");
                         this.dispose();
-                        abrirAdministrador(ventanaPrincipal,tipoUsuario);
+                        abrirEstudiante(ventanaPrincipal,tipoUsuario,est);
+                        
                     }else{
                         JOptionPane.showMessageDialog(this, "Revisar identificaciones o el grupo ya contiene ese estudiante");
                     }
-                    JOptionPane.showMessageDialog(this, "Asociacion exitosa");
                 } catch (NumberFormatException w) {
                     JOptionPane.showMessageDialog(this, "Formato inválido de la identificacion de grupo");
                 }
@@ -3045,7 +3061,14 @@ public class ProjectoPOO extends JFrame {
             });
             
 
-            
+            btnAtras.addActionListener(e ->{
+                this.dispose();
+                abrirEstudiante(ventanaPrincipal,tipoUsuario,est);
+
+                
+                
+                
+            });
             
             
         }
