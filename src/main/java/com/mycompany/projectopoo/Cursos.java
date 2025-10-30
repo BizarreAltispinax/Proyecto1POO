@@ -197,18 +197,6 @@ public class Cursos implements Serializable{
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // --- Crear un nuevo grupo vacío ---
     public void crearGrupo(LocalDate inicio, LocalDate fin,Cursos curso) {
         int nuevoId = grupos.size() + 1;

@@ -185,6 +185,8 @@ public class ProjectoPOO extends JFrame {
                         if(tipoUsuario.equals("Profesor")&& sistema.devProfesor(identificacion)!=null&& sistema.devProfesor(identificacion).verificarContraseña(contrasena)){
                             JOptionPane.showMessageDialog(this, "Bienvenido: " + sistema.devProfesor(identificacion).getNombre());
                             JOptionPane.showMessageDialog(this, "Ah entrado como profesor");
+                            abrirProfesor(ventanaPrincipal,tipoUsuario,sistema.devProfesor(identificacion));
+                            this.dispose();
                         }else{
                             JOptionPane.showMessageDialog(this,
                             "No se encontro el usuario",
@@ -516,6 +518,313 @@ public class ProjectoPOO extends JFrame {
         }
         
         
+    }
+    
+    
+    private void abrirProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario, Profesores prof) {
+        new VentanaProfesor(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.setVisible(false); // Cierra la ventana principal
+    }
+    private class VentanaProfesor extends JFrame {
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(400, 250);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            
+            
+            JPanel panelBotones = new JPanel(new GridLayout(6, 1, 10, 10));
+            JButton btninfo = new JButton("Informacion general");
+            JButton btnEvaluaciones = new JButton("Evaluaciones (CRUD)");
+            JButton btnPrev = new JButton("Previzualizacion de evaluaciones");
+            JButton btnRep = new JButton("Reporte evaluacion");
+            JButton btnAsoDesa = new JButton("Asociar/Desasociar evaluaciones");
+            JButton btnEvAsignadas = new JButton("Evaluaciones asignadas");
+            JButton btnEvRealizadas = new JButton("Evaluaciones realizadas");
+            
+            JButton btnSalir = new JButton("Salir");
+            
+            
+            panelBotones.add(btninfo);
+            panelBotones.add(btnEvaluaciones);
+            panelBotones.add(btnPrev);
+            panelBotones.add(btnRep);
+            panelBotones.add(btnAsoDesa);
+            panelBotones.add(btnEvAsignadas);
+            panelBotones.add(btnEvRealizadas);
+            panelBotones.add(btnSalir);
+
+            add(panelBotones, BorderLayout.CENTER);
+
+        // Acción para cada botón
+        btninfo.addActionListener(e -> {
+            
+            JFrame ventana = new JFrame("Informacion general");
+            ventana.setSize(400, 300);
+            ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            ventana.setLayout(null);
+
+            // Campo de fecha
+            JTextArea lblFecha = new JTextArea(10, 50);
+            lblFecha.setText(prof.toString());
+            lblFecha.setEditable(false);
+            lblFecha.setBounds(20, 20, 350, 170);
+            lblFecha.setBackground(ventana.getBackground());
+            ventana.add(lblFecha);
+
+            // Botón para cerrar la ventana
+            JButton btnCerrar = new JButton("Cerrar");
+            btnCerrar.setBounds(150, 210, 100, 30); // posición y tamaño del botón
+            btnCerrar.addActionListener(w -> ventana.dispose());
+            ventana.add(btnCerrar);
+
+            ventana.setVisible(true);
+                        
+                        
+                        
+                        
+                });
+
+        btnEvaluaciones.addActionListener(e -> {
+            this.dispose();
+            abrirEvaluacionesCRUD(ventanaPrincipal,tipoUsuario);
+                });
+        
+        
+        btnPrev.addActionListener(e -> {
+            this.dispose();
+            
+                });
+
+        
+          
+        //btnProfesor.addActionListener(e ->);    
+        btnSalir.addActionListener(e -> {
+            this.dispose();
+            ventanaPrincipal.setVisible(true); // Muestra ventana principal
+                });
+        }
+        
+        
+    }
+    private void abrirEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaEvaluacionesCRUD(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaEvaluacionesCRUD extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(350, 200);
+            setLocationRelativeTo(null);
+            setLayout(new BorderLayout());
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
+            JButton btnCrear = new JButton("Crear");
+            JButton btnConsultar = new JButton("Consultar");
+            JButton btnModificar = new JButton("Modificar");
+            JButton btnEliminar = new JButton("Eliminar");
+            
+            
+            
+            
+            panelBotones.add(btnCrear);
+            panelBotones.add(btnConsultar);
+            panelBotones.add(btnModificar);
+            panelBotones.add(btnEliminar);
+       
+
+            add(panelBotones, BorderLayout.CENTER);
+            
+            btnCrear.addActionListener(e -> {
+                this.dispose();
+                abrirCrearEvaluacion(ventanaPrincipal,tipoUsuario);
+                    });
+            
+            btnConsultar.addActionListener(e -> {
+                this.dispose();
+                abrirMostrarEvaluacion(ventanaPrincipal,tipoUsuario);
+                    });
+            
+            btnModificar.addActionListener(e -> {
+                this.dispose();
+                abrirModificarEvaluacion(ventanaPrincipal,tipoUsuario);
+                    });
+            
+           btnEliminar.addActionListener(e -> {
+                this.dispose();
+                abrirEliminarEvaluacion(ventanaPrincipal,tipoUsuario);
+                    });
+            
+            
+        }
+    }
+    
+    private void abrirCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaCrearEvaluacion(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaCrearEvaluacion extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        private JRadioButton rbOpcion1, rbOpcion2;
+        private ArrayList<Ejercicios> listaEjercicios = new ArrayList<Ejercicios>();
+        public VentanaCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            setLayout(new GridLayout(21, 1, 5, 5));
+            
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            
+            JLabel lblNombre = new JLabel("Nombre: ");
+            JTextField txtNombre = new JTextField();
+            JLabel lblInstrucciones = new JLabel("Instrucciones generales:");
+            JTextField txtInstrucciones = new JTextField();
+            JLabel lblObjetivos = new JLabel("Objetivos: ");
+            JTextField txtObjetivos = new JTextField();
+            JLabel lblDuracion = new JLabel("Duracion: ");
+            JTextField txtDuracion = new JTextField();
+            
+
+            JButton btnAgregarEjercicio = new JButton("Agregar ejercicio");
+            
+            JButton btnCrear = new JButton("Crear");
+  
+            
+            
+            add(lblNombre); 
+            add(txtNombre); 
+            add(lblInstrucciones); 
+            add(txtInstrucciones); 
+            add(lblObjetivos); 
+            add(txtObjetivos); 
+            add(lblDuracion); 
+            add(txtDuracion); 
+            
+            rbOpcion1 = new JRadioButton("Opción 1");
+            rbOpcion1.setBounds(50, 40, 100, 30);
+            add(rbOpcion1);
+
+            rbOpcion2 = new JRadioButton("Opción 2");
+            rbOpcion2.setBounds(50, 70, 100, 30);
+            add(rbOpcion2);
+            
+            add(btnAgregarEjercicio);
+            add(btnCrear);
+            
+           
+            
+            
+            
+            
+            btnCrear.addActionListener(e -> {
+                boolean valor1 = rbOpcion1.isSelected();
+                boolean valor2 = rbOpcion2.isSelected();
+                String nombre = txtNombre.getText().trim();
+                String instrucciones = txtInstrucciones.getText().trim();
+                String objetivos = txtObjetivos.getText().trim();
+                String duracion = txtDuracion.getText().trim();
+                int duracionT = Integer.parseInt(duracion);
+
+                
+                
+                ArrayList<String> listaObjetivos = new ArrayList<String>();
+                
+                
+                
+                String[] arregloObjetivos = objetivos.split("\\s*,\\s*");
+                for (int i = 0; i < arregloObjetivos.length; i++) {
+                    listaObjetivos.add(arregloObjetivos[i]);
+                }
+                
+                
+                    try{
+                        Evaluaciones eva = new Evaluaciones(sistema.getEvaluaciones().size()+1,nombre,instrucciones,listaObjetivos,duracionT,valor1,valor2,listaEjercicios);
+                        sistema.agregarEvaluacion(eva);
+                        this.dispose();
+                        abrirAdministrador(ventanaPrincipal,tipoUsuario);
+                    } catch(IllegalArgumentException ex){
+                        JOptionPane.showMessageDialog(this,
+                                    "Error:\n" + ex.getMessage(),
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                
+            });
+        }
     }
     
     private void abrirAdministradorEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
@@ -3042,8 +3351,10 @@ public class ProjectoPOO extends JFrame {
                 
 
                 try {
+                    
                     int idGrupo= Integer.parseInt(identificacionGrupo);
-                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && est!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().contains(est)==false){
+                    
+                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && est!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().contains(est)==false && sistema.verificarEstudiante(identificacionCurso, est)){
                         sistema.devCursos(identificacionCurso).devGrupos(idGrupo).agregarEstudiantes(est);
                         JOptionPane.showMessageDialog(this, "Asociacion exitosa");
                         this.dispose();

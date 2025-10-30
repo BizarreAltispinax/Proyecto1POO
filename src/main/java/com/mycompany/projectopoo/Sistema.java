@@ -28,6 +28,7 @@ public class Sistema implements Serializable{
     
     private ArrayList<Grupos> grupos;
     private ArrayList<Cursos> cursos;
+    private ArrayList<Evaluaciones> evaluaciones;
     private static Sistema instancia;
     /*
     private ArrayList<Evaluaciones> evaluaciones;
@@ -40,6 +41,7 @@ public class Sistema implements Serializable{
         this.profesores=new ArrayList<>();
         this.grupos=new ArrayList<>();
         this.cursos=new ArrayList<>();
+        this.evaluaciones=new ArrayList<>();
     }
     public void agregarEstudiantes(Estudiantes estudiante){
         estudiantes.add(estudiante);
@@ -51,6 +53,10 @@ public class Sistema implements Serializable{
     public void agregarCursos(Cursos curso){
         cursos.add(curso);
     }
+    public void agregarEvaluacion(Evaluaciones evaluacion){
+        evaluaciones.add(evaluacion);
+    }
+    
     /*
     public void agregarGrupos(Grupos grupo){
         estudiantes.add(grupo);
@@ -355,7 +361,9 @@ public class Sistema implements Serializable{
         }
         return false;
     }
-    
+    public ArrayList<Evaluaciones> getEvaluaciones() {
+        return evaluaciones;
+    }
     
     public void eliminarEstudiantes(String identificacion){
 
@@ -516,4 +524,16 @@ public class Sistema implements Serializable{
                 
         }
     } 
+    public boolean verificarEstudiante(String idCurso,Estudiantes est){
+        
+        for (Grupos g : devCursos(idCurso).getGrupos()){
+            for (Estudiantes e : g.getEstudiantes()){
+                if (e.equals(est)){
+                    return false;
+                }
+            }
+        }
+        return true;
+        
+    }
 }
