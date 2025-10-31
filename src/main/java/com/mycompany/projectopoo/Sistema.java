@@ -30,9 +30,7 @@ public class Sistema implements Serializable{
     private ArrayList<Cursos> cursos;
     private ArrayList<Evaluaciones> evaluaciones;
     private static Sistema instancia;
-    /*
-    private ArrayList<Evaluaciones> evaluaciones;
-    */
+    
     
     
     
@@ -60,10 +58,6 @@ public class Sistema implements Serializable{
     /*
     public void agregarGrupos(Grupos grupo){
         estudiantes.add(grupo);
-    }
-    
-    public void agregarEvaluaciones(Evaluaciones evaluacion){
-        estudiantes.add(evaluacion);
     }
     */
     
@@ -455,8 +449,26 @@ public class Sistema implements Serializable{
         } catch (FileNotFoundException | DocumentException e) {
             e.printStackTrace();
         }
+    }
+    
+    public void ReporteEvaluacionesDetalle(int idEvaluacion){
         
+        Document documento = new Document();
 
+        try {
+            PdfWriter.getInstance(documento, new FileOutputStream("DetalleEvaluacion.pdf"));
+            documento.open();
+            documento.add(new Paragraph("Detalle de la evaluacion: "));
+            for (Evaluaciones e : evaluaciones){
+                if (e.getIdentificacion()==idEvaluacion){
+                    documento.add(new Paragraph(e.toString()));
+                }
+            }
+            documento.close();
+            
+        } catch (FileNotFoundException | DocumentException e) {
+            e.printStackTrace();
+        }
     }
     public void ReporteEstadistica(int opcion, String idCurso, String idGrupo,LocalDate fechavigencia){
         Document documento = new Document();

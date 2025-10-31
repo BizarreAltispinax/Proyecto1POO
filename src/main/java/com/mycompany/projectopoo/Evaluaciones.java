@@ -67,6 +67,12 @@ public class Evaluaciones {
     public void eliminarEjercicio (Ejercicios ejercicio){
         ejercicios.remove(ejercicio);
     }
+    public int getIdentificacion(){
+        return identificacion;
+    }
+    public String toString(){
+        return "Identificacion: "+identificacion+"\n"+"Nombre: "+nombre+"\n"+"Objetivos: "+this.getObjetivos()+"\n"+"Duracion: "+duracion+"\n"+"Aleatoriedad de preguntas: "+pregAl+"\n"+"Aleatoriedad de respuestas: "+resAl+"\n"+"Cantidad de preguntas: "+ejercicios.size()+"\n";
+    }  
     
     
 }
