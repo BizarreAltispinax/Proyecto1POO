@@ -16,7 +16,7 @@ import java.util.*;
 abstract class Ejercicios extends JPanel implements Serializable {
     protected String enunciado;
     protected int puntaje;
-    protected int puntajeObtenido;
+    protected double puntajeObtenido;
     public Ejercicios(String enunciado, int puntaje) {
         this.enunciado = enunciado;
         if (puntaje == 0 || puntaje < 1)
@@ -36,7 +36,7 @@ abstract class Ejercicios extends JPanel implements Serializable {
         return puntaje;
     }
 
-    public int getPuntajeObtenido() {
+    public double getPuntajeObtenido() {
         return puntajeObtenido;
     }
 }

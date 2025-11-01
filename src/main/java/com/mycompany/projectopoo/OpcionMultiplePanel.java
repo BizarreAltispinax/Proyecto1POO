@@ -64,7 +64,7 @@ public class OpcionMultiplePanel extends Ejercicios {
             nuevosIndices.add(lista.indexOf(correcta));
         }
         this.correctas = nuevosIndices;
-
+        opciones=lista;
         // Reconstruimos el panel con el nuevo orden
         construirPanel();
     }
@@ -75,7 +75,7 @@ public class OpcionMultiplePanel extends Ejercicios {
         for (int i : seleccionadas)
             if (correctas.contains(i)) correctos++;
 
-        puntajeObtenido = (int) Math.round((correctos / (double) correctas.size()) * puntaje);
+        puntajeObtenido = (int) ((correctos / (double) correctas.size()) * puntaje);
     }
 
     @Override

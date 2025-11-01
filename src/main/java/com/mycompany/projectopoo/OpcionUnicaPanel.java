@@ -48,6 +48,7 @@ public class OpcionUnicaPanel extends Ejercicios {
 
     @Override
     public void aplicarRandom(Random rand) {
+   
     // Guardamos el texto de la opción correcta antes de mezclar
     String opcionCorrecta = opciones.get(correcta);
 
@@ -57,7 +58,7 @@ public class OpcionUnicaPanel extends Ejercicios {
 
     // Actualizamos el índice correcto según la nueva posición del texto correcto
     this.correcta = lista.indexOf(opcionCorrecta);
-
+    opciones=lista;
     // Reconstruimos el panel con las opciones mezcladas
     construirPanel();
 }
@@ -66,6 +67,7 @@ public class OpcionUnicaPanel extends Ejercicios {
     public void verificar() {
         puntajeObtenido = (seleccion == correcta) ? puntaje : 0;
     }
+    
 
     @Override
     public String detalle() {

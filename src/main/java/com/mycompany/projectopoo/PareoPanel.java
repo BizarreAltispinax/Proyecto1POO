@@ -30,7 +30,7 @@ public class PareoPanel extends Ejercicios {
         add(lbl, BorderLayout.NORTH);
 
         java.util.List<String> valores = new ArrayList<>(paresCorrectos.values());
-        Collections.shuffle(valores);
+        
         JPanel panel = new JPanel(new GridLayout(paresCorrectos.size(), 2, 5, 5));
 
         for (String clave : paresCorrectos.keySet()) {
@@ -62,6 +62,7 @@ public class PareoPanel extends Ejercicios {
 
         // Reemplazamos el mapa original
         paresCorrectos = mezclado;
+        construirPanel();
     }
 
 
@@ -72,7 +73,7 @@ public class PareoPanel extends Ejercicios {
             String respuesta = respuestas.get(clave);
             if (respuesta != null && respuesta.equals(paresCorrectos.get(clave))) correctos++;
         }
-        puntajeObtenido = (int) Math.round((correctos / (double) paresCorrectos.size()) * puntaje);
+        puntajeObtenido = (int) ((correctos / (double) paresCorrectos.size()) * puntaje);
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Ventana de inicio de sesión con opción de restablecer contraseña.
@@ -86,6 +87,7 @@ public class ProjectoPOO extends JFrame {
         // Acción para cada botón
         btnAdmin.addActionListener(e -> {JOptionPane.showMessageDialog(this,
                 "Bienvenido, Administrador. Acceso directo permitido.");
+                prueba(this,"Administrador");
                 abrirAdministrador(this,"Administrador");
         
         });
@@ -706,17 +708,17 @@ public class ProjectoPOO extends JFrame {
             
             btnConsultar.addActionListener(e -> {
                 this.dispose();
-                abrirMostrarEvaluacion(ventanaPrincipal,tipoUsuario);
+                //abrirMostrarEvaluacion(ventanaPrincipal,tipoUsuario);
                     });
             
             btnModificar.addActionListener(e -> {
                 this.dispose();
-                abrirModificarEvaluacion(ventanaPrincipal,tipoUsuario);
+                //abrirModificarEvaluacion(ventanaPrincipal,tipoUsuario);
                     });
             
            btnEliminar.addActionListener(e -> {
                 this.dispose();
-                abrirEliminarEvaluacion(ventanaPrincipal,tipoUsuario);
+                //abrirEliminarEvaluacion(ventanaPrincipal,tipoUsuario);
                     });
             
             
@@ -3764,6 +3766,143 @@ public class ProjectoPOO extends JFrame {
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     }
     }
+    
+    
+    
+    private void prueba(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        new VentanaPrueba(ventanaPrincipal,tipoUsuario).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaPrueba extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaPrueba(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            
+            setLayout(new GridLayout(3, 1, 5, 5));
+
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            /*this.identificacion = identificacion;
+        this.nombre = nombre;
+        this.instrucciones = instrucciones;
+        this.objetivos = objetivos;
+        
+        this.duracion = duracion;
+        this.pregAl = pregAl;
+        this.resAl = resAl;
+        this.ejercicios = ejercicios;
+        */
+            ArrayList<String> obj = new ArrayList<>(Arrays.asList(
+    "Manzanahrthsrhr",
+    "Banasrthsrthsrno",
+    "Pesrthsrthsrtra",
+    "Sansrthsrthsrsrtdía"
+));
+            ArrayList<Ejercicios> ejercicios = new ArrayList<>();
+
+        // Ejercicio 1: Opción Única
+        ArrayList<String> opciones1 = new ArrayList<>(Arrays.asList(
+            "Un archivo fuente de Java se guarda con extensión .jav",
+            "Un archivo fuente de Java se guarda con extensión .java",
+            "Un archivo fuente de Java se guarda con extensión .jar",
+            "Un archivo fuente de Java se guarda con extensión .class"
+        ));
+        OpcionUnicaPanel e1 = new OpcionUnicaPanel(
+            "¿Cuál es la extensión correcta de un archivo fuente de Java?",
+            opciones1,
+            1, // índice correcto
+            10 // puntaje
+        );
+
+        // Ejercicio 2: Opción Múltiple
+        ArrayList<String> opciones2 = new ArrayList<>(Arrays.asList(
+            "for",
+            "switch",
+            "if",
+            "repeat"
+        ));
+        Set<Integer> correctas2 = new HashSet<>(Arrays.asList(0, 1, 2)); // correctas
+        OpcionMultiplePanel e2 = new OpcionMultiplePanel(
+            "Selecciona todas las estructuras de control válidas en Java:",
+            opciones2,
+            correctas2,
+            15
+        );
+
+        // Ejercicio 3: Pareo
+        LinkedHashMap<String, String> pares = new LinkedHashMap<>();
+        pares.put("int", "Número entero");
+        pares.put("double", "Número decimal");
+        pares.put("boolean", "Verdadero o falso");
+        PareoPanel e3 = new PareoPanel(
+            "Relaciona cada tipo de dato con su descripción:",
+            pares,
+            20
+        );
+        
+        Map<String, String> palabras = new LinkedHashMap<>();
+        palabras.put("JAVAAAAA", "Lenguaje de programación orientado a objetos.");
+        palabras.put("HTMLL", "Lenguaje de marcado para páginas web.");
+        palabras.put("SQL", "Lenguaje para bases de datos relacionales.");
+
+        SopaDeLetrasPanel e4 = new SopaDeLetrasPanel(
+            "Encuentra las palabras relacionadas con informática:",
+            palabras, // tablero aleatorio
+            15
+        );
+        
+        
+        
+        // Agregar todos los ejercicios
+        ejercicios.add(e1);
+        ejercicios.add(e2);
+        ejercicios.add(e3);
+        ejercicios.add(e4);
+            Evaluaciones eva1 = new Evaluaciones(1,"Patos","Hacer todas las evaluaciones",obj,120,false,true,ejercicios);
+            
+            eva1.iniciar();
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+        
+        }
+        
+    }
+    
+    
     
     
     

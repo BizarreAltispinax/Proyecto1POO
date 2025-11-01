@@ -22,7 +22,7 @@ public class SopaDeLetrasPanel extends Ejercicios {
     private JTextArea areaDefiniciones;
     private JLabel lblTitulo;
     private boolean aleatoria;
-    private Random random = new Random();
+    private Random random = new Random(1);
     private String llaveMasLarga = null;
 
     private static final int[][] DIRECCIONES = {
@@ -36,10 +36,10 @@ public class SopaDeLetrasPanel extends Ejercicios {
         {1, 1}    // diagonal abajo-derecha
     };
 
-    public SopaDeLetrasPanel(String enunciado, Map<String, String> palabras, boolean aleatoria, int puntaje) {
+    public SopaDeLetrasPanel(String enunciado, Map<String, String> palabras, int puntaje) {
         super(enunciado, puntaje);
         this.palabras = new LinkedHashMap<>(palabras);
-        this.aleatoria = aleatoria;
+        this.aleatoria = false;
         for (String llave : palabras.keySet()) {
             if (llaveMasLarga == null || llave.length() > llaveMasLarga.length()) {
                 llaveMasLarga = llave;
@@ -217,7 +217,7 @@ public class SopaDeLetrasPanel extends Ejercicios {
         int total = palabras.size();
         int correctas = encontradas.size();
         double proporcion = (double) correctas / total;
-        puntajeObtenido = (int) Math.round(proporcion * puntaje);
+        puntajeObtenido = (int) (proporcion * puntaje);
     }
 
     @Override
@@ -244,10 +244,13 @@ public class SopaDeLetrasPanel extends Ejercicios {
         sb.append("Puntaje obtenido: ").append(puntajeObtenido).append("/").append(puntaje).append("\n");
         return sb.toString();
     }
-    
+    public void setAleatorio(boolean aleatorio){
+        this.aleatoria=aleatorio;
+    }
     public Ejercicios copiar(){
-        SopaDeLetrasPanel copia = new SopaDeLetrasPanel(enunciado, new LinkedHashMap<>(palabras), aleatoria,puntaje);
+        SopaDeLetrasPanel copia = new SopaDeLetrasPanel(enunciado, new LinkedHashMap<>(palabras),puntaje);
         copia.encontradas.addAll(encontradas);
+        copia.setAleatorio(aleatoria);
         return copia;
     }
 }
