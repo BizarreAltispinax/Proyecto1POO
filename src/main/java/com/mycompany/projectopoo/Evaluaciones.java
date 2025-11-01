@@ -4,13 +4,14 @@
  */
 package com.mycompany.projectopoo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author User
  */
-public class Evaluaciones {
+public class Evaluaciones implements Serializable{
     private int identificacion;
     private String nombre;
     private String instrucciones;

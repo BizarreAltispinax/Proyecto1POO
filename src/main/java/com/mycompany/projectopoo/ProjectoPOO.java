@@ -621,7 +621,20 @@ public class ProjectoPOO extends JFrame {
             this.dispose();
             
                 });
-
+        btnRep.addActionListener(e -> {
+            String identificacion = JOptionPane.showInputDialog(this,
+                        "Ingrese la identificacion de la evaluacion:");
+            int id =Integer.parseInt(identificacion);
+                if (sistema.devEva(id)!=null){
+                    JOptionPane.showMessageDialog(this, "Reporte realizado");
+                    sistema.ReporteEvaluacionesDetalle(id);
+                }else{
+                    JOptionPane.showMessageDialog(this, "No se encontro la evaluacion");
+                }
+            this.dispose();
+            
+                });
+        
         
           
         //btnProfesor.addActionListener(e ->);    
@@ -786,7 +799,9 @@ public class ProjectoPOO extends JFrame {
             add(btnAgregarEjercicio);
             add(btnCrear);
             
-           
+           btnAgregarEjercicio.addActionListener(e -> {
+               
+           });
             
             
             

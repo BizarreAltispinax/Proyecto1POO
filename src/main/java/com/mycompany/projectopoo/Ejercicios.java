@@ -11,20 +11,32 @@ package com.mycompany.projectopoo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
-abstract class Ejercicios extends JPanel {
+abstract class Ejercicios extends JPanel implements Serializable {
     protected String enunciado;
     protected int puntaje;
-
+    protected int puntajeObtenido;
     public Ejercicios(String enunciado, int puntaje) {
         this.enunciado = enunciado;
         if (puntaje == 0 || puntaje < 1)
             throw new IllegalArgumentException("El puntaje debe mayor o igual a 1.");
         this.puntaje = puntaje;
+        this.puntajeObtenido = 0;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
     protected abstract void construirPanel();
-    public abstract boolean verificarRespuesta();
+    public abstract void verificar();
+    public abstract void aplicarRandom(Random r);
+    public abstract String detalle();
+
+    public int getPuntos() {
+        return puntaje;
+    }
+
+    public int getPuntajeObtenido() {
+        return puntajeObtenido;
+    }
 }

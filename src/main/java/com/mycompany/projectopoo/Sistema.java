@@ -418,6 +418,15 @@ public class Sistema implements Serializable{
         }
         return null;
     }
+    
+    public Evaluaciones devEva(int IdEva){
+        for (Evaluaciones e :evaluaciones){
+            if(e.getIdentificacion()==IdEva){
+                return e;
+            }
+        }
+        return null;
+    }
     public void ReporteEstudiantesCurso(){
         
         Document documento = new Document();
