@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
+import java.time.*;
+import javax.swing.Timer;
 
 /**
  *
@@ -25,7 +27,7 @@ public class Evaluaciones implements Serializable{
     private boolean pregAl;
     private boolean resAl;
     private ArrayList<Ejercicios> ejercicios;
-    private Grupos grupo;
+    private ArrayList<Grupos> grupo;
     private JFrame frame;
     private JPanel panelCentral;
     private long inicio;
@@ -33,11 +35,18 @@ public class Evaluaciones implements Serializable{
     private int indiceActual = 0;
     private double puntajeTotalObt=0;
     private double puntajeTotal=0;
+    private LocalDateTime fechaInicio = LocalDateTime.of(2025, 11, 1, 18, 0);;
+    private LocalDateTime fechaFin = LocalDateTime.of(2025, 11, 1, 20, 0);;
+    private JLabel lblTiempoRestante;
+    private javax.swing.Timer temporizador;
+    private String nombreEst;
+    private LocalDateTime fechaInicioEv;
+    private LocalDateTime fechaFinEv;
     
     
     public Evaluaciones(int identificacion, String nombre, String instrucciones, ArrayList<String> objetivos,
                  int duracion, boolean pregAl,
-                 boolean resAl, ArrayList<Ejercicios> ejercicios) {
+                 boolean resAl) {
         
         
         
@@ -62,9 +71,26 @@ public class Evaluaciones implements Serializable{
         this.duracion = duracion;
         this.pregAl = pregAl;
         this.resAl = resAl;
-        this.ejercicios = ejercicios;
+        this.ejercicios = new ArrayList<>();
+        this.grupo = new ArrayList<>();
         
 
+    }
+    public void setHoraDeInicioEv(LocalDateTime horaInicio){
+        this.fechaInicioEv=horaInicio;
+    }
+    public void setHoraDeFinalEv(LocalDateTime horaFinal){
+        this.fechaFinEv=horaFinal;
+    }
+    
+    public void agregarGrupo(Grupos g){
+        if (g!=null){
+            grupo.add(g);
+        }
+
+    }
+    public void setNombreEst(String nombre){
+        this.nombreEst=nombre;
     }
     public String getObjetivos() {
         String objs="";
@@ -96,7 +122,9 @@ public class Evaluaciones implements Serializable{
         return (int) Math.round(getPuntajeTotalObtenido() * 100.0 / getPuntajeTotal());
     }
     
-    
+    public void mezclarEjercicios() {
+        Collections.shuffle(ejercicios);
+    }
     
     public void agregarEjercicio(Ejercicios ejercicio){
         ejercicios.add(ejercicio);
@@ -111,12 +139,17 @@ public class Evaluaciones implements Serializable{
         return "Identificacion: "+identificacion+"\n"+"Nombre: "+nombre+"\n"+"Objetivos: "+this.getObjetivos()+"\n"+"Duracion: "+duracion+"\n"+"Aleatoriedad de preguntas: "+pregAl+"\n"+"Aleatoriedad de respuestas: "+resAl+"\n"+"Cantidad de preguntas: "+ejercicios.size()+"\n";
     }  
     
+    
     public String imprimir() {
     StringBuilder todo = new StringBuilder();
-
+    for (Ejercicios ej :ejercicios){
+        ej.verificar();
+    }
     // Información general de la evaluación
     todo.append("Evaluación: ").append(nombre).append("\n");
-    todo.append("Estudiante: ").append("Andres").append("\n");
+    todo.append("Estudiante: ").append(nombreEst).append("\n");
+    todo.append("Hora de inicio: ").append(fechaInicioEv).append("\n");
+    todo.append("Hora de finalizacion: ").append(fechaFinEv).append("\n");
     todo.append("Nota: ").append(getNota())
         .append(" (").append(getPuntajeTotalObtenido())
         .append("/").append(getPuntajeTotal()).append(")\n");
@@ -126,6 +159,7 @@ public class Evaluaciones implements Serializable{
     // Detalle de cada ejercicio
     int n = 1;
     for (Ejercicios e : ejercicios) {
+        e.verificar();
         todo.append("Pregunta ").append(n++).append("\n");
         todo.append(e.detalle()).append("\n");
         todo.append("--------------------------------------------------\n");
@@ -138,13 +172,21 @@ public class Evaluaciones implements Serializable{
     }
     
     public void iniciar(){
-        
+        this.setHoraDeInicioEv(LocalDateTime.now());
         frame = new JFrame("Evaluación: "+nombre);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,500);
         frame.setLayout(new BorderLayout());
-
+        
+        lblTiempoRestante = new JLabel("Tiempo restante: 00:00", SwingConstants.CENTER);
+        lblTiempoRestante.setFont(new Font("Arial", Font.BOLD, 24));
+        frame.add(lblTiempoRestante, BorderLayout.NORTH);
+        
+        
         panelCentral = new JPanel(new CardLayout());
+        if (pregAl==true){
+            mezclarEjercicios();
+        }
         for(Ejercicios e: ejercicios){
             if(resAl){
                 e.aplicarRandom(new Random());
@@ -174,10 +216,92 @@ public class Evaluaciones implements Serializable{
         frame.add(panelBotones,BorderLayout.SOUTH);
 
         inicio = System.currentTimeMillis();
+        Timer temporizador = new Timer(1000, ev -> actualizarTiempo());
+        temporizador.start();
 
         frame.setVisible(true);
         mostrarEjercicio(0);
     }
+    
+    
+    
+    public void iniciarProfesor(){
+        
+        frame = new JFrame("Evaluación: "+nombre);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600,500);
+        frame.setLayout(new BorderLayout());
+        
+        lblTiempoRestante = new JLabel("Tiempo restante: 00:00", SwingConstants.CENTER);
+        lblTiempoRestante.setFont(new Font("Arial", Font.BOLD, 24));
+        frame.add(lblTiempoRestante, BorderLayout.NORTH);
+        
+        
+        panelCentral = new JPanel(new CardLayout());
+        if (pregAl==true){
+            mezclarEjercicios();
+        }
+        for(Ejercicios e: ejercicios){
+            if(resAl){
+                e.aplicarRandom(new Random());
+            }else{
+                e.construirPanel();
+            } 
+                
+            panelCentral.add(e,enunciado(e));
+            e.setVisible(false);
+        }
+
+        frame.add(panelCentral,BorderLayout.CENTER);
+
+        JPanel panelBotones = new JPanel();
+        JButton btnAnterior = new JButton("Anterior");
+        JButton btnSiguiente = new JButton("Siguiente");
+        JButton btnFinalizar = new JButton("Finalizar");
+
+        btnAnterior.addActionListener(ev -> mostrarAnterior());
+        btnSiguiente.addActionListener(ev -> mostrarSiguiente());
+        btnFinalizar.addActionListener(ev -> finalizarProfesor());
+
+        panelBotones.add(btnAnterior);
+        panelBotones.add(btnSiguiente);
+        panelBotones.add(btnFinalizar);
+
+        frame.add(panelBotones,BorderLayout.SOUTH);
+
+        inicio = System.currentTimeMillis();
+        Timer temporizador = new Timer(1000, ev -> actualizarTiempo());
+        temporizador.start();
+
+        frame.setVisible(true);
+        mostrarEjercicio(0);
+    }
+    
+    
+    
+    
+    private void actualizarTiempo() {
+        LocalDateTime ahora = LocalDateTime.now();
+
+        if (ahora.isBefore(fechaFin)) {
+            Duration restante = Duration.between(ahora, fechaFin);
+            long totalSegundos = restante.getSeconds();
+
+            long minutos = totalSegundos / 60;
+            long segundos = totalSegundos % 60;
+
+            lblTiempoRestante.setText(
+                String.format("Tiempo restante: %02d:%02d", minutos, segundos)
+            );
+        } else {
+            lblTiempoRestante.setText("⏰ Tiempo terminado");
+            temporizador.stop();
+            finalizar();
+        }
+    }
+    
+    
+    
 
     private String enunciado(Ejercicios e){
         return e.enunciado;
@@ -193,9 +317,53 @@ public class Evaluaciones implements Serializable{
     private void mostrarAnterior(){ mostrarEjercicio(indiceActual-1); }
 
     private void finalizar(){
+        this.setHoraDeFinalEv(LocalDateTime.now());
+        for(Ejercicios e: ejercicios){
+            e.verificar();
+        }
         fin = System.currentTimeMillis();
         JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
-        // Aquí podrías calcular notas y guardar resultados
+        
+        for (Grupos g: grupo){
+            for (Estudiantes est:g.getEstudiantes()){
+                if (est.getNombre().equals(nombreEst)){
+                    g.guardarEvaluacion(nombreEst,this); 
+                    g.obtenerEvaluacion("Andres",this.getIdentificacion()).imprimirReporte();
+                }
+            }
+        }
+        
+        frame.dispose();
+    }
+    
+    private void finalizarProfesor(){
+        
+        fin = System.currentTimeMillis();
+        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
+
+        frame.dispose();
+    }
+    
+    
+    
+    public Evaluaciones copiarEvaluacion(){
+        Evaluaciones copia = new Evaluaciones(identificacion,nombre,instrucciones,objetivos,duracion,pregAl,resAl);
+        copia.inicio = inicio;
+        copia.fin = fin;
+        copia.fechaInicio = fechaInicio;
+        copia.fechaFin = fechaFin;
+        copia.grupo=grupo;
+        copia.nombreEst=nombreEst;
+        copia.fechaInicioEv=fechaInicioEv;
+        copia.fechaFinEv=fechaFinEv;
+        
+        for(Ejercicios e: ejercicios){
+            copia.agregarEjercicio(e.copiar());
+        }
+        return copia;
+    }
+    
+    public void imprimirReporte(){
         JFrame ventana = new JFrame("Información general");
             ventana.setSize(400, 300);
             ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -225,7 +393,6 @@ public class Evaluaciones implements Serializable{
             ventana.add(btnCerrar);
 
             ventana.setVisible(true);
-        this.iniciar();
     }
     
     

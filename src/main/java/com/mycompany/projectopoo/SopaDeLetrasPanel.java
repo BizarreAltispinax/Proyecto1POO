@@ -11,9 +11,10 @@ package com.mycompany.projectopoo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class SopaDeLetrasPanel extends Ejercicios {
+public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     private char[][] tablero;
     private int filas, columnas;
     private Map<String, String> palabras; // palabra → definición
@@ -24,6 +25,7 @@ public class SopaDeLetrasPanel extends Ejercicios {
     private boolean aleatoria;
     private Random random = new Random(1);
     private String llaveMasLarga = null;
+    private boolean v = false;
 
     private static final int[][] DIRECCIONES = {
         {-1, 0},  // arriba
@@ -58,14 +60,51 @@ public class SopaDeLetrasPanel extends Ejercicios {
         for (int i = 0; i < filas; i++)
             Arrays.fill(tablero[i], ' ');
 
-        java.util.List<String> listaPalabras = new ArrayList<>(palabras.keySet());
-        if (aleatoria) Collections.shuffle(listaPalabras, random);
+        ArrayList<String> listaPalabras = new ArrayList<>(palabras.keySet());
+        
 
-        for (String palabra : listaPalabras)
-            colocarPalabra(palabra.toUpperCase());
+        colocarTodasLasPalabras(listaPalabras);
         llenarVacios();
     }
 
+    
+    private void colocarTodasLasPalabras(ArrayList<String> palabras) {
+        
+
+        // 1️⃣ Colocar las primeras 8, una en cada dirección
+        int limite = Math.min(DIRECCIONES.length, palabras.size());
+        for (int i = 0; i < limite; i++) {
+            String palabra = palabras.get(i);
+            int[] dir = DIRECCIONES[i];
+            colocarPalabraEnDireccion(palabra, dir);
+        }
+
+        // 2️⃣ Colocar el resto aleatoriamente
+        for (int i = DIRECCIONES.length; i < palabras.size(); i++) {
+            colocarPalabra(palabras.get(i));
+        }
+    }
+    private void colocarPalabraEnDireccion(String palabra, int[] dir) {
+        palabra = palabra.toUpperCase();
+        int intentos = 100;
+        while (intentos-- > 0) {
+            int fila = random.nextInt(filas);
+            int col = random.nextInt(columnas);
+            if (puedeColocar(palabra, fila, col, dir[0], dir[1])) {
+                for (int i = 0; i < palabra.length(); i++) {
+                    tablero[fila + i * dir[0]][col + i * dir[1]] = palabra.charAt(i);
+                }
+                return;
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
     private void colocarPalabra(String palabra) {
         palabra = palabra.toUpperCase();
         int intentos = 100;
@@ -103,7 +142,11 @@ public class SopaDeLetrasPanel extends Ejercicios {
     // ---------------------------------------------------
     @Override
     public void construirPanel() {
+        encontradas.clear();
         removeAll();
+        if (v==false){
+            random = new Random(1);
+        }
         generarTablero();
 
         lblTitulo = new JLabel("<html><b>" + enunciado + "</b></html>", SwingConstants.CENTER);
@@ -224,6 +267,7 @@ public class SopaDeLetrasPanel extends Ejercicios {
     public void aplicarRandom(Random r) {
         this.random = r;
         this.aleatoria = true;
+        v=true;
         construirPanel();
     }
 

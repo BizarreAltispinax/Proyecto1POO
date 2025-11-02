@@ -11,6 +11,11 @@ package com.mycompany.projectopoo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 
 public class Grupos implements Serializable{
     private int idGrupo;
@@ -19,6 +24,8 @@ public class Grupos implements Serializable{
     private ArrayList<Estudiantes> estudiantes;
     private Profesores profesor;
     private Cursos curso;
+    private Map<String, ArrayList<Evaluaciones>> respuestasAlumnos;
+    private ArrayList<Evaluaciones> evaluaciones;
 
     public Grupos(int idGrupo, LocalDate fechaInicio, LocalDate fechaFin) {
         if (fechaInicio == null || fechaFin == null || fechaFin.isBefore(fechaInicio))
@@ -28,6 +35,9 @@ public class Grupos implements Serializable{
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.estudiantes = new ArrayList<>();
+        this.respuestasAlumnos = new LinkedHashMap<>();
+        this.evaluaciones = new ArrayList<>();
+        
     }
 
     public int getIdGrupo() { return idGrupo; }
@@ -68,6 +78,39 @@ public class Grupos implements Serializable{
 
     public void asignarCurso(Cursos curso){
         this.curso=curso;
+    }
+    
+    public void asignarEvaluacion(Evaluaciones eva){
+        if (eva!=null){
+            evaluaciones.add(eva);
+        }
+    }
+    public ArrayList<Evaluaciones> getEvaluaciones(){
+        return evaluaciones;
+    }
+    
+    
+    public void guardarEvaluacion(String estudiante, Evaluaciones e){
+        Evaluaciones copia = e.copiarEvaluacion();
+        respuestasAlumnos.putIfAbsent(estudiante,new ArrayList<>());
+        respuestasAlumnos.get(estudiante).add(copia);
+    }
+
+    public List<Evaluaciones> obtenerEvaluaciones(String estudiante){
+        return respuestasAlumnos.getOrDefault(estudiante,new ArrayList<>());
+    }
+
+    public Evaluaciones obtenerEvaluacion(String estudiante, int id){
+        List<Evaluaciones> lista = respuestasAlumnos.get(estudiante);
+        if (lista == null) {
+            return null; // El estudiante no tiene respuestas registradas
+        }
+        for (Evaluaciones ev : lista){
+            if (ev.getIdentificacion()==id){
+                return ev;
+            }
+        }
+        return null;
     }
 
     @Override

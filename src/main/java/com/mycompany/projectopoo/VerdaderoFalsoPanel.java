@@ -10,9 +10,10 @@ package com.mycompany.projectopoo;
  */
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class VerdaderoFalsoPanel extends Ejercicios {
+public class VerdaderoFalsoPanel extends Ejercicios implements Serializable{
     private java.util.List<String> opciones;
     private int correcta;  // 0 = Verdadero, 1 = Falso
     private int seleccion = -1;
@@ -27,6 +28,7 @@ public class VerdaderoFalsoPanel extends Ejercicios {
     @Override
     public void construirPanel() {
         removeAll();
+        seleccion=-1;
         grupo = new ButtonGroup();
         JPanel panelOpciones = new JPanel(new GridLayout(opciones.size(), 1));
         JLabel lbl = new JLabel("<html><b>" + enunciado + "</b></html>");
@@ -35,7 +37,9 @@ public class VerdaderoFalsoPanel extends Ejercicios {
         for (int i = 0; i < opciones.size(); i++) {
             JRadioButton rb = new JRadioButton(opciones.get(i));
             int idx = i;
-            rb.addActionListener(e -> seleccion = idx);
+            rb.addActionListener(e -> {seleccion = idx;
+                verificar();
+                    });
             grupo.add(rb);
             panelOpciones.add(rb);
         }

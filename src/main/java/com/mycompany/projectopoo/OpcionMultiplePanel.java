@@ -10,9 +10,10 @@ package com.mycompany.projectopoo;
  */
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class OpcionMultiplePanel extends Ejercicios {
+public class OpcionMultiplePanel extends Ejercicios implements Serializable{
     private java.util.List<String> opciones;
     private Set<Integer> correctas;
     private Set<Integer> seleccionadas = new HashSet<>();
@@ -27,6 +28,7 @@ public class OpcionMultiplePanel extends Ejercicios {
     @Override
     public void construirPanel() {
         removeAll();
+        seleccionadas.clear();
         JPanel panelOpciones = new JPanel(new GridLayout(opciones.size(), 1));
         JLabel lbl = new JLabel("<html><b>" + enunciado + "</b></html>");
         add(lbl, BorderLayout.NORTH);
@@ -37,6 +39,7 @@ public class OpcionMultiplePanel extends Ejercicios {
             cb.addActionListener(e -> {
                 if (cb.isSelected()) seleccionadas.add(idx);
                 else seleccionadas.remove(idx);
+                verificar();
             });
             panelOpciones.add(cb);
         }

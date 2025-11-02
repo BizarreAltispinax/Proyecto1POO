@@ -31,7 +31,7 @@ abstract class Ejercicios extends JPanel implements Serializable {
     public abstract void verificar();
     public abstract void aplicarRandom(Random r);
     public abstract String detalle();
-
+    public abstract Ejercicios copiar();
     public int getPuntos() {
         return puntaje;
     }

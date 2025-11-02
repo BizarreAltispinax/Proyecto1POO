@@ -802,7 +802,7 @@ public class ProjectoPOO extends JFrame {
             add(btnCrear);
             
            btnAgregarEjercicio.addActionListener(e -> {
-               
+               new VentanaAgregarEjercicios(listaEjercicios).setVisible(true);
            });
             
             
@@ -830,7 +830,10 @@ public class ProjectoPOO extends JFrame {
                 
                 
                     try{
-                        Evaluaciones eva = new Evaluaciones(sistema.getEvaluaciones().size()+1,nombre,instrucciones,listaObjetivos,duracionT,valor1,valor2,listaEjercicios);
+                        Evaluaciones eva = new Evaluaciones(sistema.getEvaluaciones().size()+1,nombre,instrucciones,listaObjetivos,duracionT,valor1,valor2);
+                        for (Ejercicios ej : listaEjercicios){
+                            eva.agregarEjercicio(ej);
+                        }
                         sistema.agregarEvaluacion(eva);
                         this.dispose();
                         abrirAdministrador(ventanaPrincipal,tipoUsuario);
@@ -843,6 +846,375 @@ public class ProjectoPOO extends JFrame {
             });
         }
     }
+    
+    public class VentanaAgregarEjercicios extends JFrame {
+
+        public VentanaAgregarEjercicios(ArrayList<Ejercicios> listaEjercicios) {
+            setTitle("Tipos de Ejercicio");
+            setSize(400, 300);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setLocationRelativeTo(null);
+            setLayout(new GridLayout(5, 1, 10, 10));
+
+            JButton btnOpcionUnica = new JButton("Opción Única");
+            JButton btnOpcionMultiple = new JButton("Opción Múltiple");
+            JButton btnVerdaderoFalso = new JButton("Verdadero/Falso");
+            JButton btnPareo = new JButton("Pareo");
+            JButton btnSopaLetras = new JButton("Sopa de Letras");
+
+            add(btnOpcionUnica);
+            add(btnOpcionMultiple);
+            add(btnVerdaderoFalso);
+            add(btnPareo);
+            add(btnSopaLetras);
+
+            // Acciones para cada botón → Abren una ventana diferente
+            btnOpcionUnica.addActionListener(e -> {new VentanaOpcionUnica(listaEjercicios).setVisible(true);
+                this.dispose();
+                    });
+            btnOpcionMultiple.addActionListener(e -> {new VentanaOpcionMultiple(listaEjercicios).setVisible(true);
+                this.dispose();
+                    });
+            btnVerdaderoFalso.addActionListener(e -> {new VentanaVerdaderoFalso(listaEjercicios).setVisible(true);
+                this.dispose();
+                    });
+            btnPareo.addActionListener(e -> {new VentanaPareo(listaEjercicios).setVisible(true);
+                this.dispose();
+                    });
+            btnSopaLetras.addActionListener(e -> {new VentanaSopaLetras(listaEjercicios).setVisible(true);
+                this.dispose();
+                    });
+        }
+    }
+    
+    
+    
+    class VentanaOpcionUnica extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JTextField txtCorrecta;
+        private JPanel panelOtrasOpciones;
+        private ArrayList<JTextField> camposOtras;
+        private ArrayList<String> opciones;  // ← donde se guardan todas las opciones
+
+        public VentanaOpcionUnica(ArrayList<Ejercicios> listaEjercicios) {
+            setTitle("Opción Única");
+            setSize(500, 400);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
+
+            opciones = new ArrayList<>();
+            camposOtras = new ArrayList<>();
+
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central: Correcta y Otras ----------
+            JPanel panelCentro = new JPanel(new GridLayout(1, 2, 10, 10));
+
+            // Columna izquierda - Opción correcta
+            JPanel panelCorrecta = new JPanel(new BorderLayout(5, 5));
+            panelCorrecta.setBorder(BorderFactory.createTitledBorder("Opción correcta"));
+            txtCorrecta = new JTextField();
+            panelCorrecta.add(txtCorrecta, BorderLayout.NORTH);
+            panelCentro.add(panelCorrecta);
+
+            // Columna derecha - Otras opciones
+            JPanel panelDerecha = new JPanel(new BorderLayout(5, 5));
+            panelDerecha.setBorder(BorderFactory.createTitledBorder("Otras opciones"));
+
+            panelOtrasOpciones = new JPanel();
+            panelOtrasOpciones.setLayout(new BoxLayout(panelOtrasOpciones, BoxLayout.Y_AXIS));
+
+            // Campo inicial
+            agregarCampoOpcion();
+
+            JScrollPane scroll = new JScrollPane(panelOtrasOpciones);
+            panelDerecha.add(scroll, BorderLayout.CENTER);
+
+            JButton btnAgregarCampo = new JButton("Agregar opción");
+            btnAgregarCampo.addActionListener(e -> agregarCampoOpcion());
+            panelDerecha.add(btnAgregarCampo, BorderLayout.SOUTH);
+
+            panelCentro.add(panelDerecha);
+            add(panelCentro, BorderLayout.CENTER);
+
+            // ---------- Panel inferior: Botón agregar ----------
+            JButton btnAgregar = new JButton("Agregar al ArrayList");
+            String enunciado = txtEnunciado.getText();
+            String puntaje=txtPuntaje.getText();
+            int PuntajeInt = Integer.parseInt(puntaje);
+            btnAgregar.addActionListener(e -> {guardarOpciones();
+                try{
+                    OpcionUnicaPanel nuevo = new OpcionUnicaPanel(enunciado,getOpciones(),0,PuntajeInt);
+                    listaEjercicios.add(nuevo);
+                    this.dispose();
+                }catch (IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                    });
+            add(btnAgregar, BorderLayout.SOUTH);
+        }
+
+        // Agrega un nuevo campo de texto en la columna "otras opciones"
+        private void agregarCampoOpcion() {
+            JTextField campo = new JTextField();
+            camposOtras.add(campo);
+            panelOtrasOpciones.add(campo);
+            panelOtrasOpciones.revalidate();
+            panelOtrasOpciones.repaint();
+        }
+
+        // Reúne toda la información y la guarda en el ArrayList
+        private void guardarOpciones() {
+            opciones.clear();
+
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+            String correcta = txtCorrecta.getText().trim();
+
+            if (enunciado.isEmpty() || puntaje.isEmpty() || correcta.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar enunciado, puntaje y opción correcta");
+                return;
+            }
+
+            opciones.add(correcta); // la primera es la correcta
+
+            for (JTextField campo : camposOtras) {
+                String texto = campo.getText().trim();
+                if (!texto.isEmpty()) {
+                    opciones.add(texto);
+                }
+            }
+
+            
+        }
+
+        // (Opcional) puedes obtener la lista para integrarla a tu lista general
+        public ArrayList<String> getOpciones() {
+            return opciones;
+        }
+    }
+
+    class VentanaOpcionMultiple extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JPanel panelCorrectas, panelOtras;
+        private ArrayList<JTextField> camposCorrectas, camposOtras;
+        private ArrayList<String> opciones;
+        private Set<Integer> correctas;
+
+        public VentanaOpcionMultiple(ArrayList<Ejercicios> listaEjercicios) {
+            setTitle("Opción Múltiple");
+            setSize(550, 420);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
+
+            opciones = new ArrayList<>();
+            correctas = new HashSet<>();
+            camposCorrectas = new ArrayList<>();
+            camposOtras = new ArrayList<>();
+
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central con dos columnas ----------
+            JPanel panelCentro = new JPanel(new GridLayout(1, 2, 10, 10));
+
+            // Columna izquierda - Opciones correctas
+            JPanel panelIzq = new JPanel(new BorderLayout(5, 5));
+            panelIzq.setBorder(BorderFactory.createTitledBorder("Opciones correctas"));
+
+            panelCorrectas = new JPanel();
+            panelCorrectas.setLayout(new BoxLayout(panelCorrectas, BoxLayout.Y_AXIS));
+            JScrollPane scrollCorrectas = new JScrollPane(panelCorrectas);
+
+            JButton btnAgregarCorrecta = new JButton("Agregar correcta");
+            btnAgregarCorrecta.addActionListener(e -> agregarCampoCorrecta());
+
+            // Campo inicial
+            agregarCampoCorrecta();
+
+            panelIzq.add(scrollCorrectas, BorderLayout.CENTER);
+            panelIzq.add(btnAgregarCorrecta, BorderLayout.SOUTH);
+
+            // Columna derecha - Otras opciones
+            JPanel panelDer = new JPanel(new BorderLayout(5, 5));
+            panelDer.setBorder(BorderFactory.createTitledBorder("Otras opciones"));
+
+            panelOtras = new JPanel();
+            panelOtras.setLayout(new BoxLayout(panelOtras, BoxLayout.Y_AXIS));
+            JScrollPane scrollOtras = new JScrollPane(panelOtras);
+
+            JButton btnAgregarOtra = new JButton("Agregar opción");
+            btnAgregarOtra.addActionListener(e -> agregarCampoOtra());
+
+            // Campo inicial
+            agregarCampoOtra();
+
+            panelDer.add(scrollOtras, BorderLayout.CENTER);
+            panelDer.add(btnAgregarOtra, BorderLayout.SOUTH);
+
+            panelCentro.add(panelIzq);
+            panelCentro.add(panelDer);
+
+            add(panelCentro, BorderLayout.CENTER);
+
+            // ---------- Botón inferior ----------
+            String enunciado = txtEnunciado.getText();
+            String puntaje=txtPuntaje.getText();
+            int PuntajeInt = Integer.parseInt(puntaje);
+            JButton btnGuardar = new JButton("Agregar al ArrayList");
+            btnGuardar.addActionListener(e -> {guardarOpciones();
+            try{
+                OpcionMultiplePanel nuevo = new OpcionMultiplePanel(enunciado,getOpciones(),getCorrectas(),PuntajeInt);
+                listaEjercicios.add(nuevo);
+                this.dispose();
+            }catch (IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                    });
+            add(btnGuardar, BorderLayout.SOUTH);
+        }
+
+        private void agregarCampoCorrecta() {
+            JTextField campo = new JTextField();
+            camposCorrectas.add(campo);
+            panelCorrectas.add(campo);
+            panelCorrectas.revalidate();
+            panelCorrectas.repaint();
+        }
+
+        private void agregarCampoOtra() {
+            JTextField campo = new JTextField();
+            camposOtras.add(campo);
+            panelOtras.add(campo);
+            panelOtras.revalidate();
+            panelOtras.repaint();
+        }
+
+        private void guardarOpciones() {
+            opciones.clear();
+            correctas.clear();
+
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+
+            // Validar enunciado y puntaje
+            if (enunciado.isEmpty() || puntaje.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar enunciado y puntaje", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar campos vacíos en correctas
+            boolean hayCorrectaVacia = camposCorrectas.stream().anyMatch(c -> c.getText().trim().isEmpty());
+            boolean hayOtraVacia = camposOtras.stream().anyMatch(c -> c.getText().trim().isEmpty());
+
+            if (hayCorrectaVacia || hayOtraVacia) {
+                JOptionPane.showMessageDialog(this, "No deben haber espacios vacíos en las opciones", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar que haya al menos una correcta
+            if (camposCorrectas.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe haber al menos una opción correcta", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Agregar las correctas primero
+            for (JTextField campo : camposCorrectas) {
+                String texto = campo.getText().trim();
+                correctas.add(opciones.size()); // índice actual
+                opciones.add(texto);
+            }
+
+            // Agregar las otras opciones
+            for (JTextField campo : camposOtras) {
+                String texto = campo.getText().trim();
+                opciones.add(texto);
+            }
+
+            // Mostrar confirmación
+            
+        }
+
+        // Métodos para obtener los datos
+        public ArrayList<String> getOpciones() {
+            return opciones;
+        }
+
+        public Set<Integer> getCorrectas() {
+            return correctas;
+        }
+    }
+
+    class VentanaVerdaderoFalso extends JFrame {
+        public VentanaVerdaderoFalso(ArrayList<Ejercicios> listaEjercicios) {
+            setTitle("Verdadero/Falso");
+            setSize(300, 200);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            JLabel label = new JLabel("Ventana de Verdadero/Falso", SwingConstants.CENTER);
+            add(label);
+        }
+    }
+
+    class VentanaPareo extends JFrame {
+        public VentanaPareo(ArrayList<Ejercicios> listaEjercicios) {
+            setTitle("Pareo");
+            setSize(300, 200);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            JLabel label = new JLabel("Ventana de Pareo", SwingConstants.CENTER);
+            add(label);
+        }
+    }
+
+    class VentanaSopaLetras extends JFrame {
+        public VentanaSopaLetras(ArrayList<Ejercicios> listaEjercicios) {
+            setTitle("Sopa de Letras");
+            setSize(300, 200);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            JLabel label = new JLabel("Ventana de Sopa de Letras", SwingConstants.CENTER);
+            add(label);
+        }
+    }
+    
+    
+    
     
     private void abrirAdministradorEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
         new VentanaAdministradorEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
@@ -3883,11 +4255,20 @@ public class ProjectoPOO extends JFrame {
         ejercicios.add(e2);
         ejercicios.add(e3);
         ejercicios.add(e4);
-            Evaluaciones eva1 = new Evaluaciones(1,"Patos","Hacer todas las evaluaciones",obj,120,false,true,ejercicios);
+            Evaluaciones eva1 = new Evaluaciones(1,"Patos","Hacer todas las evaluaciones",obj,120,true,true);
+            for (Ejercicios ej : ejercicios){
+                eva1.agregarEjercicio(ej);
+            }
+            LocalDate fecha1 = LocalDate.of(2025, 10, 30);
+
+            // Fecha 2: 1 de noviembre de 2025
+            LocalDate fecha2 = LocalDate.of(2025, 11, 1);
+            Grupos grupo = new Grupos(1,fecha1,fecha2);
+            grupo.asignarEvaluacion(eva1);
+            eva1.agregarGrupo(grupo);
+            eva1.setNombreEst("Andres");
             
             eva1.iniciar();
-            
-            
             
             
             

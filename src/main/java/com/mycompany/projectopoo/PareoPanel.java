@@ -10,12 +10,14 @@ package com.mycompany.projectopoo;
  */
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class PareoPanel extends Ejercicios {
+public class PareoPanel extends Ejercicios implements Serializable{
     private Map<String, String> paresCorrectos;
     private Map<String, String> respuestas = new HashMap<>();
     private Map<String, JComboBox<String>> combos = new HashMap<>();
+    private boolean v =false;
 
     public PareoPanel(String enunciado, Map<String, String> paresCorrectos, int puntaje) {
         super(enunciado, puntaje);
@@ -26,17 +28,22 @@ public class PareoPanel extends Ejercicios {
     @Override
     public void construirPanel() {
         removeAll();
+        respuestas.clear();
         JLabel lbl = new JLabel("<html><b>" + enunciado + "</b></html>");
         add(lbl, BorderLayout.NORTH);
 
         java.util.List<String> valores = new ArrayList<>(paresCorrectos.values());
-        
+        if (v==true){
+            Collections.shuffle(valores);
+        }
         JPanel panel = new JPanel(new GridLayout(paresCorrectos.size(), 2, 5, 5));
 
         for (String clave : paresCorrectos.keySet()) {
             JLabel lblClave = new JLabel(clave);
             JComboBox<String> combo = new JComboBox<>(valores.toArray(new String[0]));
-            combo.addActionListener(e -> respuestas.put(clave, (String) combo.getSelectedItem()));
+            combo.addActionListener(e -> {respuestas.put(clave, (String) combo.getSelectedItem());
+                verificar();
+                    });
             combos.put(clave, combo);
             panel.add(lblClave);
             panel.add(combo);
@@ -48,6 +55,7 @@ public class PareoPanel extends Ejercicios {
 
     @Override
     public void aplicarRandom(Random rand) {
+        v=true;
         // Creamos una lista concreta de los pares completos (clave-valor)
         ArrayList<Map.Entry<String, String>> entradas = new ArrayList<>(paresCorrectos.entrySet());
 
