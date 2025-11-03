@@ -20,7 +20,7 @@ abstract class Ejercicios extends JPanel implements Serializable {
     public Ejercicios(String enunciado, int puntaje) {
         this.enunciado = enunciado;
         if (puntaje == 0 || puntaje < 1)
-            throw new IllegalArgumentException("El puntaje debe mayor o igual a 1.");
+            throw new IllegalArgumentException("El puntaje debe ser mayor o igual a 1.");
         this.puntaje = puntaje;
         this.puntajeObtenido = 0;
         setLayout(new BorderLayout());
@@ -35,8 +35,24 @@ abstract class Ejercicios extends JPanel implements Serializable {
     public int getPuntos() {
         return puntaje;
     }
+    public String getEnunciado(){
+        return enunciado;
+    }
 
     public double getPuntajeObtenido() {
         return puntajeObtenido;
     }
+    
+    public void setEnunciado(String enunciados){
+        this.enunciado=enunciados;
+    }
+    
+    public void setPuntaje(int puntaje){
+        if (puntaje == 0 || puntaje < 1)
+            throw new IllegalArgumentException("El puntaje debe ser mayor o igual a 1.");
+        this.puntaje=puntaje;
+    }
+    
+    
+    
 }

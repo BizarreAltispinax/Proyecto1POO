@@ -27,7 +27,7 @@ public class Evaluaciones implements Serializable{
     private boolean pregAl;
     private boolean resAl;
     private ArrayList<Ejercicios> ejercicios;
-    private ArrayList<Grupos> grupo;
+    private Grupos grupo;
     private JFrame frame;
     private JPanel panelCentral;
     private long inicio;
@@ -72,10 +72,68 @@ public class Evaluaciones implements Serializable{
         this.pregAl = pregAl;
         this.resAl = resAl;
         this.ejercicios = new ArrayList<>();
-        this.grupo = new ArrayList<>();
+        
         
 
     }
+    
+    // Setter para nombre
+    public void setNombre(String nombre) {
+        if (nombre == null || nombre.length() < 5 || nombre.length() > 20) {
+            throw new IllegalArgumentException("El nombre debe tener entre 5 y 20 caracteres.");
+        }
+        this.nombre = nombre;
+    }
+
+    // Setter para instrucciones
+    public void setInstrucciones(String instrucciones) {
+        if (instrucciones == null || instrucciones.length() < 5 || instrucciones.length() > 400) {
+            throw new IllegalArgumentException("Las instrucciones deben tener entre 5 y 400 caracteres.");
+        }
+        this.instrucciones = instrucciones;
+    }
+
+    // Setter para objetivos
+    public void setObjetivos(ArrayList<String> objetivos) {
+        if (objetivos == null) {
+            throw new IllegalArgumentException("La lista de objetivos no puede ser nula.");
+        }
+        for (String st : objetivos) {
+            if (st == null || st.length() < 10 || st.length() > 40) {
+                throw new IllegalArgumentException("Cada objetivo debe tener entre 10 y 40 caracteres.");
+            }
+        }
+        this.objetivos = objetivos;
+    }
+
+    // Setter para duracion
+    public void setDuracion(int duracion) {
+        if (duracion < 1) {
+            throw new IllegalArgumentException("La duración debe ser de mínimo 1 minuto.");
+        }
+        this.duracion = duracion;
+    }
+    
+    
+    public void setPregAl(boolean pregAl){
+        this.pregAl=pregAl;
+    }
+    
+    public void setResAl(boolean resAl){
+        this.resAl=resAl;
+    }
+    
+    
+    
+    public Grupos getGrupo(){
+        return grupo;
+    }
+    
+    
+    
+    
+    
+    
     public void setHoraDeInicioEv(LocalDateTime horaInicio){
         this.fechaInicioEv=horaInicio;
     }
@@ -84,9 +142,7 @@ public class Evaluaciones implements Serializable{
     }
     
     public void agregarGrupo(Grupos g){
-        if (g!=null){
-            grupo.add(g);
-        }
+        this.grupo=g;
 
     }
     public void setNombreEst(String nombre){
@@ -125,6 +181,12 @@ public class Evaluaciones implements Serializable{
     public void mezclarEjercicios() {
         Collections.shuffle(ejercicios);
     }
+    
+    
+    public ArrayList<Ejercicios> getEjercicios(){
+        return ejercicios;
+    }
+    
     
     public void agregarEjercicio(Ejercicios ejercicio){
         ejercicios.add(ejercicio);
@@ -324,14 +386,10 @@ public class Evaluaciones implements Serializable{
         fin = System.currentTimeMillis();
         JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
         
-        for (Grupos g: grupo){
-            for (Estudiantes est:g.getEstudiantes()){
-                if (est.getNombre().equals(nombreEst)){
-                    g.guardarEvaluacion(nombreEst,this); 
-                    g.obtenerEvaluacion("Andres",this.getIdentificacion()).imprimirReporte();
-                }
-            }
-        }
+
+        grupo.guardarEvaluacion(nombreEst,this); 
+        grupo.obtenerEvaluacion("Andres",this.getIdentificacion()).imprimirReporte();
+
         
         frame.dispose();
     }

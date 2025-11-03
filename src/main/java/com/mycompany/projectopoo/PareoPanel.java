@@ -52,7 +52,10 @@ public class PareoPanel extends Ejercicios implements Serializable{
         revalidate();
         repaint();
     }
-
+    
+    public void setPares(Map<String, String> paresCorrectos){
+        this.paresCorrectos=paresCorrectos;
+    }
     @Override
     public void aplicarRandom(Random rand) {
         v=true;

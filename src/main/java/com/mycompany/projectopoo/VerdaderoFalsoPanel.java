@@ -24,7 +24,14 @@ public class VerdaderoFalsoPanel extends Ejercicios implements Serializable{
         this.opciones = Arrays.asList("Verdadero", "Falso");
         this.correcta = esVerdadero ? 0 : 1;
     }
-
+    public void setCorrecta(boolean correcta){
+        if (correcta==true){
+            this.correcta=0;
+        }else{
+            this.correcta=1;
+        }
+        
+    }
     @Override
     public void construirPanel() {
         removeAll();

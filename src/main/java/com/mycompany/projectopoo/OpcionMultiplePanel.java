@@ -24,6 +24,14 @@ public class OpcionMultiplePanel extends Ejercicios implements Serializable{
         this.correctas = new HashSet<>(correctas);
         
     }
+    
+    public void setOpciones(ArrayList<String>opciones){
+        this.opciones=opciones;
+    }
+    
+    public void setCorrectas(Set<Integer>correctas){
+        this.correctas=correctas;
+    }
 
     @Override
     public void construirPanel() {

@@ -87,7 +87,7 @@ public class ProjectoPOO extends JFrame {
         // Acción para cada botón
         btnAdmin.addActionListener(e -> {JOptionPane.showMessageDialog(this,
                 "Bienvenido, Administrador. Acceso directo permitido.");
-                prueba(this,"Administrador");
+                //prueba(this,"Administrador");
                 abrirAdministrador(this,"Administrador");
         
         });
@@ -615,7 +615,7 @@ public class ProjectoPOO extends JFrame {
 
         btnEvaluaciones.addActionListener(e -> {
             this.dispose();
-            abrirEvaluacionesCRUD(ventanaPrincipal,tipoUsuario);
+            abrirEvaluacionesCRUD(ventanaPrincipal,tipoUsuario,prof);
                 });
         
         
@@ -648,13 +648,13 @@ public class ProjectoPOO extends JFrame {
         
         
     }
-    private void abrirEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
-        new VentanaEvaluacionesCRUD(ventanaPrincipal,tipoUsuario).setVisible(true);
+    private void abrirEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaEvaluacionesCRUD(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaEvaluacionesCRUD extends JFrame{
         private ProjectoPOO ventanaPrincipal;
-        public VentanaEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        public VentanaEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -703,37 +703,37 @@ public class ProjectoPOO extends JFrame {
             
             btnCrear.addActionListener(e -> {
                 this.dispose();
-                abrirCrearEvaluacion(ventanaPrincipal,tipoUsuario);
+                abrirCrearEvaluacion(ventanaPrincipal,tipoUsuario, prof);
                     });
             
             btnConsultar.addActionListener(e -> {
                 this.dispose();
-                //abrirMostrarEvaluacion(ventanaPrincipal,tipoUsuario);
+                abrirMostrarEvaluacion(ventanaPrincipal,tipoUsuario, prof);
                     });
             
             btnModificar.addActionListener(e -> {
                 this.dispose();
-                //abrirModificarEvaluacion(ventanaPrincipal,tipoUsuario);
+                abrirModificarEvaluacion(ventanaPrincipal,tipoUsuario,prof);
                     });
             
            btnEliminar.addActionListener(e -> {
                 this.dispose();
-                //abrirEliminarEvaluacion(ventanaPrincipal,tipoUsuario);
+                abrirEliminarEvaluacion(ventanaPrincipal,tipoUsuario,prof);
                     });
             
             
         }
     }
     
-    private void abrirCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
-        new VentanaCrearEvaluacion(ventanaPrincipal,tipoUsuario).setVisible(true);
+    private void abrirCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaCrearEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaCrearEvaluacion extends JFrame{
         private ProjectoPOO ventanaPrincipal;
         private JRadioButton rbOpcion1, rbOpcion2;
         private ArrayList<Ejercicios> listaEjercicios = new ArrayList<Ejercicios>();
-        public VentanaCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        public VentanaCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -790,11 +790,11 @@ public class ProjectoPOO extends JFrame {
             add(lblDuracion); 
             add(txtDuracion); 
             
-            rbOpcion1 = new JRadioButton("Opción 1");
+            rbOpcion1 = new JRadioButton("Orden preguntas aleatorias");
             rbOpcion1.setBounds(50, 40, 100, 30);
             add(rbOpcion1);
 
-            rbOpcion2 = new JRadioButton("Opción 2");
+            rbOpcion2 = new JRadioButton("Orden respuestas aleatorias");
             rbOpcion2.setBounds(50, 70, 100, 30);
             add(rbOpcion2);
             
@@ -809,39 +809,50 @@ public class ProjectoPOO extends JFrame {
             
             
             btnCrear.addActionListener(e -> {
+                
+                
+                
                 boolean valor1 = rbOpcion1.isSelected();
                 boolean valor2 = rbOpcion2.isSelected();
                 String nombre = txtNombre.getText().trim();
                 String instrucciones = txtInstrucciones.getText().trim();
                 String objetivos = txtObjetivos.getText().trim();
                 String duracion = txtDuracion.getText().trim();
-                int duracionT = Integer.parseInt(duracion);
+                if (!duracion.isEmpty() && !nombre.isEmpty() && !instrucciones.isEmpty() && !objetivos.isEmpty()&& !listaEjercicios.isEmpty()){
+                    int duracionT = Integer.parseInt(duracion);
+                    ArrayList<String> listaObjetivos = new ArrayList<String>();
+                
+                
+                
+                    String[] arregloObjetivos = objetivos.split("\\s*,\\s*");
+                    for (int i = 0; i < arregloObjetivos.length; i++) {
+                        listaObjetivos.add(arregloObjetivos[i]);
+                    }
+
+
+                        try{
+                            Evaluaciones eva = new Evaluaciones(sistema.getEvaluaciones().size()+1,nombre,instrucciones,listaObjetivos,duracionT,valor1,valor2);
+                            for (Ejercicios ej : listaEjercicios){
+                                eva.agregarEjercicio(ej);
+                            }
+                            sistema.agregarEvaluacion(eva);
+                            this.dispose();
+                            abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                        } catch(IllegalArgumentException ex){
+                            JOptionPane.showMessageDialog(this,
+                                        "Error:\n" + ex.getMessage(),
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                }else{
+                    JOptionPane.showMessageDialog(this,
+                                    "Error: Espacios en blanco o ejercicios no agregados\n",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
 
                 
                 
-                ArrayList<String> listaObjetivos = new ArrayList<String>();
                 
-                
-                
-                String[] arregloObjetivos = objetivos.split("\\s*,\\s*");
-                for (int i = 0; i < arregloObjetivos.length; i++) {
-                    listaObjetivos.add(arregloObjetivos[i]);
-                }
-                
-                
-                    try{
-                        Evaluaciones eva = new Evaluaciones(sistema.getEvaluaciones().size()+1,nombre,instrucciones,listaObjetivos,duracionT,valor1,valor2);
-                        for (Ejercicios ej : listaEjercicios){
-                            eva.agregarEjercicio(ej);
-                        }
-                        sistema.agregarEvaluacion(eva);
-                        this.dispose();
-                        abrirAdministrador(ventanaPrincipal,tipoUsuario);
-                    } catch(IllegalArgumentException ex){
-                        JOptionPane.showMessageDialog(this,
-                                    "Error:\n" + ex.getMessage(),
-                                    "Error", JOptionPane.ERROR_MESSAGE);
-                    }
                 
             });
         }
@@ -886,6 +897,1246 @@ public class ProjectoPOO extends JFrame {
                     });
         }
     }
+    
+    
+    private void abrirMostrarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaConsultarEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    public class VentanaConsultarEvaluacion extends JFrame {
+        private JTextField txtId;
+    private JButton btnConsultar;
+    private JButton btnSalir;
+
+
+    
+    public VentanaConsultarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        setTitle("Consultar Evaluación");
+        setSize(500, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+
+
+
+        JPanel panelId = new JPanel(new GridLayout(1, 2, 10, 10));
+        panelId.setBorder(BorderFactory.createTitledBorder("Datos de la evaluación"));
+
+        panelId.add(new JLabel("ID de evaluación:"));
+        txtId = new JTextField();
+        panelId.add(txtId);
+
+        add(panelId, BorderLayout.NORTH);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        btnConsultar = new JButton("Consultar");
+        btnSalir = new JButton("Salir");
+        panelBotones.add(btnConsultar);
+        panelBotones.add(btnSalir);
+
+        add(panelBotones, BorderLayout.SOUTH);
+
+        btnSalir.addActionListener(e -> {this.dispose();
+            abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                });
+
+        btnConsultar.addActionListener(e -> {
+            String id = txtId.getText().trim();
+            int idInt = Integer.parseInt(id);
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un ID de evaluación.");
+                return;
+            }
+            if (!sistema.getEvaluaciones().isEmpty()){
+                for (Evaluaciones eva1 : sistema.getEvaluaciones()){
+                if (eva1 != null && eva1.getIdentificacion()==idInt) {
+                    abrirFrameConsulta(eva1);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Evaluación no encontrada.");
+                }
+            }
+            }else{
+                JOptionPane.showMessageDialog(this, "No hay evaluaciones creadas.");
+            }
+            
+        });
+    }
+
+    private void abrirFrameConsulta(Evaluaciones eval) {
+        JFrame frameConsulta = new JFrame("Detalles de Evaluación");
+        frameConsulta.setSize(600, 500);
+        frameConsulta.setLayout(new BorderLayout());
+
+        JTextArea txtInfo = new JTextArea();
+        txtInfo.setEditable(false);
+        txtInfo.setText(eval.toString() + "\n\n" + eval.imprimir());
+
+        JScrollPane scroll = new JScrollPane(txtInfo);
+        frameConsulta.add(scroll, BorderLayout.CENTER);
+
+        JButton btnCerrar = new JButton("Cerrar");
+        btnCerrar.addActionListener(e -> frameConsulta.dispose());
+        frameConsulta.add(btnCerrar, BorderLayout.SOUTH);
+
+        frameConsulta.setLocationRelativeTo(null);
+        frameConsulta.setVisible(true);
+    }
+    } 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private void abrirModificarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new abrirModificarEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class abrirModificarEvaluacion extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        private JRadioButton rbOpcion1, rbOpcion2;
+        private ArrayList<Ejercicios> listaEjercicios = new ArrayList<Ejercicios>();
+        public abrirModificarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            setLayout(new GridLayout(25, 1, 5, 5));
+            
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            JLabel lblIdentificacion = new JLabel("Identificacion: ");
+            JTextField txtIdentificacion = new JTextField();
+            JLabel lblNombre = new JLabel("Nombre: ");
+            JTextField txtNombre = new JTextField();
+            JLabel lblInstrucciones = new JLabel("Instrucciones generales:");
+            JTextField txtInstrucciones = new JTextField();
+            JLabel lblObjetivos = new JLabel("Objetivos: ");
+            JTextField txtObjetivos = new JTextField();
+            JLabel lblDuracion = new JLabel("Duracion: ");
+            JTextField txtDuracion = new JTextField();
+            
+
+            JButton btnAgregarEjercicio = new JButton("Agregar ejercicio");
+            JButton btnModificarEjercicio = new JButton("Modificar ejercicio");
+            JButton btnEliminarEjercicio = new JButton("Eliminar ejercicio");
+            JButton btnCompletar = new JButton("Terminar modificaciones");
+            JButton btnSalir = new JButton("Salir");
+  
+            
+            add(lblIdentificacion); 
+            add(txtIdentificacion);
+            add(lblNombre); 
+            add(txtNombre); 
+            add(lblInstrucciones); 
+            add(txtInstrucciones); 
+            add(lblObjetivos); 
+            add(txtObjetivos); 
+            add(lblDuracion); 
+            add(txtDuracion); 
+            
+            rbOpcion1 = new JRadioButton("Orden preguntas aleatorias");
+            rbOpcion1.setBounds(50, 40, 100, 30);
+            add(rbOpcion1);
+
+            rbOpcion2 = new JRadioButton("Orden respuestas aleatorias");
+            rbOpcion2.setBounds(50, 70, 100, 30);
+            add(rbOpcion2);
+            
+            add(btnAgregarEjercicio);
+            add(btnModificarEjercicio);
+            add(btnEliminarEjercicio);
+            add(btnCompletar);
+            add(btnSalir);
+            
+           btnAgregarEjercicio.addActionListener(e -> {
+               
+               String identificacion = txtIdentificacion.getText().trim();
+               if (!identificacion.isEmpty()){
+                   new VentanaAgregarEjercicios(listaEjercicios).setVisible(true);
+                   
+               }else{
+                    JOptionPane.showMessageDialog(this,
+                                    "Error: No hay identificacion\n",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+               
+           });
+            
+            
+            
+            
+            btnModificarEjercicio.addActionListener(e -> {
+                
+                String identificacion = txtIdentificacion.getText().trim();
+                if (!identificacion.isEmpty()){
+                   int identificacionInt = Integer.parseInt(identificacion);
+                   for (Evaluaciones eva : sistema.getEvaluaciones()){
+                    if (eva.getIdentificacion()==identificacionInt){
+                        new VentanaModificarEjercicios(eva).setVisible(true);;
+                    }
+                   }
+               
+                
+                
+                }else{
+                    JOptionPane.showMessageDialog(this,
+                                    "Error: No hay identificacion\n",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+
+                
+                
+                
+                
+            });
+            
+            
+            btnEliminarEjercicio.addActionListener(e -> {
+                String identificacion = txtIdentificacion.getText().trim();
+                if (!identificacion.isEmpty()){
+                   int identificacionInt = Integer.parseInt(identificacion);
+                   for (Evaluaciones eva : sistema.getEvaluaciones()){
+                    if (eva.getIdentificacion()==identificacionInt){
+                        new VentanaEliminarEjercicios(eva).setVisible(true);;
+                    }
+                   }
+               
+                
+                
+                }else{
+                    JOptionPane.showMessageDialog(this,
+                                    "Error: No hay identificacion\n",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+               
+           });
+            
+            btnCompletar.addActionListener(e -> {
+                String identificacion = txtIdentificacion.getText().trim();
+                boolean valor1 = rbOpcion1.isSelected();
+                boolean valor2 = rbOpcion2.isSelected();
+                String nombre = txtNombre.getText().trim();
+                String instrucciones = txtInstrucciones.getText().trim();
+                String objetivos = txtObjetivos.getText().trim();
+                String duracion = txtDuracion.getText().trim();
+                if (!duracion.isEmpty() && !nombre.isEmpty() && !instrucciones.isEmpty() && !objetivos.isEmpty()&& !identificacion.isEmpty()){
+                    int duracionT = Integer.parseInt(duracion);
+                    int identificacionInt = Integer.parseInt(identificacion);
+                    ArrayList<String> listaObjetivos = new ArrayList<String>();
+                
+                
+                
+                    String[] arregloObjetivos = objetivos.split("\\s*,\\s*");
+                    for (int i = 0; i < arregloObjetivos.length; i++) {
+                        listaObjetivos.add(arregloObjetivos[i]);
+                    }
+
+                    
+                    
+                    
+                    
+                   
+
+                        try{
+                            for (Evaluaciones ev: sistema.getEvaluaciones()){
+                                if (ev.getIdentificacion()==identificacionInt){
+                                    for (Ejercicios ej:listaEjercicios){
+                                
+                                        ev.agregarEjercicio(ej);
+
+                                    }
+                                    ev.setNombre(nombre);
+                                    ev.setInstrucciones(instrucciones);
+                                    ev.setObjetivos(listaObjetivos);
+                                    ev.setDuracion(duracionT);
+                                    ev.setPregAl(valor1);
+                                    ev.setResAl(valor2);
+                                    
+                                    this.dispose();
+                                    abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                                }
+                            }
+                            
+                            
+                            
+                            
+                            
+                            
+                        } catch(IllegalArgumentException ex){
+                            JOptionPane.showMessageDialog(this,
+                                        "Error:\n" + ex.getMessage(),
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                }else{
+                    JOptionPane.showMessageDialog(this,
+                                    "Error: Espacios en blanco\n",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+               
+           });
+            
+            btnSalir.addActionListener(e -> {
+                abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                this.dispose();
+               
+           });
+            
+            
+            
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    class VentanaModificarEjercicios extends JFrame {
+        private Evaluaciones evaluacion;
+        private JPanel panelBotones;
+
+        public VentanaModificarEjercicios(Evaluaciones evaluacion) {
+            this.evaluacion = evaluacion;
+
+            setTitle("Ejercicios de la Evaluación " + evaluacion.getIdentificacion());
+            setSize(400, 300);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            panelBotones = new JPanel();
+            panelBotones.setLayout(new GridLayout(0, 1, 5, 5));
+            add(new JScrollPane(panelBotones), BorderLayout.CENTER);
+
+            cargarBotones();
+        }
+
+        private void cargarBotones() {
+            panelBotones.removeAll(); // limpiar panel antes de volver a cargar
+
+            for (Ejercicios e : evaluacion.getEjercicios()) {
+                JButton btn = new JButton(e.getEnunciado());
+                panelBotones.add(btn);
+
+                btn.addActionListener(ev -> {
+                    
+                    if (e instanceof OpcionUnicaPanel) {
+                        new VentanaOpcionUnicaMod((OpcionUnicaPanel)e).setVisible(true);
+                        this.dispose();
+                    } else if (e instanceof OpcionMultiplePanel) {
+                        new VentanaOpcionMultipleMod((OpcionMultiplePanel)e).setVisible(true);
+                        this.dispose();
+                    } else if (e instanceof VerdaderoFalsoPanel) {
+                        new VentanaVerdaderoFalsoMod((VerdaderoFalsoPanel)e).setVisible(true);
+                        this.dispose();
+                    } else if (e instanceof PareoPanel) {
+                        new VentanaPareoMod((PareoPanel)e).setVisible(true);
+                        this.dispose();
+                    } else if (e instanceof SopaDeLetrasPanel) {
+                        new VentanaSopaLetrasMod((SopaDeLetrasPanel)e).setVisible(true);
+                        this.dispose();
+                    }
+                    this.dispose();
+                    
+                });
+            }
+
+
+
+        }
+    }
+    class VentanaOpcionUnicaMod extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JTextField txtCorrecta;
+        private JPanel panelOtrasOpciones;
+        private ArrayList<JTextField> camposOtras;
+        private ArrayList<String> opciones;  // ← donde se guardan todas las opciones
+
+        public VentanaOpcionUnicaMod(OpcionUnicaPanel eje) {
+            setTitle("Opción Única");
+            setSize(500, 400);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
+
+            opciones = new ArrayList<>();
+            camposOtras = new ArrayList<>();
+
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central: Correcta y Otras ----------
+            JPanel panelCentro = new JPanel(new GridLayout(1, 2, 10, 10));
+
+            // Columna izquierda - Opción correcta
+            JPanel panelCorrecta = new JPanel(new BorderLayout(5, 5));
+            panelCorrecta.setBorder(BorderFactory.createTitledBorder("Opción correcta"));
+            txtCorrecta = new JTextField();
+            panelCorrecta.add(txtCorrecta, BorderLayout.NORTH);
+            panelCentro.add(panelCorrecta);
+
+            // Columna derecha - Otras opciones
+            JPanel panelDerecha = new JPanel(new BorderLayout(5, 5));
+            panelDerecha.setBorder(BorderFactory.createTitledBorder("Otras opciones"));
+
+            panelOtrasOpciones = new JPanel();
+            panelOtrasOpciones.setLayout(new BoxLayout(panelOtrasOpciones, BoxLayout.Y_AXIS));
+
+            // Campo inicial
+            agregarCampoOpcion();
+
+            JScrollPane scroll = new JScrollPane(panelOtrasOpciones);
+            panelDerecha.add(scroll, BorderLayout.CENTER);
+
+            JButton btnAgregarCampo = new JButton("Agregar opción");
+            btnAgregarCampo.addActionListener(e -> agregarCampoOpcion());
+            panelDerecha.add(btnAgregarCampo, BorderLayout.SOUTH);
+
+            panelCentro.add(panelDerecha);
+            add(panelCentro, BorderLayout.CENTER);
+
+            // ---------- Panel inferior: Botón agregar ----------
+            JButton btnAgregar = new JButton("Modificar");
+            
+            btnAgregar.addActionListener(e -> {guardarOpciones();
+            String enunciado = txtEnunciado.getText();
+            String puntaje=txtPuntaje.getText();
+            int PuntajeInt = Integer.parseInt(puntaje);
+                try{
+                    eje.setEnunciado(enunciado);
+                    eje.setPuntaje(PuntajeInt);
+                    eje.setOpciones(opciones);
+                    
+                    this.dispose();
+                }catch (IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                    });
+            add(btnAgregar, BorderLayout.SOUTH);
+        }
+
+        // Agrega un nuevo campo de texto en la columna "otras opciones"
+        private void agregarCampoOpcion() {
+            JTextField campo = new JTextField();
+            camposOtras.add(campo);
+            panelOtrasOpciones.add(campo);
+            panelOtrasOpciones.revalidate();
+            panelOtrasOpciones.repaint();
+        }
+
+        // Reúne toda la información y la guarda en el ArrayList
+        private void guardarOpciones() {
+            opciones.clear();
+
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+            String correcta = txtCorrecta.getText().trim();
+
+            if (enunciado.isEmpty() || puntaje.isEmpty() || correcta.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar enunciado, puntaje y opción correcta");
+                return;
+            }
+
+            opciones.add(correcta); // la primera es la correcta
+
+            for (JTextField campo : camposOtras) {
+                String texto = campo.getText().trim();
+                if (!texto.isEmpty()) {
+                    opciones.add(texto);
+                }
+            }
+
+            
+        }
+
+        // (Opcional) puedes obtener la lista para integrarla a tu lista general
+        public ArrayList<String> getOpciones() {
+            return opciones;
+        }
+    }
+
+    class VentanaOpcionMultipleMod extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JPanel panelCorrectas, panelOtras;
+        private ArrayList<JTextField> camposCorrectas, camposOtras;
+        private ArrayList<String> opciones;
+        private Set<Integer> correctas;
+
+        public VentanaOpcionMultipleMod(OpcionMultiplePanel eje) {
+            setTitle("Opción Múltiple");
+            setSize(550, 420);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
+
+            opciones = new ArrayList<>();
+            correctas = new HashSet<>();
+            camposCorrectas = new ArrayList<>();
+            camposOtras = new ArrayList<>();
+
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central con dos columnas ----------
+            JPanel panelCentro = new JPanel(new GridLayout(1, 2, 10, 10));
+
+            // Columna izquierda - Opciones correctas
+            JPanel panelIzq = new JPanel(new BorderLayout(5, 5));
+            panelIzq.setBorder(BorderFactory.createTitledBorder("Opciones correctas"));
+
+            panelCorrectas = new JPanel();
+            panelCorrectas.setLayout(new BoxLayout(panelCorrectas, BoxLayout.Y_AXIS));
+            JScrollPane scrollCorrectas = new JScrollPane(panelCorrectas);
+
+            JButton btnAgregarCorrecta = new JButton("Agregar correcta");
+            btnAgregarCorrecta.addActionListener(e -> agregarCampoCorrecta());
+
+            // Campo inicial
+            agregarCampoCorrecta();
+
+            panelIzq.add(scrollCorrectas, BorderLayout.CENTER);
+            panelIzq.add(btnAgregarCorrecta, BorderLayout.SOUTH);
+
+            // Columna derecha - Otras opciones
+            JPanel panelDer = new JPanel(new BorderLayout(5, 5));
+            panelDer.setBorder(BorderFactory.createTitledBorder("Otras opciones"));
+
+            panelOtras = new JPanel();
+            panelOtras.setLayout(new BoxLayout(panelOtras, BoxLayout.Y_AXIS));
+            JScrollPane scrollOtras = new JScrollPane(panelOtras);
+
+            JButton btnAgregarOtra = new JButton("Agregar opción");
+            btnAgregarOtra.addActionListener(e -> agregarCampoOtra());
+
+            // Campo inicial
+            agregarCampoOtra();
+
+            panelDer.add(scrollOtras, BorderLayout.CENTER);
+            panelDer.add(btnAgregarOtra, BorderLayout.SOUTH);
+
+            panelCentro.add(panelIzq);
+            panelCentro.add(panelDer);
+
+            add(panelCentro, BorderLayout.CENTER);
+
+            // ---------- Botón inferior ----------
+            
+            JButton btnGuardar = new JButton("Modificar");
+            
+            btnGuardar.addActionListener(e -> {guardarOpciones();
+            
+            
+            String enunciado = txtEnunciado.getText();
+            String puntaje=txtPuntaje.getText();
+            if (!puntaje.isEmpty() && !enunciado.isEmpty()){
+                int PuntajeInt = Integer.parseInt(puntaje);
+                try{
+                    eje.setEnunciado(enunciado);
+                    eje.setPuntaje(PuntajeInt);
+                    eje.setOpciones(opciones);
+                    eje.setCorrectas(correctas);
+                this.dispose();
+            }catch (IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            
+            
+                    });
+            add(btnGuardar, BorderLayout.SOUTH);
+        }
+
+        private void agregarCampoCorrecta() {
+            JTextField campo = new JTextField();
+            camposCorrectas.add(campo);
+            panelCorrectas.add(campo);
+            panelCorrectas.revalidate();
+            panelCorrectas.repaint();
+        }
+
+        private void agregarCampoOtra() {
+            JTextField campo = new JTextField();
+            camposOtras.add(campo);
+            panelOtras.add(campo);
+            panelOtras.revalidate();
+            panelOtras.repaint();
+        }
+
+        private void guardarOpciones() {
+            opciones.clear();
+            correctas.clear();
+
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+
+            // Validar enunciado y puntaje
+            if (enunciado.isEmpty() || puntaje.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar enunciado y puntaje", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar campos vacíos en correctas
+            boolean hayCorrectaVacia = camposCorrectas.stream().anyMatch(c -> c.getText().trim().isEmpty());
+            boolean hayOtraVacia = camposOtras.stream().anyMatch(c -> c.getText().trim().isEmpty());
+
+            if (hayCorrectaVacia || hayOtraVacia) {
+                JOptionPane.showMessageDialog(this, "No deben haber espacios vacíos en las opciones", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar que haya al menos una correcta
+            if (camposCorrectas.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe haber al menos una opción correcta", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Agregar las correctas primero
+            for (JTextField campo : camposCorrectas) {
+                String texto = campo.getText().trim();
+                correctas.add(opciones.size()); // índice actual
+                opciones.add(texto);
+            }
+
+            // Agregar las otras opciones
+            for (JTextField campo : camposOtras) {
+                String texto = campo.getText().trim();
+                opciones.add(texto);
+            }
+
+            // Mostrar confirmación
+            
+        }
+
+        // Métodos para obtener los datos
+        public ArrayList<String> getOpciones() {
+            return opciones;
+        }
+
+        public Set<Integer> getCorrectas() {
+            return correctas;
+        }
+    }
+
+    class VentanaVerdaderoFalsoMod extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JRadioButton rbVerdadero;
+        private JRadioButton rbFalso;
+        private boolean respuestaCorrecta; // true si es verdadero, false si es falso
+
+        public VentanaVerdaderoFalsoMod(VerdaderoFalsoPanel eje) {
+            setTitle("Ejercicio Verdadero / Falso");
+            setSize(400, 300);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
+
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central: opciones Verdadero/Falso ----------
+            JPanel panelOpciones = new JPanel();
+            panelOpciones.setBorder(BorderFactory.createTitledBorder("Seleccione la respuesta correcta"));
+            panelOpciones.setLayout(new GridLayout(2, 1, 5, 5));
+
+            ButtonGroup grupo = new ButtonGroup();
+
+            rbVerdadero = new JRadioButton("Verdadero");
+            rbFalso = new JRadioButton("Falso");
+
+            grupo.add(rbVerdadero);
+            grupo.add(rbFalso);
+
+            panelOpciones.add(rbVerdadero);
+            panelOpciones.add(rbFalso);
+
+            add(panelOpciones, BorderLayout.CENTER);
+
+            // ---------- Botón inferior ----------
+            JButton btnGuardar = new JButton("Guardar");
+            btnGuardar.addActionListener(e -> {
+                guardarRespuesta(eje);
+                
+            });
+            add(btnGuardar, BorderLayout.SOUTH);
+        }
+
+        private void guardarRespuesta(VerdaderoFalsoPanel eje) {
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+            int puntajeInt=Integer.parseInt(puntaje);
+
+            // Validaciones
+            if (enunciado.isEmpty() || puntaje.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar el enunciado y el puntaje.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!rbVerdadero.isSelected() && !rbFalso.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar Verdadero o Falso.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Guardar la respuesta
+            respuestaCorrecta = rbVerdadero.isSelected();
+            
+            try{
+                eje.setEnunciado(enunciado);
+                eje.setPuntaje(puntajeInt);
+                eje.setCorrecta(respuestaCorrecta);
+                this.dispose();
+            }catch(IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+            
+            
+            
+                 
+            
+            
+            
+            
+           
+        }
+
+        // Getters para obtener los datos desde fuera
+        public String getEnunciado() {
+            return txtEnunciado.getText().trim();
+        }
+
+        public int getPuntaje() {
+            try {
+                return Integer.parseInt(txtPuntaje.getText().trim());
+            } catch (NumberFormatException e) {
+                return 0; // por si el usuario escribió algo no numérico
+            }
+        }
+
+        public boolean getRespuestaCorrecta() {
+            return respuestaCorrecta;
+        }
+    }
+
+    class VentanaPareoMod extends JFrame {
+            private JTextField txtEnunciado;
+    private JTextField txtPuntaje;
+    private JPanel panelPareo;
+    private ArrayList<JTextField> camposPalabra;
+    private ArrayList<JTextField> camposDefinicion;
+    private Map<String, String> pares;
+
+    public VentanaPareoMod(PareoPanel eje) {
+        setTitle("Ejercicio de Pareo");
+        setSize(600, 450);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+
+        pares = new LinkedHashMap<>();
+        camposPalabra = new ArrayList<>();
+        camposDefinicion = new ArrayList<>();
+
+        // ---------- Panel superior: Enunciado y Puntaje ----------
+        JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+        panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+        panelDatos.add(new JLabel("Enunciado:"));
+        txtEnunciado = new JTextField();
+        panelDatos.add(txtEnunciado);
+
+        panelDatos.add(new JLabel("Puntaje:"));
+        txtPuntaje = new JTextField();
+        panelDatos.add(txtPuntaje);
+
+        add(panelDatos, BorderLayout.NORTH);
+
+        // ---------- Panel central: columnas Palabra / Definición ----------
+        panelPareo = new JPanel();
+        panelPareo.setLayout(new GridLayout(0, 2, 10, 10));
+        panelPareo.setBorder(BorderFactory.createTitledBorder("Palabras y definiciones"));
+
+        // Etiquetas de encabezado
+        panelPareo.add(new JLabel("Palabra", SwingConstants.CENTER));
+        panelPareo.add(new JLabel("Definición", SwingConstants.CENTER));
+
+        // Primer par inicial
+        agregarParCampos();
+
+        JScrollPane scroll = new JScrollPane(panelPareo);
+        add(scroll, BorderLayout.CENTER);
+
+        // ---------- Panel inferior con botones ----------
+        JPanel panelBotones = new JPanel(new FlowLayout());
+
+        JButton btnAgregar = new JButton("Agregar campo");
+        btnAgregar.addActionListener(e -> agregarParCampos());
+
+        JButton btnGuardar = new JButton("Guardar");
+        btnGuardar.addActionListener(e -> guardarPareo(eje));
+
+        panelBotones.add(btnAgregar);
+        panelBotones.add(btnGuardar);
+
+        add(panelBotones, BorderLayout.SOUTH);
+    }
+
+    private void agregarParCampos() {
+        JTextField campoPalabra = new JTextField();
+        JTextField campoDefinicion = new JTextField();
+
+        camposPalabra.add(campoPalabra);
+        camposDefinicion.add(campoDefinicion);
+
+        panelPareo.add(campoPalabra);
+        panelPareo.add(campoDefinicion);
+
+        panelPareo.revalidate();
+        panelPareo.repaint();
+    }
+
+    private void guardarPareo(PareoPanel eje) {
+        pares.clear();
+
+        String enunciado = txtEnunciado.getText().trim();
+        String puntaje = txtPuntaje.getText().trim();
+        int puntajeInt = Integer.parseInt(puntaje);
+
+        // Validaciones
+        if (enunciado.isEmpty() || puntaje.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe completar el enunciado y el puntaje.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validar que no haya campos vacíos
+        for (int i = 0; i < camposPalabra.size(); i++) {
+            String palabra = camposPalabra.get(i).getText().trim();
+            String definicion = camposDefinicion.get(i).getText().trim();
+
+            if (palabra.isEmpty() || definicion.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No deben haber espacios vacíos en las palabras o definiciones.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Agregar al mapa
+            pares.put(palabra, definicion);
+        }
+        try{
+                eje.setEnunciado(enunciado);
+                eje.setPuntaje(puntajeInt);
+                eje.setPares(pares);
+                this.dispose();
+            }catch(IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        
+
+        // Cerrar ventana
+        this.dispose();
+    }
+
+    // ---------- Getters ----------
+    public String getEnunciado() {
+        return txtEnunciado.getText().trim();
+    }
+
+    public int getPuntaje() {
+        try {
+            return Integer.parseInt(txtPuntaje.getText().trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    public Map<String, String> getPares() {
+        return pares;
+    }
+    }
+
+    class VentanaSopaLetrasMod extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JPanel panelPalabras;
+        private ArrayList<JTextField> camposPalabra;
+        private ArrayList<JTextField> camposDefinicion;
+        private Map<String, String> mapaPalabras;
+
+        public VentanaSopaLetrasMod(SopaDeLetrasPanel eje) {
+            setTitle("Ejercicio de Sopa de Letras");
+            setSize(600, 500);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
+
+            mapaPalabras = new LinkedHashMap<>();
+            camposPalabra = new ArrayList<>();
+            camposDefinicion = new ArrayList<>();
+
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central con columnas Palabra / Definición ----------
+            panelPalabras = new JPanel();
+            panelPalabras.setLayout(new GridLayout(0, 2, 10, 10));
+            panelPalabras.setBorder(BorderFactory.createTitledBorder("Palabras y definiciones"));
+
+            // Encabezados
+            JLabel lblPalabra = new JLabel("Palabra", SwingConstants.CENTER);
+            lblPalabra.setFont(lblPalabra.getFont().deriveFont(Font.BOLD));
+            JLabel lblDefinicion = new JLabel("Definición", SwingConstants.CENTER);
+            lblDefinicion.setFont(lblDefinicion.getFont().deriveFont(Font.BOLD));
+
+            panelPalabras.add(lblPalabra);
+            panelPalabras.add(lblDefinicion);
+
+            // Agregar 10 pares por defecto
+            for (int i = 0; i < 10; i++) {
+                agregarParCampos();
+            }
+
+            JScrollPane scroll = new JScrollPane(panelPalabras);
+            add(scroll, BorderLayout.CENTER);
+
+            // ---------- Panel inferior con botones ----------
+            JPanel panelBotones = new JPanel(new FlowLayout());
+
+            JButton btnAgregar = new JButton("Agregar campo");
+            btnAgregar.addActionListener(e -> agregarParCampos());
+
+            JButton btnGuardar = new JButton("Guardar");
+            btnGuardar.addActionListener(e -> guardarMapa(eje));
+
+            panelBotones.add(btnAgregar);
+            panelBotones.add(btnGuardar);
+
+            add(panelBotones, BorderLayout.SOUTH);
+        }
+
+        private void agregarParCampos() {
+            JTextField campoPalabra = new JTextField();
+            JTextField campoDefinicion = new JTextField();
+
+            camposPalabra.add(campoPalabra);
+            camposDefinicion.add(campoDefinicion);
+
+            panelPalabras.add(campoPalabra);
+            panelPalabras.add(campoDefinicion);
+
+            panelPalabras.revalidate();
+            panelPalabras.repaint();
+        }
+
+        private void guardarMapa(SopaDeLetrasPanel eje) {
+            mapaPalabras.clear();
+
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+            int puntajeInt = Integer.parseInt(puntaje);
+
+            // Validaciones
+            if (enunciado.isEmpty() || puntaje.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar el enunciado y el puntaje.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar que no haya campos vacíos
+            for (int i = 0; i < camposPalabra.size(); i++) {
+                String palabra = camposPalabra.get(i).getText().trim();
+                String definicion = camposDefinicion.get(i).getText().trim();
+
+                if (palabra.isEmpty() || definicion.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No deben haber espacios vacíos en las palabras o definiciones.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                mapaPalabras.put(palabra, definicion);
+            }
+
+        try{
+                    eje.setEnunciado(enunciado);
+                    eje.setPuntaje(puntajeInt);
+                    eje.setPalabras(mapaPalabras);
+                        this.dispose();
+                }catch(IllegalArgumentException w) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Error:\n" + w.getMessage(),
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+
+            // Cerrar ventana
+            this.dispose();
+        }
+
+        // ---------- Getters ----------
+        public String getEnunciado() {
+            return txtEnunciado.getText().trim();
+        }
+
+        public int getPuntaje() {
+            try {
+                return Integer.parseInt(txtPuntaje.getText().trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+
+        public Map<String, String> getMapaPalabras() {
+            return mapaPalabras;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    class VentanaEliminarEjercicios extends JFrame {
+    private Evaluaciones evaluacion;
+    private JPanel panelBotones;
+
+    public VentanaEliminarEjercicios(Evaluaciones evaluacion) {
+        this.evaluacion = evaluacion;
+
+        setTitle("Ejercicios de la Evaluación " + evaluacion.getIdentificacion());
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        panelBotones = new JPanel();
+        panelBotones.setLayout(new GridLayout(0, 1, 5, 5));
+        add(new JScrollPane(panelBotones), BorderLayout.CENTER);
+
+        cargarBotones();
+    }
+
+    private void cargarBotones() {
+        panelBotones.removeAll(); // limpiar panel antes de volver a cargar
+
+        for (Ejercicios e : evaluacion.getEjercicios()) {
+            JButton btn = new JButton(e.getEnunciado());
+            panelBotones.add(btn);
+
+            btn.addActionListener(ev -> {
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "¿Seguro que desea eliminar este ejercicio?\n" + e.getEnunciado(),
+                        "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    evaluacion.getEjercicios().remove(e);
+                    JOptionPane.showMessageDialog(this, "Ejercicio eliminado.");
+                    cargarBotones(); // recargar lista de botones
+                    this.dispose();
+                }
+            });
+        }
+
+        // Si ya no quedan ejercicios, mostrar mensaje
+        if (evaluacion.getEjercicios().isEmpty()) {
+            panelBotones.add(new JLabel("No hay ejercicios en esta evaluación.", SwingConstants.CENTER));
+        }
+
+        panelBotones.revalidate();
+        panelBotones.repaint();
+    }
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private void abrirEliminarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaEliminarEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    public class VentanaEliminarEvaluacion extends JFrame {
+        private JTextField txtId;
+    private JButton btnEliminar;
+    private JButton btnSalir;
+
+
+    
+    public VentanaEliminarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        setTitle("Eliminar Evaluación");
+        setSize(500, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+
+
+
+        JPanel panelId = new JPanel(new GridLayout(1, 2, 10, 10));
+        panelId.setBorder(BorderFactory.createTitledBorder("Datos de la evaluación"));
+
+        panelId.add(new JLabel("ID de evaluación:"));
+        txtId = new JTextField();
+        panelId.add(txtId);
+
+        add(panelId, BorderLayout.NORTH);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        btnEliminar = new JButton("Eliminar");
+        btnSalir = new JButton("Salir");
+        panelBotones.add(btnEliminar);
+        panelBotones.add(btnSalir);
+
+        add(panelBotones, BorderLayout.SOUTH);
+
+        btnSalir.addActionListener(e -> {this.dispose();
+            abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                });
+
+        btnEliminar.addActionListener(e -> {
+            String id = txtId.getText().trim();
+            
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un ID de evaluación.");
+                return;
+            }
+            
+            int idInt = Integer.parseInt(id);
+            Evaluaciones encontrada = null;
+            for (Evaluaciones eva1 : sistema.getEvaluaciones()) {
+                if (eva1 != null && eva1.getGrupo() == null && eva1.getIdentificacion() == idInt) {
+                    encontrada = eva1;
+                    break;
+                }
+            }
+
+            if (encontrada != null) {
+                sistema.getEvaluaciones().remove(encontrada); // ✅ ya fuera del for
+                JOptionPane.showMessageDialog(this, "Evaluación eliminada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Evaluación no encontrada o está asociada a un grupo.");
+            }
+        });
+    }
+
+    
+    } 
     
     
     
@@ -954,10 +2205,11 @@ public class ProjectoPOO extends JFrame {
 
             // ---------- Panel inferior: Botón agregar ----------
             JButton btnAgregar = new JButton("Agregar al ArrayList");
+            
+            btnAgregar.addActionListener(e -> {guardarOpciones();
             String enunciado = txtEnunciado.getText();
             String puntaje=txtPuntaje.getText();
             int PuntajeInt = Integer.parseInt(puntaje);
-            btnAgregar.addActionListener(e -> {guardarOpciones();
                 try{
                     OpcionUnicaPanel nuevo = new OpcionUnicaPanel(enunciado,getOpciones(),0,PuntajeInt);
                     listaEjercicios.add(nuevo);
@@ -1088,12 +2340,17 @@ public class ProjectoPOO extends JFrame {
             add(panelCentro, BorderLayout.CENTER);
 
             // ---------- Botón inferior ----------
+            
+            JButton btnGuardar = new JButton("Agregar al ArrayList");
+            
+            btnGuardar.addActionListener(e -> {guardarOpciones();
+            
+            
             String enunciado = txtEnunciado.getText();
             String puntaje=txtPuntaje.getText();
-            int PuntajeInt = Integer.parseInt(puntaje);
-            JButton btnGuardar = new JButton("Agregar al ArrayList");
-            btnGuardar.addActionListener(e -> {guardarOpciones();
-            try{
+            if (!puntaje.isEmpty() && !enunciado.isEmpty()){
+                int PuntajeInt = Integer.parseInt(puntaje);
+                try{
                 OpcionMultiplePanel nuevo = new OpcionMultiplePanel(enunciado,getOpciones(),getCorrectas(),PuntajeInt);
                 listaEjercicios.add(nuevo);
                 this.dispose();
@@ -1102,6 +2359,9 @@ public class ProjectoPOO extends JFrame {
                                 "Error:\n" + w.getMessage(),
                                 "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+            
+            
                     });
             add(btnGuardar, BorderLayout.SOUTH);
         }
@@ -1178,38 +2438,396 @@ public class ProjectoPOO extends JFrame {
     }
 
     class VentanaVerdaderoFalso extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JRadioButton rbVerdadero;
+        private JRadioButton rbFalso;
+        private boolean respuestaCorrecta; // true si es verdadero, false si es falso
+
         public VentanaVerdaderoFalso(ArrayList<Ejercicios> listaEjercicios) {
-            setTitle("Verdadero/Falso");
-            setSize(300, 200);
+            setTitle("Ejercicio Verdadero / Falso");
+            setSize(400, 300);
             setLocationRelativeTo(null);
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
 
-            JLabel label = new JLabel("Ventana de Verdadero/Falso", SwingConstants.CENTER);
-            add(label);
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central: opciones Verdadero/Falso ----------
+            JPanel panelOpciones = new JPanel();
+            panelOpciones.setBorder(BorderFactory.createTitledBorder("Seleccione la respuesta correcta"));
+            panelOpciones.setLayout(new GridLayout(2, 1, 5, 5));
+
+            ButtonGroup grupo = new ButtonGroup();
+
+            rbVerdadero = new JRadioButton("Verdadero");
+            rbFalso = new JRadioButton("Falso");
+
+            grupo.add(rbVerdadero);
+            grupo.add(rbFalso);
+
+            panelOpciones.add(rbVerdadero);
+            panelOpciones.add(rbFalso);
+
+            add(panelOpciones, BorderLayout.CENTER);
+
+            // ---------- Botón inferior ----------
+            JButton btnGuardar = new JButton("Guardar");
+            btnGuardar.addActionListener(e -> {
+                guardarRespuesta(listaEjercicios);
+                
+            });
+            add(btnGuardar, BorderLayout.SOUTH);
+        }
+
+        private void guardarRespuesta(ArrayList<Ejercicios> listaEjercicios) {
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+            int puntajeInt=Integer.parseInt(puntaje);
+
+            // Validaciones
+            if (enunciado.isEmpty() || puntaje.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar el enunciado y el puntaje.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!rbVerdadero.isSelected() && !rbFalso.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar Verdadero o Falso.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Guardar la respuesta
+            respuestaCorrecta = rbVerdadero.isSelected();
+            
+            try{
+                VerdaderoFalsoPanel nuevo = new VerdaderoFalsoPanel(enunciado,respuestaCorrecta,puntajeInt);
+                listaEjercicios.add(nuevo);
+                this.dispose();
+            }catch(IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+            
+            
+            
+                 
+            
+            
+            
+            
+           
+        }
+
+        // Getters para obtener los datos desde fuera
+        public String getEnunciado() {
+            return txtEnunciado.getText().trim();
+        }
+
+        public int getPuntaje() {
+            try {
+                return Integer.parseInt(txtPuntaje.getText().trim());
+            } catch (NumberFormatException e) {
+                return 0; // por si el usuario escribió algo no numérico
+            }
+        }
+
+        public boolean getRespuestaCorrecta() {
+            return respuestaCorrecta;
         }
     }
 
     class VentanaPareo extends JFrame {
-        public VentanaPareo(ArrayList<Ejercicios> listaEjercicios) {
-            setTitle("Pareo");
-            setSize(300, 200);
-            setLocationRelativeTo(null);
-            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            private JTextField txtEnunciado;
+    private JTextField txtPuntaje;
+    private JPanel panelPareo;
+    private ArrayList<JTextField> camposPalabra;
+    private ArrayList<JTextField> camposDefinicion;
+    private Map<String, String> pares;
 
-            JLabel label = new JLabel("Ventana de Pareo", SwingConstants.CENTER);
-            add(label);
+    public VentanaPareo(ArrayList<Ejercicios> listaEjercicios) {
+        setTitle("Ejercicio de Pareo");
+        setSize(600, 450);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+
+        pares = new LinkedHashMap<>();
+        camposPalabra = new ArrayList<>();
+        camposDefinicion = new ArrayList<>();
+
+        // ---------- Panel superior: Enunciado y Puntaje ----------
+        JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+        panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+        panelDatos.add(new JLabel("Enunciado:"));
+        txtEnunciado = new JTextField();
+        panelDatos.add(txtEnunciado);
+
+        panelDatos.add(new JLabel("Puntaje:"));
+        txtPuntaje = new JTextField();
+        panelDatos.add(txtPuntaje);
+
+        add(panelDatos, BorderLayout.NORTH);
+
+        // ---------- Panel central: columnas Palabra / Definición ----------
+        panelPareo = new JPanel();
+        panelPareo.setLayout(new GridLayout(0, 2, 10, 10));
+        panelPareo.setBorder(BorderFactory.createTitledBorder("Palabras y definiciones"));
+
+        // Etiquetas de encabezado
+        panelPareo.add(new JLabel("Palabra", SwingConstants.CENTER));
+        panelPareo.add(new JLabel("Definición", SwingConstants.CENTER));
+
+        // Primer par inicial
+        agregarParCampos();
+
+        JScrollPane scroll = new JScrollPane(panelPareo);
+        add(scroll, BorderLayout.CENTER);
+
+        // ---------- Panel inferior con botones ----------
+        JPanel panelBotones = new JPanel(new FlowLayout());
+
+        JButton btnAgregar = new JButton("Agregar campo");
+        btnAgregar.addActionListener(e -> agregarParCampos());
+
+        JButton btnGuardar = new JButton("Guardar");
+        btnGuardar.addActionListener(e -> guardarPareo(listaEjercicios));
+
+        panelBotones.add(btnAgregar);
+        panelBotones.add(btnGuardar);
+
+        add(panelBotones, BorderLayout.SOUTH);
+    }
+
+    private void agregarParCampos() {
+        JTextField campoPalabra = new JTextField();
+        JTextField campoDefinicion = new JTextField();
+
+        camposPalabra.add(campoPalabra);
+        camposDefinicion.add(campoDefinicion);
+
+        panelPareo.add(campoPalabra);
+        panelPareo.add(campoDefinicion);
+
+        panelPareo.revalidate();
+        panelPareo.repaint();
+    }
+
+    private void guardarPareo(ArrayList<Ejercicios> listaEjercicios) {
+        pares.clear();
+
+        String enunciado = txtEnunciado.getText().trim();
+        String puntaje = txtPuntaje.getText().trim();
+        int puntajeInt = Integer.parseInt(puntaje);
+
+        // Validaciones
+        if (enunciado.isEmpty() || puntaje.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe completar el enunciado y el puntaje.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validar que no haya campos vacíos
+        for (int i = 0; i < camposPalabra.size(); i++) {
+            String palabra = camposPalabra.get(i).getText().trim();
+            String definicion = camposDefinicion.get(i).getText().trim();
+
+            if (palabra.isEmpty() || definicion.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No deben haber espacios vacíos en las palabras o definiciones.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Agregar al mapa
+            pares.put(palabra, definicion);
+        }
+        try{
+                PareoPanel nuevo = new PareoPanel(enunciado,pares,puntajeInt);
+                listaEjercicios.add(nuevo);
+                this.dispose();
+            }catch(IllegalArgumentException w) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error:\n" + w.getMessage(),
+                                "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        
+
+        // Cerrar ventana
+        this.dispose();
+    }
+
+    // ---------- Getters ----------
+    public String getEnunciado() {
+        return txtEnunciado.getText().trim();
+    }
+
+    public int getPuntaje() {
+        try {
+            return Integer.parseInt(txtPuntaje.getText().trim());
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
+    public Map<String, String> getPares() {
+        return pares;
+    }
+    }
+
     class VentanaSopaLetras extends JFrame {
+        private JTextField txtEnunciado;
+        private JTextField txtPuntaje;
+        private JPanel panelPalabras;
+        private ArrayList<JTextField> camposPalabra;
+        private ArrayList<JTextField> camposDefinicion;
+        private Map<String, String> mapaPalabras;
+
         public VentanaSopaLetras(ArrayList<Ejercicios> listaEjercicios) {
-            setTitle("Sopa de Letras");
-            setSize(300, 200);
+            setTitle("Ejercicio de Sopa de Letras");
+            setSize(600, 500);
             setLocationRelativeTo(null);
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout(10, 10));
 
-            JLabel label = new JLabel("Ventana de Sopa de Letras", SwingConstants.CENTER);
-            add(label);
+            mapaPalabras = new LinkedHashMap<>();
+            camposPalabra = new ArrayList<>();
+            camposDefinicion = new ArrayList<>();
+
+            // ---------- Panel superior: Enunciado y Puntaje ----------
+            JPanel panelDatos = new JPanel(new GridLayout(2, 2, 10, 10));
+            panelDatos.setBorder(BorderFactory.createTitledBorder("Datos del ejercicio"));
+
+            panelDatos.add(new JLabel("Enunciado:"));
+            txtEnunciado = new JTextField();
+            panelDatos.add(txtEnunciado);
+
+            panelDatos.add(new JLabel("Puntaje:"));
+            txtPuntaje = new JTextField();
+            panelDatos.add(txtPuntaje);
+
+            add(panelDatos, BorderLayout.NORTH);
+
+            // ---------- Panel central con columnas Palabra / Definición ----------
+            panelPalabras = new JPanel();
+            panelPalabras.setLayout(new GridLayout(0, 2, 10, 10));
+            panelPalabras.setBorder(BorderFactory.createTitledBorder("Palabras y definiciones"));
+
+            // Encabezados
+            JLabel lblPalabra = new JLabel("Palabra", SwingConstants.CENTER);
+            lblPalabra.setFont(lblPalabra.getFont().deriveFont(Font.BOLD));
+            JLabel lblDefinicion = new JLabel("Definición", SwingConstants.CENTER);
+            lblDefinicion.setFont(lblDefinicion.getFont().deriveFont(Font.BOLD));
+
+            panelPalabras.add(lblPalabra);
+            panelPalabras.add(lblDefinicion);
+
+            // Agregar 10 pares por defecto
+            for (int i = 0; i < 10; i++) {
+                agregarParCampos();
+            }
+
+            JScrollPane scroll = new JScrollPane(panelPalabras);
+            add(scroll, BorderLayout.CENTER);
+
+            // ---------- Panel inferior con botones ----------
+            JPanel panelBotones = new JPanel(new FlowLayout());
+
+            JButton btnAgregar = new JButton("Agregar campo");
+            btnAgregar.addActionListener(e -> agregarParCampos());
+
+            JButton btnGuardar = new JButton("Guardar");
+            btnGuardar.addActionListener(e -> guardarMapa(listaEjercicios));
+
+            panelBotones.add(btnAgregar);
+            panelBotones.add(btnGuardar);
+
+            add(panelBotones, BorderLayout.SOUTH);
+        }
+
+        private void agregarParCampos() {
+            JTextField campoPalabra = new JTextField();
+            JTextField campoDefinicion = new JTextField();
+
+            camposPalabra.add(campoPalabra);
+            camposDefinicion.add(campoDefinicion);
+
+            panelPalabras.add(campoPalabra);
+            panelPalabras.add(campoDefinicion);
+
+            panelPalabras.revalidate();
+            panelPalabras.repaint();
+        }
+
+        private void guardarMapa(ArrayList<Ejercicios> listaEjercicios) {
+            mapaPalabras.clear();
+
+            String enunciado = txtEnunciado.getText().trim();
+            String puntaje = txtPuntaje.getText().trim();
+            int puntajeInt = Integer.parseInt(puntaje);
+
+            // Validaciones
+            if (enunciado.isEmpty() || puntaje.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe completar el enunciado y el puntaje.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar que no haya campos vacíos
+            for (int i = 0; i < camposPalabra.size(); i++) {
+                String palabra = camposPalabra.get(i).getText().trim();
+                String definicion = camposDefinicion.get(i).getText().trim();
+
+                if (palabra.isEmpty() || definicion.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No deben haber espacios vacíos en las palabras o definiciones.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                mapaPalabras.put(palabra, definicion);
+            }
+
+        try{
+                    SopaDeLetrasPanel nuevo = new SopaDeLetrasPanel(enunciado,mapaPalabras,puntajeInt);
+                    listaEjercicios.add(nuevo);
+                    this.dispose();
+                }catch(IllegalArgumentException w) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Error:\n" + w.getMessage(),
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+
+            // Cerrar ventana
+            this.dispose();
+        }
+
+        // ---------- Getters ----------
+        public String getEnunciado() {
+            return txtEnunciado.getText().trim();
+        }
+
+        public int getPuntaje() {
+            try {
+                return Integer.parseInt(txtPuntaje.getText().trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+
+        public Map<String, String> getMapaPalabras() {
+            return mapaPalabras;
         }
     }
     

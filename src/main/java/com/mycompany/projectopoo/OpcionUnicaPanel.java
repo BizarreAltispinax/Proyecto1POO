@@ -25,6 +25,10 @@ public class OpcionUnicaPanel extends Ejercicios implements Serializable{
         this.correcta = correcta;
         
     }
+    
+    public void setOpciones(ArrayList<String>opciones){
+        this.opciones=opciones;
+    }
 
     @Override
     public void construirPanel() {

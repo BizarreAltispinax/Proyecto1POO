@@ -51,6 +51,9 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         this.columnas = llaveMasLarga.length();
         
     }
+    public void setPalabras(Map<String, String> palabras){
+        this.palabras=palabras;
+    }
 
     // ---------------------------------------------------
     // 🔹 Generación del tablero

@@ -38,6 +38,6 @@ public class Profesores extends Usuarios implements Serializable{
     public void setTitulos(ArrayList<String> titulosObt) { this.titulosObt = titulosObt; }
     public void setCertificaciones(ArrayList<String> Certificaciones) { this.Certificaciones = Certificaciones; }
     public String toString(){
-        return super.toString()+"Titulos Obtenidos: "+this.getTitulos()+"/n"+"Certificaciones"+this.getCertificaciones();
+        return super.toString()+"Titulos Obtenidos: "+this.getTitulos()+"\n"+"Certificaciones"+this.getCertificaciones();
     }
 }
