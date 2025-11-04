@@ -5634,7 +5634,7 @@ public class ProjectoPOO extends JFrame {
                     try {
                         int idGrupo= Integer.parseInt(identificacionGrupo);
                         int idEvaluacion = Integer.parseInt(identificacionEvaluacion);
-                        if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devEva(idEvaluacion)!=null&&sistema.devEva(idEvaluacion).getGrupo()!=null){
+                        if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devEva(idEvaluacion)!=null&&sistema.devEva(idEvaluacion).getGrupo()!=null && sistema.devEva(idEvaluacion).getFechaFin().isBefore(LocalDateTime.now())){
                             
                             
 
@@ -5646,7 +5646,7 @@ public class ProjectoPOO extends JFrame {
                             abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
                             JOptionPane.showMessageDialog(this, "Asociacion exitosa");
                         }else{
-                            JOptionPane.showMessageDialog(this, "Revisar identificaciones o la evaluacion ya esta asociada");
+                            JOptionPane.showMessageDialog(this, "Revisar identificaciones o la evaluacion no ah terminado");
                         }
 
                     } catch (NumberFormatException w) {
@@ -5776,7 +5776,7 @@ public class ProjectoPOO extends JFrame {
                         boolean agregarBoton = false;
 
                         // Caso 1: no existe la clave en el mapa
-                        if (!mapaEvaluaciones.containsKey(claveBuscada)) {
+                        if (!mapaEvaluaciones.containsKey(claveBuscada) && eva.getFechaInicio().isBefore(LocalDateTime.now()) && eva.getFechaFin().isAfter(LocalDateTime.now())) {
                             agregarBoton = true;
                         } else {
                             // Caso 2: la clave existe pero ninguna evaluación coincide en id
@@ -5790,7 +5790,7 @@ public class ProjectoPOO extends JFrame {
                                 }
                             }
 
-                            if (!encontrada) {
+                            if (!encontrada && eva.getFechaInicio().isBefore(LocalDateTime.now()) && eva.getFechaFin().isAfter(LocalDateTime.now())) {
                                 agregarBoton = true;
                             }
                         }
