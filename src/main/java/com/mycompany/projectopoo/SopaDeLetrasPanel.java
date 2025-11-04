@@ -163,7 +163,8 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
                 btn.setMargin(new Insets(0, 0, 0, 0));
                 btn.setFocusPainted(false);
                 int fi = i, co = j;
-                btn.addActionListener(e -> seleccionarLetra(fi, co));
+                btn.addActionListener(e -> {seleccionarLetra(fi, co);
+                    });
                 panelTablero.add(btn);
             }
         }
@@ -190,6 +191,7 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     private java.util.List<Point> seleccionActual = new ArrayList<>();
 
     private void seleccionarLetra(int fila, int col) {
+        
         seleccionActual.add(new Point(fila, col));
         if (seleccionActual.size() >= 2) {
             verificarSeleccion();
@@ -198,13 +200,18 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     }
 
     private void verificarSeleccion() {
+        
         if (seleccionActual.size() < 2) return;
 
         Point inicio = seleccionActual.get(0);
         Point fin = seleccionActual.get(seleccionActual.size() - 1);
         String palabra = obtenerPalabra(inicio, fin);
-
+        
+        
+        
+        
         if (palabra != null && palabras.containsKey(palabra.toUpperCase())) {
+            
             encontradas.add(palabra.toUpperCase());
             actualizarDefiniciones();
             resaltarPalabra(inicio, fin);
@@ -213,18 +220,21 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     }
 
     private String obtenerPalabra(Point inicio, Point fin) {
+        
         int df = Integer.compare(fin.x, inicio.x);
         int dc = Integer.compare(fin.y, inicio.y);
         StringBuilder sb = new StringBuilder();
 
         int f = inicio.x, c = inicio.y;
         while (true) {
+            
             if (f < 0 || f >= filas || c < 0 || c >= columnas) break;
             sb.append(tablero[f][c]);
             if (f == fin.x && c == fin.y) break;
             f += df;
             c += dc;
         }
+        
         return sb.toString();
     }
 

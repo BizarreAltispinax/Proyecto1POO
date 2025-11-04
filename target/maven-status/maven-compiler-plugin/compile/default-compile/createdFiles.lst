@@ -37,6 +37,7 @@ com\mycompany\projectopoo\PareoPanel.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaOpcionMultipleMod.class
 com\mycompany\projectopoo\Evaluaciones.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaEstudiante$1.class
+com\mycompany\projectopoo\ProjectoPOO$VentanaPrevisualizacionEvaluacion.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaCrearCurso$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaEvaluacionesCRUD$1.class
 com\mycompany\projectopoo\Estudiantes.class
@@ -54,6 +55,7 @@ com\mycompany\projectopoo\ProjectoPOO$VentanaEliminarCurso.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaModificarProfesor$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaMostrarEstudiante$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaCrearProfesor.class
+com\mycompany\projectopoo\ProjectoPOO$VentanaEvaluacionesPendientes.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaRestablecerCon.class
 com\mycompany\projectopoo\Usuarios.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaEstudiante.class
@@ -71,7 +73,9 @@ com\mycompany\projectopoo\ProjectoPOO$VentanaMatriculaEstudiante$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaAdministrador.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaOpcionMultiple.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaAsociarCursoGrupo$1.class
+com\mycompany\projectopoo\ProjectoPOO$VentanaAsociarGrupoEvaluacion$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaEliminarEstudiante$1.class
+com\mycompany\projectopoo\ProjectoPOO$VentanaAsociarGrupoEvaluacion.class
 com\mycompany\projectopoo\Sistema.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaModificarEstudiante$1.class
 com\mycompany\projectopoo\ProjectoPOO$abrirModificarEvaluacion.class

@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -87,7 +88,7 @@ public class ProjectoPOO extends JFrame {
         // Acción para cada botón
         btnAdmin.addActionListener(e -> {JOptionPane.showMessageDialog(this,
                 "Bienvenido, Administrador. Acceso directo permitido.");
-                //prueba(this,"Administrador");
+                prueba(this,"Administrador");
                 abrirAdministrador(this,"Administrador");
         
         });
@@ -301,7 +302,12 @@ public class ProjectoPOO extends JFrame {
                         JOptionPane.showMessageDialog(this, "Error, la contraseña debe de tener 8 o mas caracteres y tener mayuscula, numero y caracter especial");
                     }else{
                         tipoUsuario.setContraseña(contraseña);
-                        abrirLogin(ventanaPrincipal,"Estudiante");
+                        if (tipoUsuario instanceof Estudiantes){
+                            abrirLogin(ventanaPrincipal,"Estudiante");
+                        }else{
+                            abrirLogin(ventanaPrincipal,"Profesor");
+                        }
+                        
                         this.dispose();
                     }
                     
@@ -363,6 +369,7 @@ public class ProjectoPOO extends JFrame {
             JButton btnCurso = new JButton("Curso");
             JButton btnReporte = new JButton("Reportes");
             JButton btnGrupo = new JButton("Grupo");
+            JButton btnAsoProf = new JButton("Asociar Profesores/Grupo");
             JButton btnSalir = new JButton("Salir");
             
             
@@ -370,6 +377,7 @@ public class ProjectoPOO extends JFrame {
             panelBotones.add(btnProfesor);
             panelBotones.add(btnCurso);
             panelBotones.add(btnGrupo);
+            panelBotones.add(btnAsoProf);
             panelBotones.add(btnReporte);
             panelBotones.add(btnSalir);
 
@@ -395,6 +403,10 @@ public class ProjectoPOO extends JFrame {
         btnGrupo.addActionListener(e -> {
             this.dispose();
             abrirAsociarCursoGrupo(ventanaPrincipal,tipoUsuario);
+                });
+        btnAsoProf.addActionListener(e -> {
+            this.dispose();
+            abrirAsociarProfesorGrupo(ventanaPrincipal,tipoUsuario);
                 });
         btnReporte.addActionListener(e -> {
             this.dispose();
@@ -501,6 +513,7 @@ public class ProjectoPOO extends JFrame {
         
         
         btnEvaluaciones.addActionListener(e -> {
+            abrirEvaluacionesPendientes(ventanaPrincipal,tipoUsuario,est);
             this.dispose();
             
                 });
@@ -621,6 +634,7 @@ public class ProjectoPOO extends JFrame {
         
         btnPrev.addActionListener(e -> {
             this.dispose();
+            abrirPrevisualizacionEvaluacion(ventanaPrincipal,tipoUsuario,prof);
             
                 });
         btnRep.addActionListener(e -> {
@@ -633,10 +647,14 @@ public class ProjectoPOO extends JFrame {
                 }else{
                     JOptionPane.showMessageDialog(this, "No se encontro la evaluacion");
                 }
-            this.dispose();
+            
             
                 });
-        
+        btnAsoDesa.addActionListener(e -> {
+            this.dispose();
+            abrirAsociarGrupoEvaluacion(ventanaPrincipal,tipoUsuario,prof);
+            
+                });
         
           
         //btnProfesor.addActionListener(e ->);    
@@ -1079,16 +1097,36 @@ public class ProjectoPOO extends JFrame {
             add(btnSalir);
             
            btnAgregarEjercicio.addActionListener(e -> {
-               
                String identificacion = txtIdentificacion.getText().trim();
-               if (!identificacion.isEmpty()){
-                   new VentanaAgregarEjercicios(listaEjercicios).setVisible(true);
+               try {
+                    int identificacionInt = Integer.parseInt(identificacion);
+                    for (Evaluaciones ev :sistema.getEvaluaciones()){
+                      if (ev.getGrupo()!=null && ev.getIdentificacion()==identificacionInt ) {
+                          JOptionPane.showMessageDialog(this,
+                            "Error: La Evaluacion esta asociada a un grupo.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                      }
+                   }
+                    
                    
-               }else{
-                    JOptionPane.showMessageDialog(this,
-                                    "Error: No hay identificacion\n",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
+                    
+                        
+                        if (!identificacion.isEmpty()){
+                            new VentanaAgregarEjercicios(listaEjercicios).setVisible(true);
+
+                        }else{
+                             JOptionPane.showMessageDialog(this,
+                                             "Error: No hay identificacion\n",
+                                             "Error", JOptionPane.ERROR_MESSAGE);
+                         }
+                   
+               
+               }catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Error: debes ingresar un número entero válido.");
                 }
+               
+               
                
            });
             
@@ -1098,8 +1136,28 @@ public class ProjectoPOO extends JFrame {
             btnModificarEjercicio.addActionListener(e -> {
                 
                 String identificacion = txtIdentificacion.getText().trim();
-                if (!identificacion.isEmpty()){
+                
+                
+               
+                
+                
+                try{
+                    if (!identificacion.isEmpty()){
                    int identificacionInt = Integer.parseInt(identificacion);
+                   
+                   for (Evaluaciones ev :sistema.getEvaluaciones()){
+                      if (ev.getGrupo()!=null && ev.getIdentificacion()==identificacionInt ) {
+                          JOptionPane.showMessageDialog(this,
+                            "Error: La Evaluacion esta asociada a un grupo.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                      }
+                   }
+                   
+                   
+                   
+                   
+                   
                    for (Evaluaciones eva : sistema.getEvaluaciones()){
                     if (eva.getIdentificacion()==identificacionInt){
                         new VentanaModificarEjercicios(eva).setVisible(true);;
@@ -1113,6 +1171,10 @@ public class ProjectoPOO extends JFrame {
                                     "Error: No hay identificacion\n",
                                     "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                }catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Error: debes ingresar un número entero válido.");
+                }
+                
                 
 
                 
@@ -1124,8 +1186,21 @@ public class ProjectoPOO extends JFrame {
             
             btnEliminarEjercicio.addActionListener(e -> {
                 String identificacion = txtIdentificacion.getText().trim();
+                
+                try{
+                    int identificacionInt = Integer.parseInt(identificacion);
+                for (Evaluaciones ev :sistema.getEvaluaciones()){
+                      if (ev.getGrupo()!=null && ev.getIdentificacion()==identificacionInt ) {
+                          JOptionPane.showMessageDialog(this,
+                            "Error: La Evaluacion esta asociada a un grupo.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                      }
+                   }
+                
+                
                 if (!identificacion.isEmpty()){
-                   int identificacionInt = Integer.parseInt(identificacion);
+                   
                    for (Evaluaciones eva : sistema.getEvaluaciones()){
                     if (eva.getIdentificacion()==identificacionInt){
                         new VentanaEliminarEjercicios(eva).setVisible(true);;
@@ -1139,6 +1214,10 @@ public class ProjectoPOO extends JFrame {
                                     "Error: No hay identificacion\n",
                                     "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                }catch (NumberFormatException ej) {
+                    JOptionPane.showMessageDialog(this, "Error: debes ingresar un número entero válido.");
+                }
+                
                
            });
             
@@ -1151,53 +1230,74 @@ public class ProjectoPOO extends JFrame {
                 String objetivos = txtObjetivos.getText().trim();
                 String duracion = txtDuracion.getText().trim();
                 if (!duracion.isEmpty() && !nombre.isEmpty() && !instrucciones.isEmpty() && !objetivos.isEmpty()&& !identificacion.isEmpty()){
-                    int duracionT = Integer.parseInt(duracion);
-                    int identificacionInt = Integer.parseInt(identificacion);
-                    ArrayList<String> listaObjetivos = new ArrayList<String>();
-                
-                
-                
-                    String[] arregloObjetivos = objetivos.split("\\s*,\\s*");
-                    for (int i = 0; i < arregloObjetivos.length; i++) {
-                        listaObjetivos.add(arregloObjetivos[i]);
-                    }
+                    
+                    try{
+                        int duracionT = Integer.parseInt(duracion);
+                        int identificacionInt = Integer.parseInt(identificacion);
 
-                    
-                    
-                    
-                    
-                   
 
-                        try{
-                            for (Evaluaciones ev: sistema.getEvaluaciones()){
-                                if (ev.getIdentificacion()==identificacionInt){
-                                    for (Ejercicios ej:listaEjercicios){
-                                
-                                        ev.agregarEjercicio(ej);
+                        for (Evaluaciones ev :sistema.getEvaluaciones()){
+                          if (ev.getGrupo()!=null && ev.getIdentificacion()==identificacionInt ) {
+                              JOptionPane.showMessageDialog(this,
+                                "Error: La Evaluacion esta asociada a un grupo.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                          }
+                       }
 
-                                    }
-                                    ev.setNombre(nombre);
-                                    ev.setInstrucciones(instrucciones);
-                                    ev.setObjetivos(listaObjetivos);
-                                    ev.setDuracion(duracionT);
-                                    ev.setPregAl(valor1);
-                                    ev.setResAl(valor2);
-                                    
-                                    this.dispose();
-                                    abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
-                                }
-                            }
-                            
-                            
-                            
-                            
-                            
-                            
-                        } catch(IllegalArgumentException ex){
-                            JOptionPane.showMessageDialog(this,
-                                        "Error:\n" + ex.getMessage(),
-                                        "Error", JOptionPane.ERROR_MESSAGE);
+
+
+
+
+                        ArrayList<String> listaObjetivos = new ArrayList<String>();
+
+
+
+                        String[] arregloObjetivos = objetivos.split("\\s*,\\s*");
+                        for (int i = 0; i < arregloObjetivos.length; i++) {
+                            listaObjetivos.add(arregloObjetivos[i]);
                         }
+
+
+
+
+
+
+
+                            try{
+                                for (Evaluaciones ev: sistema.getEvaluaciones()){
+                                    if (ev.getIdentificacion()==identificacionInt){
+                                        for (Ejercicios ej:listaEjercicios){
+
+                                            ev.agregarEjercicio(ej);
+
+                                        }
+                                        ev.setNombre(nombre);
+                                        ev.setInstrucciones(instrucciones);
+                                        ev.setObjetivos(listaObjetivos);
+                                        ev.setDuracion(duracionT);
+                                        ev.setPregAl(valor1);
+                                        ev.setResAl(valor2);
+
+                                        this.dispose();
+                                        abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                                    }
+                                }
+
+
+
+
+
+
+                            } catch(IllegalArgumentException ex){
+                                JOptionPane.showMessageDialog(this,
+                                            "Error:\n" + ex.getMessage(),
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                    }catch (NumberFormatException ej) {
+                        JOptionPane.showMessageDialog(this, "Error: debes ingresar un número entero válido.");
+                    }
+                    
                 }else{
                     JOptionPane.showMessageDialog(this,
                                     "Error: Espacios en blanco\n",
@@ -1949,7 +2049,7 @@ public class ProjectoPOO extends JFrame {
                     return;
                 }
 
-                mapaPalabras.put(palabra, definicion);
+                mapaPalabras.put(palabra.toUpperCase(), definicion);
             }
 
         try{
@@ -2795,7 +2895,7 @@ public class ProjectoPOO extends JFrame {
                     return;
                 }
 
-                mapaPalabras.put(palabra, definicion);
+                mapaPalabras.put(palabra.toUpperCase(), definicion);
             }
 
         try{
@@ -5272,10 +5372,11 @@ public class ProjectoPOO extends JFrame {
                         sistema.devCursos(identificacionCurso).devGrupos(idGrupo).asignarProfesor(sistema.devProfesor(identificacionProfesor));
                         this.dispose();
                         abrirAdministrador(ventanaPrincipal,tipoUsuario);
+                        JOptionPane.showMessageDialog(this, "Asociacion exitosa");
                     }else{
                         JOptionPane.showMessageDialog(this, "Revisar identificaciones o el grupo ya contiene un profesor");
                     }
-                    JOptionPane.showMessageDialog(this, "Asociacion exitosa");
+                    
                 } catch (NumberFormatException w) {
                     JOptionPane.showMessageDialog(this, "Formato inválido de la identificacion de grupo");
                 }
@@ -5290,6 +5391,20 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     private void abrirMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est) {
@@ -5391,6 +5506,360 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
+    
+    
+    
+    
+    
+    
+    private void abrirAsociarGrupoEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaAsociarGrupoEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    private class VentanaAsociarGrupoEvaluacion extends JFrame{
+        private ProjectoPOO ventanaPrincipal;
+        public VentanaAsociarGrupoEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+            this.ventanaPrincipal = ventanaPrincipal;
+            setTitle("Usuario: - "+tipoUsuario);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1000, 850);
+            setLocationRelativeTo(null);
+            
+            setLayout(new GridLayout(12, 1, 5, 5));
+
+            
+            addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //guardarInformacionAlCerrar();
+
+                // 🔹 Mostramos confirmación opcional
+                int opcion = JOptionPane.showConfirmDialog(
+                    null,
+                    "¿Desea salir del programa?",
+                    "Confirmar salida",
+                    JOptionPane.YES_NO_OPTION
+                    
+                );
+
+                if (opcion == JOptionPane.YES_OPTION) {
+                    sistema.guardar();
+                    System.out.println("Cerrando aplicación...");
+                    System.exit(0); // 🔹 Cierra completamente el programa
+                }
+            }
+        });
+            
+            
+            JLabel lblIdentificacionCurso = new JLabel("Identificacion de curso:");
+            JTextField txtIdentificacionCurso = new JTextField();
+            JLabel lblIdentificacionGrupo = new JLabel("Identificacion de grupo:");
+            JTextField txtIdentificacionGrupo = new JTextField();
+            JLabel lblIdentificacionProfesor = new JLabel("Identificaion de la evaluacion:");
+            JTextField txtIdentificacionProfesor = new JTextField();
+            JLabel lblFechaInicial = new JLabel("Fecha de inicio:");
+            JTextField txtFechaInicial = new JTextField();
+            JLabel lblHoraInicial = new JLabel("Hora de inicio:");
+            JTextField txtHoraInicial = new JTextField();
+            JButton btnAsociar = new JButton("Asociar");
+            JButton btnDesasociar = new JButton("Desasociar");
+            
+            add(lblIdentificacionCurso);
+            add(txtIdentificacionCurso);
+            add(lblIdentificacionGrupo);
+            add(txtIdentificacionGrupo);
+            add(lblIdentificacionProfesor);
+            add(txtIdentificacionProfesor);
+            add(lblFechaInicial);
+            add(txtFechaInicial);
+            add(lblHoraInicial);
+            add(txtHoraInicial);
+
+            add(btnAsociar);
+            add(btnDesasociar);
+
+                        
+            
+            btnAsociar.addActionListener(e ->{
+                String identificacionCurso=txtIdentificacionCurso.getText();
+                String identificacionGrupo=txtIdentificacionGrupo.getText();
+                String identificacionEvaluacion=txtIdentificacionProfesor.getText();
+                try{
+                    String fechaStr = txtFechaInicial.getText().trim();
+                    String horaStr = txtHoraInicial.getText().trim();
+                    LocalDate fecha = LocalDate.parse(fechaStr);
+                    LocalTime hora = LocalTime.parse(horaStr);
+                    LocalDateTime fechaHoraInicial = LocalDateTime.of(fecha, hora);
+
+                    try {
+                        int idGrupo= Integer.parseInt(identificacionGrupo);
+                        int idEvaluacion = Integer.parseInt(identificacionEvaluacion);
+                        if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devEva(idEvaluacion)!=null&&sistema.devEva(idEvaluacion).getGrupo()==null){
+                            LocalDateTime fechaHoraFinal = fechaHoraInicial.plusMinutes(sistema.devEva(idEvaluacion).getDur());
+                            
+                            sistema.devEva(idEvaluacion).setHoraDeInicio(fechaHoraInicial);
+                            sistema.devEva(idEvaluacion).setHoraDeFinal(fechaHoraFinal);
+                            
+                            
+                            sistema.devCursos(identificacionCurso).devGrupos(idGrupo).asignarEvaluacion(sistema.devEva(idEvaluacion));
+                            sistema.devEva(idEvaluacion).agregarGrupo(sistema.devCursos(identificacionCurso).devGrupos(idGrupo));
+                            JOptionPane.showMessageDialog(this, "Asociacion exitosa");
+                            this.dispose();
+                            abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                            
+                        }else{
+                            JOptionPane.showMessageDialog(this, "Revisar identificaciones o la evaluacion ya esta asociada");
+                        }
+
+                    } catch (NumberFormatException w) {
+                        JOptionPane.showMessageDialog(this, "Formato inválido de la identificacion de grupo");
+                    }
+                }catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Error: revisa los formatos (yyyy-MM-dd y HH:mm)");
+                }
+
+                
+                
+                
+                
+            });
+            
+
+            btnDesasociar.addActionListener(e ->{
+                String identificacionCurso=txtIdentificacionCurso.getText();
+                String identificacionGrupo=txtIdentificacionGrupo.getText();
+                String identificacionEvaluacion=txtIdentificacionProfesor.getText();
+               
+
+                    try {
+                        int idGrupo= Integer.parseInt(identificacionGrupo);
+                        int idEvaluacion = Integer.parseInt(identificacionEvaluacion);
+                        if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devEva(idEvaluacion)!=null&&sistema.devEva(idEvaluacion).getGrupo()!=null){
+                            
+                            
+
+                            
+                            
+                            sistema.devCursos(identificacionCurso).devGrupos(idGrupo).eliminarEvaluacion(sistema.devEva(idEvaluacion));
+                            sistema.devEva(idEvaluacion).agregarGrupo(null);
+                            this.dispose();
+                            abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                            JOptionPane.showMessageDialog(this, "Asociacion exitosa");
+                        }else{
+                            JOptionPane.showMessageDialog(this, "Revisar identificaciones o la evaluacion ya esta asociada");
+                        }
+
+                    } catch (NumberFormatException w) {
+                        JOptionPane.showMessageDialog(this, "Formato inválido de la identificacion de grupo");
+                    }
+               
+
+                
+                
+                
+                
+            });
+            
+            
+        }
+    }
+    
+    
+    private void abrirPrevisualizacionEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaPrevisualizacionEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    public class VentanaPrevisualizacionEvaluacion extends JFrame {
+        private JTextField txtId;
+    private JButton btnConsultar;
+    private JButton btnSalir;
+
+
+    
+    public VentanaPrevisualizacionEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        setTitle("Consultar Evaluación");
+        setSize(500, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+
+
+
+        JPanel panelId = new JPanel(new GridLayout(1, 2, 10, 10));
+        panelId.setBorder(BorderFactory.createTitledBorder("Datos de la evaluación"));
+
+        panelId.add(new JLabel("ID de evaluación:"));
+        txtId = new JTextField();
+        panelId.add(txtId);
+
+        add(panelId, BorderLayout.NORTH);
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        btnConsultar = new JButton("Previsualizar");
+        btnSalir = new JButton("Salir");
+        panelBotones.add(btnConsultar);
+        panelBotones.add(btnSalir);
+
+        add(panelBotones, BorderLayout.SOUTH);
+
+        btnSalir.addActionListener(e -> {this.dispose();
+            abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                });
+
+        btnConsultar.addActionListener(e -> {
+            String id = txtId.getText().trim();
+            int idInt = Integer.parseInt(id);
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un ID de evaluación.");
+                return;
+            }
+            if (!sistema.getEvaluaciones().isEmpty()){
+                for (Evaluaciones eva1 : sistema.getEvaluaciones()){
+                if (eva1 != null && eva1.getIdentificacion()==idInt && eva1.getFechaInicio()!=null && eva1.getFechaFin()!=null && eva1.getFechaInicio().isBefore(LocalDateTime.now()) && eva1.getFechaFin().isAfter(LocalDateTime.now())) {
+                    eva1.iniciarProfesor();
+                    this.dispose();
+                    abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Evaluación no encontrada o sin fechas.");
+                }
+            }
+            }else{
+                JOptionPane.showMessageDialog(this, "No hay evaluaciones creadas.");
+            }
+            
+        });
+    }
+    
+    
+    }
+    
+    
+    
+    
+    
+    
+    private void abrirEvaluacionesPendientes(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est) {
+        new VentanaEvaluacionesPendientes(ventanaPrincipal,tipoUsuario,est).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    
+    
+    public class VentanaEvaluacionesPendientes extends JFrame {
+
+    private Map<String, ArrayList<Evaluaciones>> mapaEvaluaciones;
+    private String claveBuscada;
+    private int idBuscado;
+
+    public VentanaEvaluacionesPendientes(ProjectoPOO ventanaPrincipal,String tipoUsuario , Estudiantes est) {
+
+        this.claveBuscada = est.getNombre();
+  
+
+        setTitle("Evaluaciones disponibles");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        revisarEvaluaciones(ventanaPrincipal,tipoUsuario,est);
+
+        setVisible(true);
+    }
+
+    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Estudiantes est) {
+        boolean hayBotones = false;
+        for (Cursos curso : sistema.getCursos()) {
+            for (Grupos grupo : curso.getGrupos()) {
+                if(grupo.getEstudiantes().contains(est)){
+                    mapaEvaluaciones = grupo.getRespuestasAlumnos();
+                    for (Evaluaciones eva : grupo.getEvaluaciones()) {
+
+                        boolean agregarBoton = false;
+
+                        // Caso 1: no existe la clave en el mapa
+                        if (!mapaEvaluaciones.containsKey(claveBuscada)) {
+                            agregarBoton = true;
+                        } else {
+                            // Caso 2: la clave existe pero ninguna evaluación coincide en id
+                            ArrayList<Evaluaciones> lista = mapaEvaluaciones.get(claveBuscada);
+                            boolean encontrada = false;
+
+                            for (Evaluaciones ev : lista) {
+                                if (ev.getIdentificacion() == eva.getIdentificacion()) {
+                                    encontrada = true;
+                                    break;
+                                }
+                            }
+
+                            if (!encontrada) {
+                                agregarBoton = true;
+                            }
+                        }
+
+                        // Crear el botón dinámicamente si corresponde
+                        if (agregarBoton) {
+                            hayBotones = true;
+
+                            JPanel panelInfo = new JPanel();
+                            panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
+                            panelInfo.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                            panelInfo.setBackground(new Color(245, 245, 245));
+                            panelInfo.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+                            JLabel lblCurso = new JLabel("Curso: " + curso.getIdentificacion());
+                            JLabel lblGrupo = new JLabel("Grupo: " + grupo.getIdGrupo());
+                            JLabel lblEvaluacion = new JLabel("Evaluación: " + eva.getIdentificacion());
+                            JLabel lblEvaluacionNom = new JLabel("Evaluación: " + eva.getNombre());
+                            JLabel lblEvaluacionFI = new JLabel("Evaluación: " + eva.getFechaInicio());
+                            JLabel lblEvaluacionFF = new JLabel("Evaluación: " + eva.getFechaFin());
+
+                            JButton btnIniciar = new JButton("Iniciar evaluación");
+                            btnIniciar.addActionListener(e -> {
+                                
+                                eva.iniciar();
+                                abrirEstudiante(ventanaPrincipal,tipoUsuario,est);
+                                dispose();  // cerrar la ventana al presionar
+                            });
+
+                            panelInfo.add(lblCurso);
+                            panelInfo.add(lblGrupo);
+                            panelInfo.add(lblEvaluacion);
+                            panelInfo.add(lblEvaluacionNom);
+                            panelInfo.add(lblEvaluacionFI);
+                            panelInfo.add(lblEvaluacionFF);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 5)));
+                            panelInfo.add(btnIniciar);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 10)));
+
+                            add(panelInfo);
+                        }
+                }   }
+            }
+        }
+        if (!hayBotones) {
+            add(new JLabel("No se encontraron evaluaciones disponibles para iniciar."));
+            JButton btnSalir = new JButton("Salir");
+            add(btnSalir);
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirEstudiante(ventanaPrincipal,tipoUsuario,est);
+            });
+            
+        }
+
+        revalidate();
+        repaint();
+    }
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     private void abrirReportes(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
@@ -5856,9 +6325,16 @@ public class ProjectoPOO extends JFrame {
         );
         
         Map<String, String> palabras = new LinkedHashMap<>();
-        palabras.put("JAVAAAAA", "Lenguaje de programación orientado a objetos.");
-        palabras.put("HTMLL", "Lenguaje de marcado para páginas web.");
-        palabras.put("SQL", "Lenguaje para bases de datos relacionales.");
+        palabras.put("POLIFORMISMOS", "Poliformismos");
+        palabras.put("ADIOS", "Adios");
+        palabras.put("MESAS", "Mesas");
+        palabras.put("SILLAS", "Sillas");
+        palabras.put("ARBOL", "Arbol");
+        palabras.put("USTED", "Usted");
+        palabras.put("FAMILIA", "Familia");
+        palabras.put("FUEGO", "Fuego");
+        palabras.put("FINAL", "Final");
+        palabras.put("SOPA", "Sopa");
 
         SopaDeLetrasPanel e4 = new SopaDeLetrasPanel(
             "Encuentra las palabras relacionadas con informática:",

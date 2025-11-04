@@ -53,6 +53,10 @@ public class Grupos implements Serializable{
     public ArrayList<Estudiantes> getEstudiantes() {
         return estudiantes;
     }
+    
+    public Map<String, ArrayList<Evaluaciones>> getRespuestasAlumnos() {
+        return respuestasAlumnos;
+    }
 
     public int getCantidadEstudiantes() {
         return estudiantes.size();
@@ -75,6 +79,15 @@ public class Grupos implements Serializable{
             this.profesor = profe; 
         }
     }
+    
+    public Evaluaciones devEvaluaciones(int id){
+        for (Evaluaciones e :evaluaciones){
+            if(e.getIdentificacion()==id){
+                return e;
+            }
+        }
+        return null;
+    }
 
     public void asignarCurso(Cursos curso){
         this.curso=curso;
@@ -85,6 +98,15 @@ public class Grupos implements Serializable{
             evaluaciones.add(eva);
         }
     }
+    
+    public void eliminarEvaluacion(Evaluaciones eva){
+        if (eva!=null){
+            evaluaciones.remove(eva);
+        }
+    }
+    
+    
+    
     public ArrayList<Evaluaciones> getEvaluaciones(){
         return evaluaciones;
     }
@@ -103,6 +125,7 @@ public class Grupos implements Serializable{
     public Evaluaciones obtenerEvaluacion(String estudiante, int id){
         List<Evaluaciones> lista = respuestasAlumnos.get(estudiante);
         if (lista == null) {
+            System.out.println("Hola");
             return null; // El estudiante no tiene respuestas registradas
         }
         for (Evaluaciones ev : lista){
@@ -110,6 +133,7 @@ public class Grupos implements Serializable{
                 return ev;
             }
         }
+        System.out.println("Hola2");
         return null;
     }
 

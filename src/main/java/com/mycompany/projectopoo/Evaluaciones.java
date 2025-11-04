@@ -35,11 +35,12 @@ public class Evaluaciones implements Serializable{
     private int indiceActual = 0;
     private double puntajeTotalObt=0;
     private double puntajeTotal=0;
-    private LocalDateTime fechaInicio = LocalDateTime.of(2025, 11, 1, 18, 0);;
-    private LocalDateTime fechaFin = LocalDateTime.of(2025, 11, 1, 20, 0);;
+    private LocalDateTime fechaInicio = LocalDateTime.of(2025, 11, 3, 22, 10);
+    private LocalDateTime fechaFin=LocalDateTime.of(2025, 11, 3, 23,30 ); ;
     private JLabel lblTiempoRestante;
+    private JLabel lblPreguntaActual;
     private javax.swing.Timer temporizador;
-    private String nombreEst;
+    private String nombreEst = "Andres";
     private LocalDateTime fechaInicioEv;
     private LocalDateTime fechaFinEv;
     
@@ -76,6 +77,10 @@ public class Evaluaciones implements Serializable{
         
 
     }
+    
+    
+    
+    
     
     // Setter para nombre
     public void setNombre(String nombre) {
@@ -128,8 +133,25 @@ public class Evaluaciones implements Serializable{
     public Grupos getGrupo(){
         return grupo;
     }
+    public String getNombre(){
+        return nombre;
+    }
     
     
+    public void setHoraDeInicio(LocalDateTime horaInicio){
+        this.fechaInicio=horaInicio;
+    }
+    public void setHoraDeFinal(LocalDateTime horaFinal){
+        this.fechaFin=horaFinal;
+    }
+    
+    public LocalDateTime getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public LocalDateTime getFechaFin() {
+        return fechaFin;
+    }
     
     
     
@@ -229,22 +251,41 @@ public class Evaluaciones implements Serializable{
 
     return todo.toString();
 }
+    
+    public int getDur(){
+        return duracion;
+    }
+    
+    
     public double getDuracion(){
         return (fin-inicio)/1000;
     }
     
     public void iniciar(){
+        int i = 0;
         this.setHoraDeInicioEv(LocalDateTime.now());
         frame = new JFrame("Evaluación: "+nombre);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,500);
         frame.setLayout(new BorderLayout());
         
+        JPanel panelSuperior = new JPanel();
+        panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
+
         lblTiempoRestante = new JLabel("Tiempo restante: 00:00", SwingConstants.CENTER);
         lblTiempoRestante.setFont(new Font("Arial", Font.BOLD, 24));
-        frame.add(lblTiempoRestante, BorderLayout.NORTH);
-        
-        
+        lblTiempoRestante.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // 🔹 Nuevo label para la pregunta
+        lblPreguntaActual = new JLabel("Pregunta 1", SwingConstants.CENTER);
+        lblPreguntaActual.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblPreguntaActual.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panelSuperior.add(lblTiempoRestante);
+        panelSuperior.add(lblPreguntaActual);
+
+        frame.add(panelSuperior, BorderLayout.NORTH);
+
         panelCentral = new JPanel(new CardLayout());
         if (pregAl==true){
             mezclarEjercicios();
@@ -278,7 +319,7 @@ public class Evaluaciones implements Serializable{
         frame.add(panelBotones,BorderLayout.SOUTH);
 
         inicio = System.currentTimeMillis();
-        Timer temporizador = new Timer(1000, ev -> actualizarTiempo());
+        temporizador = new Timer(1000, ev -> actualizarTiempo(i));
         temporizador.start();
 
         frame.setVisible(true);
@@ -288,16 +329,29 @@ public class Evaluaciones implements Serializable{
     
     
     public void iniciarProfesor(){
-        
+        int i =1;
         frame = new JFrame("Evaluación: "+nombre);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,500);
         frame.setLayout(new BorderLayout());
         
+        JPanel panelSuperior = new JPanel();
+        panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
+
         lblTiempoRestante = new JLabel("Tiempo restante: 00:00", SwingConstants.CENTER);
         lblTiempoRestante.setFont(new Font("Arial", Font.BOLD, 24));
-        frame.add(lblTiempoRestante, BorderLayout.NORTH);
-        
+        lblTiempoRestante.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // 🔹 Nuevo label para la pregunta
+        lblPreguntaActual = new JLabel("Pregunta 1", SwingConstants.CENTER);
+        lblPreguntaActual.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblPreguntaActual.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panelSuperior.add(lblTiempoRestante);
+        panelSuperior.add(lblPreguntaActual);
+
+        frame.add(panelSuperior, BorderLayout.NORTH);
+
         
         panelCentral = new JPanel(new CardLayout());
         if (pregAl==true){
@@ -332,7 +386,7 @@ public class Evaluaciones implements Serializable{
         frame.add(panelBotones,BorderLayout.SOUTH);
 
         inicio = System.currentTimeMillis();
-        Timer temporizador = new Timer(1000, ev -> actualizarTiempo());
+        temporizador = new Timer(1000, ev -> actualizarTiempo(i));
         temporizador.start();
 
         frame.setVisible(true);
@@ -342,7 +396,7 @@ public class Evaluaciones implements Serializable{
     
     
     
-    private void actualizarTiempo() {
+    private void actualizarTiempo(int i) {
         LocalDateTime ahora = LocalDateTime.now();
 
         if (ahora.isBefore(fechaFin)) {
@@ -356,9 +410,17 @@ public class Evaluaciones implements Serializable{
                 String.format("Tiempo restante: %02d:%02d", minutos, segundos)
             );
         } else {
-            lblTiempoRestante.setText("⏰ Tiempo terminado");
+            lblTiempoRestante.setText("Tiempo terminado");
             temporizador.stop();
-            finalizar();
+            if (i==1){
+                finalizarProfesor();
+            }else{
+                finalizar();
+            }
+            
+            
+            
+            
         }
     }
     
@@ -373,6 +435,9 @@ public class Evaluaciones implements Serializable{
         if(idx<0 || idx>=ejercicios.size()) return;
         for(int i=0;i<ejercicios.size();i++) ejercicios.get(i).setVisible(i==idx);
         indiceActual = idx;
+            if (lblPreguntaActual != null) {
+            lblPreguntaActual.setText("Pregunta " + (idx + 1));
+        }
     }
 
     private void mostrarSiguiente(){ mostrarEjercicio(indiceActual+1); }
@@ -380,16 +445,17 @@ public class Evaluaciones implements Serializable{
 
     private void finalizar(){
         this.setHoraDeFinalEv(LocalDateTime.now());
-        for(Ejercicios e: ejercicios){
-            e.verificar();
-        }
+        
         fin = System.currentTimeMillis();
         JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
         
 
         grupo.guardarEvaluacion(nombreEst,this); 
-        grupo.obtenerEvaluacion("Andres",this.getIdentificacion()).imprimirReporte();
-
+        //grupo.obtenerEvaluacion(nombreEst,this.getIdentificacion()).imprimirReporte();
+        for (Ejercicios e :ejercicios){
+            e.construirPanel();
+        }
+        
         
         frame.dispose();
     }
@@ -415,6 +481,14 @@ public class Evaluaciones implements Serializable{
         copia.fechaInicioEv=fechaInicioEv;
         copia.fechaFinEv=fechaFinEv;
         
+                
+        this.inicio=0;
+        this.fin=0;
+        this.puntajeTotalObt=0;
+        this.puntajeTotal=0;
+        this.nombreEst="";
+        this.fechaInicioEv=null;
+        this.fechaFinEv=null;
         for(Ejercicios e: ejercicios){
             copia.agregarEjercicio(e.copiar());
         }

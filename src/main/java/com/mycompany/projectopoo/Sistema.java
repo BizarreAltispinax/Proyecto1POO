@@ -557,4 +557,7 @@ public class Sistema implements Serializable{
         return true;
         
     }
+    public ArrayList<Cursos> getCursos(){
+        return cursos;
+    }
 }
