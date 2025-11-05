@@ -657,6 +657,21 @@ public class ProjectoPOO extends JFrame {
             
                 });
         
+        btnEvAsignadas.addActionListener(e -> {
+            this.dispose();
+            abrirEvaluacionesAsignadas(ventanaPrincipal,tipoUsuario,prof);
+            
+                });
+        
+        btnEvRealizadas.addActionListener(e -> {
+            this.dispose();
+            abrirEvaluacionesRealizadas(ventanaPrincipal,tipoUsuario,prof);
+            
+                });
+        
+        
+        
+        
           
         //btnProfesor.addActionListener(e ->);    
         btnSalir.addActionListener(e -> {
