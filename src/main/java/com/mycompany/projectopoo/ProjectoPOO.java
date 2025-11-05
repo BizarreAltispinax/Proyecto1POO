@@ -88,7 +88,7 @@ public class ProjectoPOO extends JFrame {
         // Acción para cada botón
         btnAdmin.addActionListener(e -> {JOptionPane.showMessageDialog(this,
                 "Bienvenido, Administrador. Acceso directo permitido.");
-                prueba(this,"Administrador");
+                //prueba(this,"Administrador");
                 abrirAdministrador(this,"Administrador");
         
         });
@@ -519,6 +519,7 @@ public class ProjectoPOO extends JFrame {
                 });
         
         btnDesempeño.addActionListener(e -> {
+            abrirDesempeñoPersonal(ventanaPrincipal,tipoUsuario,est);
             this.dispose();
             
                 });
@@ -5857,6 +5858,363 @@ public class ProjectoPOO extends JFrame {
     
     
     
+    
+    private void abrirDesempeñoPersonal(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est) {
+        new VentanaDesempeñoPersonal(ventanaPrincipal,tipoUsuario,est).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    
+    
+    public class VentanaDesempeñoPersonal extends JFrame {
+
+    private Map<String, ArrayList<Evaluaciones>> mapaEvaluaciones;
+    private String claveBuscada;
+    private int idBuscado;
+
+    public VentanaDesempeñoPersonal(ProjectoPOO ventanaPrincipal,String tipoUsuario , Estudiantes est) {
+
+        this.claveBuscada = est.getNombre();
+  
+
+        setTitle("Evaluaciones realizadas");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        revisarEvaluaciones(ventanaPrincipal,tipoUsuario,est);
+
+        setVisible(true);
+    }
+
+    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Estudiantes est) {
+        boolean hayBotones = false;
+        for (Cursos curso : sistema.getCursos()) {
+            for (Grupos grupo : curso.getGrupos()) {
+                if(grupo.getEstudiantes().contains(est)){
+                    mapaEvaluaciones = grupo.getRespuestasAlumnos();
+                    if(mapaEvaluaciones != null && mapaEvaluaciones.containsKey(claveBuscada)){
+                        ArrayList<Evaluaciones> lista = mapaEvaluaciones.get(claveBuscada);
+                        for (Evaluaciones ev : lista) {
+                            hayBotones = true;
+
+                            JPanel panelInfo = new JPanel();
+                            panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
+                            panelInfo.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                            panelInfo.setBackground(new Color(245, 245, 245));
+                            panelInfo.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+                            JLabel lblCurso = new JLabel("Curso: " + curso.getIdentificacion());
+                            JLabel lblGrupo = new JLabel("Grupo: " + grupo.getIdGrupo());
+                            JLabel lblEvaluacion = new JLabel("Evaluación: " + ev.getIdentificacion());
+                            JLabel lblEvaluacionNom = new JLabel("Nombre: " + ev.getNombre());
+                            JLabel lblEvaluacionFI = new JLabel("Fecha de Inicio: " + ev.getFechaInicio());
+                            JLabel lblEvaluacionFF = new JLabel("Fecha de Fin: " + ev.getFechaFin());
+                            JLabel lblEvaluacionN = new JLabel("Nota: " + ev.getNota());
+                            
+
+                            JButton btnIniciar = new JButton("Ver detalles");
+                            btnIniciar.addActionListener(e -> {
+                                
+                                ev.imprimirReporte();
+                                abrirEstudiante(ventanaPrincipal,tipoUsuario,est);
+                                dispose();  // cerrar la ventana al presionar
+                            });
+
+                            panelInfo.add(lblCurso);
+                            panelInfo.add(lblGrupo);
+                            panelInfo.add(lblEvaluacion);
+                            panelInfo.add(lblEvaluacionNom);
+                            panelInfo.add(lblEvaluacionFI);
+                            panelInfo.add(lblEvaluacionFF);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 5)));
+                            panelInfo.add(btnIniciar);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 10)));
+
+                            add(panelInfo);
+                        }
+                    }
+                    
+                   
+                }   
+            }
+        }
+        if (!hayBotones) {
+            add(new JLabel("No se encontraron evaluaciones disponibles para iniciar."));
+            JButton btnSalir = new JButton("Salir");
+            add(btnSalir);
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirEstudiante(ventanaPrincipal,tipoUsuario,est);
+            });
+            
+        }
+
+        revalidate();
+        repaint();
+    }
+    
+    }
+    
+    
+    
+    
+    
+    
+    private void abrirEvaluacionesAsignadas(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaEvaluacionesAsignadas(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    
+    
+    public class VentanaEvaluacionesAsignadas extends JFrame {
+
+    private Map<String, ArrayList<Evaluaciones>> mapaEvaluaciones;
+    private String claveBuscada;
+    private int idBuscado;
+
+    public VentanaEvaluacionesAsignadas(ProjectoPOO ventanaPrincipal,String tipoUsuario , Profesores prof) {
+
+        this.claveBuscada = prof.getNombre();
+  
+
+        setTitle("Evaluaciones realizadas");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        revisarEvaluaciones(ventanaPrincipal,tipoUsuario,prof);
+
+        setVisible(true);
+    }
+
+    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Profesores prof) {
+        boolean hayBotones = false;
+        for (Cursos curso : sistema.getCursos()) {
+            for (Grupos grupo : curso.getGrupos()) {
+                if(grupo.getProfesor().equals(prof)){
+                    for (Evaluaciones ev : grupo.getEvaluaciones()){
+                            hayBotones = true;
+
+                            JPanel panelInfo = new JPanel();
+                            panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
+                            panelInfo.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                            panelInfo.setBackground(new Color(245, 245, 245));
+                            panelInfo.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+                            JLabel lblCurso = new JLabel("Curso: " + curso.getIdentificacion());
+                            JLabel lblGrupo = new JLabel("Grupo: " + grupo.getIdGrupo());
+                            JLabel lblEvaluacion = new JLabel("Evaluación: " + ev.getIdentificacion());
+                            JLabel lblEvaluacionNom = new JLabel("Nombre: " + ev.getNombre());
+                            JLabel lblEvaluacionFI = new JLabel("Fecha de Inicio: " + ev.getFechaInicio());
+                            JLabel lblEvaluacionFF = new JLabel("Fecha de Fin: " + ev.getFechaFin());
+                            
+                            
+
+                            JButton btnIniciar = new JButton("Ver detalles");
+                            btnIniciar.addActionListener(e -> {
+                                
+                                ev.imprimirReporte();
+                                abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                                dispose();  // cerrar la ventana al presionar
+                            });
+
+                            panelInfo.add(lblCurso);
+                            panelInfo.add(lblGrupo);
+                            panelInfo.add(lblEvaluacion);
+                            panelInfo.add(lblEvaluacionNom);
+                            panelInfo.add(lblEvaluacionFI);
+                            panelInfo.add(lblEvaluacionFF);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 5)));
+                            panelInfo.add(btnIniciar);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 10)));
+
+                            add(panelInfo);
+                    }
+                }   
+            }
+        }
+        if (!hayBotones) {
+            add(new JLabel("No se encontraron evaluaciones."));
+            JButton btnSalir = new JButton("Salir");
+            add(btnSalir);
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+            });
+            
+        }
+
+        revalidate();
+        repaint();
+    }
+    
+    }
+    
+    
+    
+    private void abrirEvaluacionesRealizadas(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+        new VentanaEvaluacionesRealizadas(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
+        this.dispose(); // Cierra la ventana principal
+    }
+    
+    
+    public class VentanaEvaluacionesRealizadas extends JFrame {
+
+    private Map<String, ArrayList<Evaluaciones>> mapaEvaluaciones;
+    private String claveBuscada;
+    private int idBuscado;
+
+    public VentanaEvaluacionesRealizadas(ProjectoPOO ventanaPrincipal,String tipoUsuario , Profesores prof) {
+
+        this.claveBuscada = prof.getNombre();
+  
+
+        setTitle("Evaluaciones realizadas");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        revisarEvaluaciones(ventanaPrincipal,tipoUsuario,prof);
+
+        setVisible(true);
+    }
+
+    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Profesores prof) {
+        boolean hayBotones = false;
+        
+        
+        
+        
+    
+        for (Cursos curso : sistema.getCursos()) {
+            for (Grupos grupo : curso.getGrupos()) {
+                    for (Evaluaciones ev : grupo.getEvaluaciones()){
+                        if (ev.getFechaFin().isBefore(LocalDateTime.now())){
+                            hayBotones = true;
+
+                            JPanel panelInfo = new JPanel();
+                            panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
+                            panelInfo.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                            panelInfo.setBackground(new Color(245, 245, 245));
+                            panelInfo.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+                            JLabel lblCurso = new JLabel("Curso: " + curso.getIdentificacion());
+                            JLabel lblGrupo = new JLabel("Grupo: " + grupo.getIdGrupo());
+                            JLabel lblEvaluacion = new JLabel("Evaluación: " + ev.getIdentificacion());
+                            JLabel lblEvaluacionNom = new JLabel("Nombre: " + ev.getNombre());
+                            JLabel lblEvaluacionCant = new JLabel("Numero de estudiantes: " + contador(ev));
+                            JLabel lblEvaluacionFI = new JLabel("Fecha de Inicio: " + ev.getFechaInicio());
+                            JLabel lblEvaluacionFF = new JLabel("Fecha de Fin: " + ev.getFechaFin());
+                            
+                            
+
+                            JButton btnIniciar = new JButton("Ver detalles");
+                            btnIniciar.addActionListener(e -> {
+                                
+                                listaEstudiantes(ventanaPrincipal,tipoUsuario,prof,ev);
+                                dispose();
+                            });
+
+                            panelInfo.add(lblCurso);
+                            panelInfo.add(lblGrupo);
+                            panelInfo.add(lblEvaluacion);
+                            panelInfo.add(lblEvaluacionNom);
+                            panelInfo.add(lblEvaluacionCant);
+                            panelInfo.add(lblEvaluacionFI);
+                            panelInfo.add(lblEvaluacionFF);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 5)));
+                            panelInfo.add(btnIniciar);
+                            panelInfo.add(Box.createRigidArea(new Dimension(0, 10)));
+
+                            add(panelInfo);
+                    
+                        }   
+                    }
+            }
+        }
+        if (!hayBotones) {
+            add(new JLabel("No se encontraron evaluaciones."));
+            JButton btnSalir = new JButton("Salir");
+            add(btnSalir);
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+            });
+            
+        }
+
+        revalidate();
+        repaint();
+    }
+    private int contador(Evaluaciones eva){
+        int contador = 0;
+        for (Cursos curso : sistema.getCursos()) {
+            for (Grupos grupo : curso.getGrupos()) {
+                mapaEvaluaciones = grupo.getRespuestasAlumnos();
+                if (mapaEvaluaciones==null ||mapaEvaluaciones.isEmpty()){
+                    contador = contador;
+                }else{
+                    for (ArrayList<Evaluaciones> valores : mapaEvaluaciones.values()){
+                        for (Evaluaciones ev : valores){
+                            if (ev.getIdentificacion()==eva.getIdentificacion()){
+                                contador +=1;
+                            }
+                        }
+                    }
+                }   
+            }
+        }
+        return contador;
+    }
+    private void listaEstudiantes(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Profesores prof,Evaluaciones eva){
+        boolean hayBotones = false;
+        for (Cursos curso : sistema.getCursos()) {
+            for (Grupos grupo : curso.getGrupos()) {
+                mapaEvaluaciones = grupo.getRespuestasAlumnos();
+
+                    for (ArrayList<Evaluaciones> valores : mapaEvaluaciones.values()){
+                        for (Evaluaciones ev : valores){
+                            if (ev.getIdentificacion()==eva.getIdentificacion()){
+                                hayBotones = true;
+                                JPanel panelInfo = new JPanel();
+                                panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
+                                panelInfo.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                                panelInfo.setBackground(new Color(245, 245, 245));
+                                panelInfo.setAlignmentX(Component.LEFT_ALIGNMENT);
+                                
+                                JButton btnIniciar = new JButton(ev.getNombreEst());
+                                btnIniciar.addActionListener(e -> {
+                                    ev.imprimirReporte();
+                                    abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+                                    dispose();
+                                    
+
+                                });
+                                panelInfo.add(btnIniciar);
+                                add(panelInfo);
+                            }
+                        }
+                    }
+                  
+            }
+        }
+        if (!hayBotones) {
+            add(new JLabel("No se encontraron evaluaciones."));
+            JButton btnSalir = new JButton("Salir");
+            add(btnSalir);
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+            });
+            
+        }
+        revalidate();
+        repaint();
+    }
+    
+    
+    
+    }
     
     
     

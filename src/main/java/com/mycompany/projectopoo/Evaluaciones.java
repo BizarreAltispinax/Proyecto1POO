@@ -178,6 +178,10 @@ public class Evaluaciones implements Serializable{
         return objs;
     }
     
+    public String getNombreEst(){
+        return nombreEst;
+    }
+    
     public double getPuntajeTotal() {
         puntajeTotal=0;
         for (Ejercicios e: ejercicios){
@@ -197,6 +201,9 @@ public class Evaluaciones implements Serializable{
     }
 
     public int getNota() {
+        for (Ejercicios ej :ejercicios){
+        ej.verificar();
+        }
         return (int) Math.round(getPuntajeTotalObtenido() * 100.0 / getPuntajeTotal());
     }
     
