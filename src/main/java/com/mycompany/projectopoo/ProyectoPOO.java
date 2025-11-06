@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.Random;
 import jakarta.mail.MessagingException;
 import java.time.LocalDate;
@@ -21,15 +20,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * Ventana de inicio de sesión con opción de restablecer contraseña.
  * Envía un correo real usando Outlook (SMTP).
  */
-public class ProjectoPOO extends JFrame {
+public class ProyectoPOO extends JFrame {
     Sistema sistema = Sistema.getInstancia();
 
     /**
@@ -39,7 +36,7 @@ public class ProjectoPOO extends JFrame {
      * el tipo de usuario y un título.
      * </p>
      */
-    public ProjectoPOO() {
+    public ProyectoPOO() {
         setTitle("Sistema de Inicio");
         
         setSize(350, 200);
@@ -114,8 +111,8 @@ public class ProjectoPOO extends JFrame {
      *
      * @param tipoUsuario Tipo de usuario que intenta iniciar sesión ("Estudiante" o "Profesor").
      */
-    private void abrirLogin(ProjectoPOO ProjectoPOO,String tipoUsuario) {
-        new VentanaLogin(ProjectoPOO,tipoUsuario).setVisible(true);
+    private void abrirLogin(ProyectoPOO ProyectoPOO, String tipoUsuario) {
+        new VentanaLogin(ProyectoPOO,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
 
@@ -126,10 +123,10 @@ public class ProjectoPOO extends JFrame {
      * </p>
      */
     private class VentanaLogin extends JFrame {
-        private ProjectoPOO ventanaPrincipal;
+        private ProyectoPOO ventanaPrincipal;
 
             
-        public VentanaLogin(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+        public VentanaLogin(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Inicio de sesión - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -238,15 +235,15 @@ public class ProjectoPOO extends JFrame {
         
     }
     
-    private void abrirRestablecerCon(ProjectoPOO ventanaPrincipal,Usuarios tipoUsuario,String contraTemp) {
+    private void abrirRestablecerCon(ProyectoPOO ventanaPrincipal, Usuarios tipoUsuario, String contraTemp) {
         new VentanaRestablecerCon(ventanaPrincipal,tipoUsuario,contraTemp).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaRestablecerCon extends JFrame {
-        private ProjectoPOO ventanaPrincipal;
+        private ProyectoPOO ventanaPrincipal;
 
             
-        public VentanaRestablecerCon(ProjectoPOO ventanaPrincipal,Usuarios tipoUsuario,String contraTemp) {
+        public VentanaRestablecerCon(ProyectoPOO ventanaPrincipal, Usuarios tipoUsuario, String contraTemp) {
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Inicio de sesión - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -321,13 +318,13 @@ public class ProjectoPOO extends JFrame {
     }
     
     
-    private void abrirAdministrador(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirAdministrador(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaAdministrador(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.setVisible(false); // Cierra la ventana principal
     }
     private class VentanaAdministrador extends JFrame {
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaAdministrador(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaAdministrador(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -422,13 +419,13 @@ public class ProjectoPOO extends JFrame {
         }
     }
     
-    private void abrirEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario, Estudiantes est) {
+    private void abrirEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario, Estudiantes est) {
         new VentanaEstudiante(ventanaPrincipal,tipoUsuario,est).setVisible(true);
         this.setVisible(false); // Cierra la ventana principal
     }
     private class VentanaEstudiante extends JFrame {
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario, Estudiantes est){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -537,13 +534,13 @@ public class ProjectoPOO extends JFrame {
     }
     
     
-    private void abrirProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario, Profesores prof) {
+    private void abrirProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaProfesor(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.setVisible(false); // Cierra la ventana principal
     }
     private class VentanaProfesor extends JFrame {
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -682,13 +679,13 @@ public class ProjectoPOO extends JFrame {
         
         
     }
-    private void abrirEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirEvaluacionesCRUD(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaEvaluacionesCRUD(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaEvaluacionesCRUD extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaEvaluacionesCRUD(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaEvaluacionesCRUD(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -759,15 +756,15 @@ public class ProjectoPOO extends JFrame {
         }
     }
     
-    private void abrirCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirCrearEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaCrearEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaCrearEvaluacion extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
+        private ProyectoPOO ventanaPrincipal;
         private JRadioButton rbOpcion1, rbOpcion2;
         private ArrayList<Ejercicios> listaEjercicios = new ArrayList<Ejercicios>();
-        public VentanaCrearEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+        public VentanaCrearEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -934,7 +931,7 @@ public class ProjectoPOO extends JFrame {
     }
     
     
-    private void abrirMostrarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirMostrarEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaConsultarEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
@@ -945,7 +942,7 @@ public class ProjectoPOO extends JFrame {
 
 
     
-    public VentanaConsultarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    public VentanaConsultarEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         setTitle("Consultar Evaluación");
         setSize(500, 200);
         setLocationRelativeTo(null);
@@ -1030,15 +1027,15 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirModificarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirModificarEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new abrirModificarEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class abrirModificarEvaluacion extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
+        private ProyectoPOO ventanaPrincipal;
         private JRadioButton rbOpcion1, rbOpcion2;
         private ArrayList<Ejercicios> listaEjercicios = new ArrayList<Ejercicios>();
-        public abrirModificarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+        public abrirModificarEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -2185,7 +2182,7 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirEliminarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirEliminarEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaEliminarEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
@@ -2196,7 +2193,7 @@ public class ProjectoPOO extends JFrame {
 
 
     
-    public VentanaEliminarEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    public VentanaEliminarEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         setTitle("Eliminar Evaluación");
         setSize(500, 200);
         setLocationRelativeTo(null);
@@ -2951,13 +2948,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirAdministradorEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirAdministradorEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaAdministradorEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaAdministradorEstudiante extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaAdministradorEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaAdministradorEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3027,13 +3024,13 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
-    private void abrirCrearEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirCrearEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaCrearEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaCrearEstudiante extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaCrearEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaCrearEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3239,13 +3236,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirMostrarEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirMostrarEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaMostrarEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaMostrarEstudiante extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaMostrarEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaMostrarEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3387,13 +3384,13 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
-    private void abrirModificarEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirModificarEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaModificarEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaModificarEstudiante extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaModificarEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaModificarEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3623,13 +3620,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirEliminarEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirEliminarEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaEliminarEstudiante(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaEliminarEstudiante extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaEliminarEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaEliminarEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3708,13 +3705,13 @@ public class ProjectoPOO extends JFrame {
 
 
 
-    private void abrirAdministradorProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirAdministradorProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaAdministradorProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaAdministradorProfesor extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaAdministradorProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaAdministradorProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             
@@ -3784,13 +3781,13 @@ public class ProjectoPOO extends JFrame {
 
         }
     }
-    private void abrirCrearProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirCrearProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaCrearProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaCrearProfesor extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaCrearProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaCrearProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             
@@ -4009,13 +4006,13 @@ public class ProjectoPOO extends JFrame {
 
 
 
-    private void abrirMostrarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirMostrarProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaMostrarProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaMostrarProfesor extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaMostrarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaMostrarProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             
@@ -4160,13 +4157,13 @@ public class ProjectoPOO extends JFrame {
 
         }
     }
-    private void abrirModificarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirModificarProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaModificarProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaModificarProfesor extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaModificarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaModificarProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             
@@ -4409,13 +4406,13 @@ public class ProjectoPOO extends JFrame {
 
 
 
-    private void abrirEliminarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirEliminarProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaEliminarProfesor(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaEliminarProfesor extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaEliminarProfesor(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaEliminarProfesor(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             
@@ -4498,13 +4495,13 @@ public class ProjectoPOO extends JFrame {
 
 
 
-    private void abrirAdministradorCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirAdministradorCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaAdministradorCurso(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaAdministradorCurso extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaAdministradorCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaAdministradorCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -4574,13 +4571,13 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
-    private void abrirCrearCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirCrearCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaCrearCurso(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaCrearCurso extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaCrearCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaCrearCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -4719,13 +4716,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirMostrarCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirMostrarCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaMostrarCurso(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaMostrarCurso extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaMostrarCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaMostrarCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -4892,13 +4889,13 @@ public class ProjectoPOO extends JFrame {
             
         }
     }
-    private void abrirModificarCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirModificarCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaModificarCurso(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaModificarCurso extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaModificarCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaModificarCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -5148,13 +5145,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirEliminarCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirEliminarCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaEliminarCurso(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaEliminarCurso extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaEliminarCurso(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaEliminarCurso(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -5229,13 +5226,13 @@ public class ProjectoPOO extends JFrame {
         }
     }
     
-    private void abrirAsociarCursoGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirAsociarCursoGrupo(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaAsociarCursoGrupo(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaAsociarCursoGrupo extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaAsociarCursoGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaAsociarCursoGrupo(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -5319,13 +5316,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirAsociarProfesorGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirAsociarProfesorGrupo(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaAsociarProfesorGrupo(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaAsociarProfesorGrupo extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaAsociarProfesorGrupo(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaAsociarProfesorGrupo(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -5425,13 +5422,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est) {
+    private void abrirMatriculaEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario, Estudiantes est) {
         new VentanaMatriculaEstudiante(ventanaPrincipal,tipoUsuario,est).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaMatriculaEstudiante extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaMatriculaEstudiante(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaMatriculaEstudiante(ProyectoPOO ventanaPrincipal, String tipoUsuario, Estudiantes est){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -5530,13 +5527,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirAsociarGrupoEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirAsociarGrupoEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaAsociarGrupoEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaAsociarGrupoEvaluacion extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaAsociarGrupoEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaAsociarGrupoEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -5683,7 +5680,7 @@ public class ProjectoPOO extends JFrame {
     }
     
     
-    private void abrirPrevisualizacionEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirPrevisualizacionEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaPrevisualizacionEvaluacion(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
@@ -5694,7 +5691,7 @@ public class ProjectoPOO extends JFrame {
 
 
     
-    public VentanaPrevisualizacionEvaluacion(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    public VentanaPrevisualizacionEvaluacion(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         setTitle("Consultar Evaluación");
         setSize(500, 200);
         setLocationRelativeTo(null);
@@ -5756,7 +5753,7 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirEvaluacionesPendientes(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est) {
+    private void abrirEvaluacionesPendientes(ProyectoPOO ventanaPrincipal, String tipoUsuario, Estudiantes est) {
         new VentanaEvaluacionesPendientes(ventanaPrincipal,tipoUsuario,est).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
@@ -5768,7 +5765,7 @@ public class ProjectoPOO extends JFrame {
     private String claveBuscada;
     private int idBuscado;
 
-    public VentanaEvaluacionesPendientes(ProjectoPOO ventanaPrincipal,String tipoUsuario , Estudiantes est) {
+    public VentanaEvaluacionesPendientes(ProyectoPOO ventanaPrincipal, String tipoUsuario , Estudiantes est) {
 
         this.claveBuscada = est.getNombre();
   
@@ -5783,7 +5780,7 @@ public class ProjectoPOO extends JFrame {
         setVisible(true);
     }
 
-    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Estudiantes est) {
+    private void revisarEvaluaciones(ProyectoPOO ventanaPrincipal, String tipoUsuario , Estudiantes est) {
         boolean hayBotones = false;
         for (Cursos curso : sistema.getCursos()) {
             for (Grupos grupo : curso.getGrupos()) {
@@ -5876,7 +5873,7 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirDesempeñoPersonal(ProjectoPOO ventanaPrincipal,String tipoUsuario,Estudiantes est) {
+    private void abrirDesempeñoPersonal(ProyectoPOO ventanaPrincipal, String tipoUsuario, Estudiantes est) {
         new VentanaDesempeñoPersonal(ventanaPrincipal,tipoUsuario,est).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
@@ -5888,7 +5885,7 @@ public class ProjectoPOO extends JFrame {
     private String claveBuscada;
     private int idBuscado;
 
-    public VentanaDesempeñoPersonal(ProjectoPOO ventanaPrincipal,String tipoUsuario , Estudiantes est) {
+    public VentanaDesempeñoPersonal(ProyectoPOO ventanaPrincipal, String tipoUsuario , Estudiantes est) {
 
         this.claveBuscada = est.getNombre();
   
@@ -5903,7 +5900,7 @@ public class ProjectoPOO extends JFrame {
         setVisible(true);
     }
 
-    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Estudiantes est) {
+    private void revisarEvaluaciones(ProyectoPOO ventanaPrincipal, String tipoUsuario , Estudiantes est) {
         boolean hayBotones = false;
         for (Cursos curso : sistema.getCursos()) {
             for (Grupos grupo : curso.getGrupos()) {
@@ -5977,7 +5974,7 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirEvaluacionesAsignadas(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirEvaluacionesAsignadas(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaEvaluacionesAsignadas(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
@@ -5989,7 +5986,7 @@ public class ProjectoPOO extends JFrame {
     private String claveBuscada;
     private int idBuscado;
 
-    public VentanaEvaluacionesAsignadas(ProjectoPOO ventanaPrincipal,String tipoUsuario , Profesores prof) {
+    public VentanaEvaluacionesAsignadas(ProyectoPOO ventanaPrincipal, String tipoUsuario , Profesores prof) {
 
         this.claveBuscada = prof.getNombre();
   
@@ -6004,7 +6001,7 @@ public class ProjectoPOO extends JFrame {
         setVisible(true);
     }
 
-    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Profesores prof) {
+    private void revisarEvaluaciones(ProyectoPOO ventanaPrincipal, String tipoUsuario , Profesores prof) {
         boolean hayBotones = false;
         for (Cursos curso : sistema.getCursos()) {
             for (Grupos grupo : curso.getGrupos()) {
@@ -6069,7 +6066,7 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirEvaluacionesRealizadas(ProjectoPOO ventanaPrincipal,String tipoUsuario,Profesores prof) {
+    private void abrirEvaluacionesRealizadas(ProyectoPOO ventanaPrincipal, String tipoUsuario, Profesores prof) {
         new VentanaEvaluacionesRealizadas(ventanaPrincipal,tipoUsuario,prof).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
@@ -6081,7 +6078,7 @@ public class ProjectoPOO extends JFrame {
     private String claveBuscada;
     private int idBuscado;
 
-    public VentanaEvaluacionesRealizadas(ProjectoPOO ventanaPrincipal,String tipoUsuario , Profesores prof) {
+    public VentanaEvaluacionesRealizadas(ProyectoPOO ventanaPrincipal, String tipoUsuario , Profesores prof) {
 
         this.claveBuscada = prof.getNombre();
   
@@ -6096,7 +6093,7 @@ public class ProjectoPOO extends JFrame {
         setVisible(true);
     }
 
-    private void revisarEvaluaciones(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Profesores prof) {
+    private void revisarEvaluaciones(ProyectoPOO ventanaPrincipal, String tipoUsuario , Profesores prof) {
         boolean hayBotones = false;
         
         
@@ -6183,7 +6180,7 @@ public class ProjectoPOO extends JFrame {
         }
         return contador;
     }
-    private void listaEstudiantes(ProjectoPOO ventanaPrincipal,String tipoUsuario ,Profesores prof,Evaluaciones eva){
+    private void listaEstudiantes(ProyectoPOO ventanaPrincipal, String tipoUsuario , Profesores prof, Evaluaciones eva){
         boolean hayBotones = false;
         for (Cursos curso : sistema.getCursos()) {
             for (Grupos grupo : curso.getGrupos()) {
@@ -6237,13 +6234,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void abrirReportes(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void abrirReportes(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaReportes(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaReportes extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaReportes(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaReportes(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -6606,13 +6603,13 @@ public class ProjectoPOO extends JFrame {
     
     
     
-    private void prueba(ProjectoPOO ventanaPrincipal,String tipoUsuario) {
+    private void prueba(ProyectoPOO ventanaPrincipal, String tipoUsuario) {
         new VentanaPrueba(ventanaPrincipal,tipoUsuario).setVisible(true);
         this.dispose(); // Cierra la ventana principal
     }
     private class VentanaPrueba extends JFrame{
-        private ProjectoPOO ventanaPrincipal;
-        public VentanaPrueba(ProjectoPOO ventanaPrincipal,String tipoUsuario){
+        private ProyectoPOO ventanaPrincipal;
+        public VentanaPrueba(ProyectoPOO ventanaPrincipal, String tipoUsuario){
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Usuario: - "+tipoUsuario);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -6761,7 +6758,7 @@ public class ProjectoPOO extends JFrame {
     
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ProjectoPOO().setVisible(true));
+        SwingUtilities.invokeLater(() -> new ProyectoPOO().setVisible(true));
        
     }
 }
