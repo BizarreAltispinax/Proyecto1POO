@@ -52,7 +52,7 @@ abstract class Ejercicios extends JPanel implements Serializable {
             throw new IllegalArgumentException("El puntaje debe ser mayor o igual a 1.");
         this.puntaje=puntaje;
     }
-    
+    public abstract void borrarSeleccion();
     
     
 }

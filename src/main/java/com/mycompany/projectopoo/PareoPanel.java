@@ -105,12 +105,15 @@ public class PareoPanel extends Ejercicios implements Serializable{
     public void setRespuestas(Map<String, String> respuestas){
         this.respuestas=respuestas;
     }
-    
+    public void borrarSeleccion(){
+        this.respuestas.clear();
+    }
     
     
     public Ejercicios copiar() {
             PareoPanel copia = new PareoPanel(enunciado, new LinkedHashMap<>(paresCorrectos), puntaje);
             copia.setRespuestas(new HashMap<>(this.respuestas));
+            this.respuestas.clear();
             return copia;
     }
 }

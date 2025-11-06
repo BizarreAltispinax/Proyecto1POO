@@ -10,6 +10,7 @@ com\mycompany\projectopoo\ProjectoPOO$VentanaSopaLetrasMod.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaAsociarCursoGrupo.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaMostrarEstudiante.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaAdministradorEstudiante$1.class
+com\mycompany\projectopoo\ProjectoPOO$VentanaEvaluacionesRealizadas.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaPrueba$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaCrearEvaluacion.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaEliminarEstudiante.class
@@ -18,6 +19,7 @@ com\mycompany\projectopoo\ProjectoPOO$VentanaLogin.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaProfesor.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaAdministradorProfesor.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaEliminarProfesor.class
+com\mycompany\projectopoo\ProjectoPOO$VentanaDesempeñoPersonal.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaAdministradorProfesor$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaCrearProfesor$1.class
 com\mycompany\projectopoo\ProjectoPOO$abrirModificarEvaluacion$1.class
@@ -82,6 +84,7 @@ com\mycompany\projectopoo\ProjectoPOO$abrirModificarEvaluacion.class
 com\mycompany\projectopoo\Grupos.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaModificarCurso.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaCrearEstudiante.class
+com\mycompany\projectopoo\ProjectoPOO$VentanaEvaluacionesAsignadas.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaMostrarProfesor$1.class
 com\mycompany\projectopoo\ProjectoPOO$VentanaModificarEjercicios.class
 com\mycompany\projectopoo\EnviadorCorreo.class

@@ -304,10 +304,18 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     public void setAleatorio(boolean aleatorio){
         this.aleatoria=aleatorio;
     }
+    
+    
+    public void borrarSeleccion(){
+        this.encontradas.clear();
+    }
+    
+    
     public Ejercicios copiar(){
         SopaDeLetrasPanel copia = new SopaDeLetrasPanel(enunciado, new LinkedHashMap<>(palabras),puntaje);
         copia.encontradas.addAll(encontradas);
         copia.setAleatorio(aleatoria);
+        this.encontradas.clear();
         return copia;
     }
 }

@@ -488,7 +488,7 @@ public class Sistema implements Serializable{
                     PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
                     documento.open();   
                     for (Cursos c:cursos){
-                        for (Grupos g:grupos){
+                        for (Grupos g:c.getGrupos()){
                             if (fechavigencia.isAfter(g.getFechaInicio()) && fechavigencia.isBefore(g.getFechaFin())){
                                 contador=contador+g.getCantidadEstudiantes();
                             }
@@ -507,7 +507,7 @@ public class Sistema implements Serializable{
                     documento.open();
                     for (Cursos c:cursos){
                         if (c.getIdentificacion().equals(idCurso)){
-                            for (Grupos g:grupos){
+                            for (Grupos g:c.getGrupos()){
                                 contador=contador+g.getCantidadEstudiantes();
                             }
                         }
@@ -526,9 +526,13 @@ public class Sistema implements Serializable{
                     PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
                     documento.open();
                     for (Cursos c:cursos){
+                        
                         if (c.getIdentificacion().equals(idCurso)){
-                            for (Grupos g:grupos){
+                            
+                            for (Grupos g:c.getGrupos()){
+                                
                                 if (g.getIdGrupo()==idG){
+                                    
                                     contador=contador+g.getCantidadEstudiantes();
                                 }
 

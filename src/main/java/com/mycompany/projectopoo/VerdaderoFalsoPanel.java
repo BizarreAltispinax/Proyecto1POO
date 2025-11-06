@@ -87,9 +87,14 @@ public class VerdaderoFalsoPanel extends Ejercicios implements Serializable{
         this.seleccion = sele;
     }
 
+    public void borrarSeleccion(){
+        this.seleccion=-1;
+    }
+    
     public Ejercicios copiar() {
         VerdaderoFalsoPanel copia = new VerdaderoFalsoPanel(enunciado, correcta == 0, puntaje);
         copia.setSeleccion(this.seleccion);
+        this.seleccion=-1;
         return copia;
     }
 }

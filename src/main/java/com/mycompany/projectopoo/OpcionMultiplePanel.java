@@ -106,9 +106,17 @@ public class OpcionMultiplePanel extends Ejercicios implements Serializable{
     public void setSeleccionadas(Set<Integer> seleccionadas){
         this.seleccionadas=seleccionadas;
     }
+    
+    public void borrarSeleccion(){
+        this.seleccionadas.clear();
+    }
+    
+    
+    
     public Ejercicios copiar() {
         OpcionMultiplePanel copia = new OpcionMultiplePanel(enunciado, new ArrayList<>(opciones), new HashSet<>(correctas), puntaje);
         copia.setSeleccionadas(new HashSet<>(this.seleccionadas));
+        
         return copia;
     }
 }

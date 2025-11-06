@@ -35,14 +35,15 @@ public class Evaluaciones implements Serializable{
     private int indiceActual = 0;
     private double puntajeTotalObt=0;
     private double puntajeTotal=0;
-    private LocalDateTime fechaInicio = LocalDateTime.of(2025, 11, 3, 22, 10);
-    private LocalDateTime fechaFin=LocalDateTime.of(2025, 11, 3, 23,30 ); ;
+    private LocalDateTime fechaInicio;
+    private LocalDateTime fechaFin; ;
     private JLabel lblTiempoRestante;
     private JLabel lblPreguntaActual;
     private javax.swing.Timer temporizador;
-    private String nombreEst = "Andres";
+    private String nombreEst;
     private LocalDateTime fechaInicioEv;
     private LocalDateTime fechaFinEv;
+    private int i;
     
     
     public Evaluaciones(int identificacion, String nombre, String instrucciones, ArrayList<String> objetivos,
@@ -239,8 +240,10 @@ public class Evaluaciones implements Serializable{
     // Información general de la evaluación
     todo.append("Evaluación: ").append(nombre).append("\n");
     todo.append("Estudiante: ").append(nombreEst).append("\n");
-    todo.append("Hora de inicio: ").append(fechaInicioEv).append("\n");
-    todo.append("Hora de finalizacion: ").append(fechaFinEv).append("\n");
+    todo.append("Hora de inicio: ").append(fechaInicio).append("\n");
+    todo.append("Hora de finalizacion: ").append(fechaFin).append("\n");
+    todo.append("Hora de inicio estudiante: ").append(fechaInicioEv).append("\n");
+    todo.append("Hora de finalizacion estudiante: ").append(fechaFinEv).append("\n");
     todo.append("Nota: ").append(getNota())
         .append(" (").append(getPuntajeTotalObtenido())
         .append("/").append(getPuntajeTotal()).append(")\n");
@@ -269,7 +272,7 @@ public class Evaluaciones implements Serializable{
     }
     
     public void iniciar(){
-        int i = 0;
+        i = 0;
         this.setHoraDeInicioEv(LocalDateTime.now());
         frame = new JFrame("Evaluación: "+nombre);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -317,7 +320,11 @@ public class Evaluaciones implements Serializable{
 
         btnAnterior.addActionListener(ev -> mostrarAnterior());
         btnSiguiente.addActionListener(ev -> mostrarSiguiente());
-        btnFinalizar.addActionListener(ev -> finalizar());
+        btnFinalizar.addActionListener(ev -> {
+            i=2;
+            finalizar();
+            ;
+        });
 
         panelBotones.add(btnAnterior);
         panelBotones.add(btnSiguiente);
@@ -336,7 +343,7 @@ public class Evaluaciones implements Serializable{
     
     
     public void iniciarProfesor(){
-        int i =1;
+        i =1;
         frame = new JFrame("Evaluación: "+nombre);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,500);
@@ -384,7 +391,10 @@ public class Evaluaciones implements Serializable{
 
         btnAnterior.addActionListener(ev -> mostrarAnterior());
         btnSiguiente.addActionListener(ev -> mostrarSiguiente());
-        btnFinalizar.addActionListener(ev -> finalizarProfesor());
+        btnFinalizar.addActionListener(ev -> {
+            i=2;
+            finalizarProfesor();
+        });
 
         panelBotones.add(btnAnterior);
         panelBotones.add(btnSiguiente);
@@ -422,7 +432,12 @@ public class Evaluaciones implements Serializable{
             if (i==1){
                 finalizarProfesor();
             }else{
-                finalizar();
+                if (i==0){
+                    finalizar();
+                }else{
+                    
+                }
+                
             }
             
             
@@ -454,7 +469,7 @@ public class Evaluaciones implements Serializable{
         this.setHoraDeFinalEv(LocalDateTime.now());
         
         fin = System.currentTimeMillis();
-        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
+        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" segEstudiantes");
         
 
         grupo.guardarEvaluacion(nombreEst,this); 
@@ -470,7 +485,7 @@ public class Evaluaciones implements Serializable{
     private void finalizarProfesor(){
         
         fin = System.currentTimeMillis();
-        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
+        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" segProfesores");
 
         frame.dispose();
     }
@@ -498,6 +513,9 @@ public class Evaluaciones implements Serializable{
         this.fechaFinEv=null;
         for(Ejercicios e: ejercicios){
             copia.agregarEjercicio(e.copiar());
+        }
+        for (Ejercicios e :ejercicios){
+            e.borrarSeleccion();
         }
         return copia;
     }

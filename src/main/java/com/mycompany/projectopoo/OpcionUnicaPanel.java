@@ -93,10 +93,18 @@ public class OpcionUnicaPanel extends Ejercicios implements Serializable{
     public void setSeleccion(int sele){
         this.seleccion=sele;
     }
+    
+    
+    public void borrarSeleccion(){
+        this.seleccion=-1;
+    }
+    
+    
     public Ejercicios copiar() {
         OpcionUnicaPanel copia = new OpcionUnicaPanel(enunciado, new ArrayList<>(opciones), correcta, puntaje);
 
         copia.setSeleccion(this.seleccion);
+        
         return copia;
     }
 }
