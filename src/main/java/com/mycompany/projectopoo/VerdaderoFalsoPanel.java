@@ -14,15 +14,17 @@ import java.io.Serializable;
 import java.util.*;
 
 public class VerdaderoFalsoPanel extends Ejercicios implements Serializable{
-    private java.util.List<String> opciones;
+    private java.util.ArrayList<String> opciones;
     private int correcta;  // 0 = Verdadero, 1 = Falso
     private int seleccion = -1;
+    private boolean esVerdaderoE;
     private ButtonGroup grupo;
 
     public VerdaderoFalsoPanel(String enunciado, boolean esVerdadero, int puntaje) {
         super(enunciado, puntaje);
-        this.opciones = Arrays.asList("Verdadero", "Falso");
+        this.opciones = new ArrayList<>(Arrays.asList("Verdadero", "Falso"));
         this.correcta = esVerdadero ? 0 : 1;
+        this.esVerdaderoE=esVerdadero;
     }
     public void setCorrecta(boolean correcta){
         if (correcta==true){
@@ -58,10 +60,12 @@ public class VerdaderoFalsoPanel extends Ejercicios implements Serializable{
 
     @Override
     public void aplicarRandom(Random rand) {
-        // Opciones fijas, pero si quisieras mezclar Verdadero/Falso:
+        
         Collections.shuffle(opciones, rand);
+        System.out.println(opciones);
         // Recalculamos el índice de la opción correcta
         correcta = opciones.indexOf(correcta == 0 ? "Verdadero" : "Falso");
+        System.out.println(correcta);
         construirPanel();
     }
 
@@ -91,10 +95,18 @@ public class VerdaderoFalsoPanel extends Ejercicios implements Serializable{
         this.seleccion=-1;
     }
     
+    public void setOpciones(ArrayList<String> opciones) {
+    
+        this.opciones = new ArrayList<>(opciones); 
+    }
+    
     public Ejercicios copiar() {
         VerdaderoFalsoPanel copia = new VerdaderoFalsoPanel(enunciado, correcta == 0, puntaje);
         copia.setSeleccion(this.seleccion);
+        copia.setOpciones(opciones);
         this.seleccion=-1;
+        this.opciones = new ArrayList<>(Arrays.asList("Verdadero", "Falso"));
+        this.correcta = esVerdaderoE ? 0 : 1;
         return copia;
     }
 }

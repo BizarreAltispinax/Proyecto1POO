@@ -70,7 +70,7 @@ public class ProyectoPOO extends JFrame {
         add(titulo, BorderLayout.NORTH);
 
         JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
-        JButton btnAdmin = new JButton("Administradores");
+        JButton btnAdmin = new JButton("Administrador");
         JButton btnEstudiante = new JButton("Estudiante");
         JButton btnProfesor = new JButton("Profesor");
         
@@ -2624,7 +2624,7 @@ public class ProyectoPOO extends JFrame {
 
             // Guardar la respuesta
             respuestaCorrecta = rbVerdadero.isSelected();
-            
+            System.out.println(respuestaCorrecta);
             try{
                 VerdaderoFalsoPanel nuevo = new VerdaderoFalsoPanel(enunciado,respuestaCorrecta,puntajeInt);
                 listaEjercicios.add(nuevo);
@@ -5735,7 +5735,7 @@ public class ProyectoPOO extends JFrame {
                     this.dispose();
                     abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Evaluación no encontrada o sin fechas.");
+                    //JOptionPane.showMessageDialog(this, "Evaluación no encontrada o sin fechas.");
                 }
             }
             }else{

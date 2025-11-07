@@ -321,7 +321,7 @@ public class Evaluaciones implements Serializable{
         btnAnterior.addActionListener(ev -> mostrarAnterior());
         btnSiguiente.addActionListener(ev -> mostrarSiguiente());
         btnFinalizar.addActionListener(ev -> {
-            i=2;
+            
             finalizar();
             ;
         });
@@ -392,7 +392,7 @@ public class Evaluaciones implements Serializable{
         btnAnterior.addActionListener(ev -> mostrarAnterior());
         btnSiguiente.addActionListener(ev -> mostrarSiguiente());
         btnFinalizar.addActionListener(ev -> {
-            i=2;
+            
             finalizarProfesor();
         });
 
@@ -466,10 +466,11 @@ public class Evaluaciones implements Serializable{
     private void mostrarAnterior(){ mostrarEjercicio(indiceActual-1); }
 
     private void finalizar(){
+        i=2;
         this.setHoraDeFinalEv(LocalDateTime.now());
         
         fin = System.currentTimeMillis();
-        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" segEstudiantes");
+        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
         
 
         grupo.guardarEvaluacion(nombreEst,this); 
@@ -483,10 +484,13 @@ public class Evaluaciones implements Serializable{
     }
     
     private void finalizarProfesor(){
-        
+        i=2;
         fin = System.currentTimeMillis();
-        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" segProfesores");
-
+        JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
+        for (Ejercicios e :ejercicios){
+            e.borrarSeleccion();
+        }
+        
         frame.dispose();
     }
     
