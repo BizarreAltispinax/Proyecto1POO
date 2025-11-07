@@ -863,7 +863,7 @@ public class ProyectoPOO extends JFrame {
 
 
                         try{
-                            Evaluaciones eva = new Evaluaciones(sistema.getEvaluaciones().size()+1,nombre,instrucciones,listaObjetivos,duracionT,valor1,valor2);
+                            Evaluaciones eva = new Evaluaciones(sistema.idEvaluacion(),nombre,instrucciones,listaObjetivos,duracionT,valor1,valor2);
                             for (Ejercicios ej : listaEjercicios){
                                 eva.agregarEjercicio(ej);
                             }
@@ -5491,7 +5491,15 @@ public class ProyectoPOO extends JFrame {
                     
                     int idGrupo= Integer.parseInt(identificacionGrupo);
                     
-                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && est!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().contains(est)==false && sistema.verificarEstudiante(identificacionCurso, est)){
+                    
+                    if (sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getFechaFin().isBefore(LocalDate.now())){
+                            JOptionPane.showMessageDialog(this, "El grupo ya finalizo");
+                            return;
+                    }
+                    
+                    
+                    
+                    if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && est!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().contains(est)==false && sistema.verificarEstudiante(identificacionCurso, est) && sistema.devCursos(identificacionCurso).getMaxEstudiantes()>sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getEstudiantes().size()+1){
                         sistema.devCursos(identificacionCurso).devGrupos(idGrupo).agregarEstudiantes(est);
                         JOptionPane.showMessageDialog(this, "Asociacion exitosa");
                         this.dispose();
@@ -5540,7 +5548,7 @@ public class ProyectoPOO extends JFrame {
             setSize(1000, 850);
             setLocationRelativeTo(null);
             
-            setLayout(new GridLayout(12, 1, 5, 5));
+            setLayout(new GridLayout(13, 1, 5, 5));
 
             
             addWindowListener(new java.awt.event.WindowAdapter() {
@@ -5578,7 +5586,7 @@ public class ProyectoPOO extends JFrame {
             JTextField txtHoraInicial = new JTextField();
             JButton btnAsociar = new JButton("Asociar");
             JButton btnDesasociar = new JButton("Desasociar");
-            
+            JButton btnSalir = new JButton("Salir");
             add(lblIdentificacionCurso);
             add(txtIdentificacionCurso);
             add(lblIdentificacionGrupo);
@@ -5592,7 +5600,7 @@ public class ProyectoPOO extends JFrame {
 
             add(btnAsociar);
             add(btnDesasociar);
-
+            add(btnSalir);
                         
             
             btnAsociar.addActionListener(e ->{
@@ -5609,6 +5617,15 @@ public class ProyectoPOO extends JFrame {
                     try {
                         int idGrupo= Integer.parseInt(identificacionGrupo);
                         int idEvaluacion = Integer.parseInt(identificacionEvaluacion);
+                        
+                        if (sistema.devCursos(identificacionCurso).devGrupos(idGrupo).getFechaFin().isBefore(LocalDate.now())){
+                            JOptionPane.showMessageDialog(this, "El grupo ya finalizo");
+                            return;
+                        }
+                        
+                        
+                        
+                        
                         if (sistema.devCursos(identificacionCurso)!=null && sistema.devCursos(identificacionCurso).devGrupos(idGrupo)!=null && sistema.devEva(idEvaluacion)!=null&&sistema.devEva(idEvaluacion).getGrupo()==null){
                             LocalDateTime fechaHoraFinal = fechaHoraInicial.plusMinutes(sistema.devEva(idEvaluacion).getDur());
                             
@@ -5674,7 +5691,10 @@ public class ProyectoPOO extends JFrame {
                 
                 
             });
-            
+            btnSalir.addActionListener(e ->{
+                this.dispose();
+                abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
+            });
             
         }
     }

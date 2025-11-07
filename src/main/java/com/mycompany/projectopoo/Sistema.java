@@ -30,7 +30,7 @@ public class Sistema implements Serializable{
     private ArrayList<Cursos> cursos;
     private ArrayList<Evaluaciones> evaluaciones;
     private static Sistema instancia;
-    
+    private int cont;
     
     
     
@@ -563,5 +563,10 @@ public class Sistema implements Serializable{
     }
     public ArrayList<Cursos> getCursos(){
         return cursos;
+    }
+    
+    public int idEvaluacion(){
+        cont=cont+1;
+        return cont;
     }
 }
