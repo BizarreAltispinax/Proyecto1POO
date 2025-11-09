@@ -14,9 +14,14 @@ import java.util.List;
 import java.time.*;
 import javax.swing.Timer;
 
+
 /**
+ * Representa una evaluación compuesta por múltiples ejercicios.
+ * Contiene la configuración de la evaluación (nombre, instrucciones, objetivos, duración),
+ * la lista de ejercicios, enlaces a GUI (JFrame, JLabels) y mecanismos para iniciar,
+ * controlar y finalizar la evaluación tanto para estudiantes como para profesores.
  *
- * @author User
+ * <p>Implementa {@link Serializable} para permitir su persistencia si es necesario.</p>
  */
 public class Evaluaciones implements Serializable{
     private int identificacion;
@@ -46,6 +51,18 @@ public class Evaluaciones implements Serializable{
     private int i;
     
     
+    /**
+     * Constructor principal de Evaluaciones.
+     *
+     * @param identificacion identificador de la evaluación.
+     * @param nombre nombre de la evaluación (5 a 20 caracteres).
+     * @param instrucciones instrucciones de la evaluación (5 a 400 caracteres).
+     * @param objetivos lista de objetivos (cada objetivo entre 10 y 40 caracteres).
+     * @param duracion duración en minutos (mínimo 1).
+     * @param pregAl indica si las preguntas se aleatorizan.
+     * @param resAl indica si las respuestas se aleatorizan.
+     * @throws IllegalArgumentException si alguno de los parámetros no cumple las validaciones.
+     */
     public Evaluaciones(int identificacion, String nombre, String instrucciones, ArrayList<String> objetivos,
                  int duracion, boolean pregAl,
                  boolean resAl) {
@@ -58,7 +75,7 @@ public class Evaluaciones implements Serializable{
             throw new IllegalArgumentException("Las instrucciones deben tener entre 5 y 400 caracteres.");
         for (String st : objetivos){
             if (st.length() < 10 || st.length() > 40)
-            throw new IllegalArgumentException("Cada objetivo debe de tener entre 10 y 40 caracteres");
+                throw new IllegalArgumentException("Cada objetivo debe de tener entre 10 y 40 caracteres");
         }
         
         if (duracion < 1)
@@ -81,8 +98,11 @@ public class Evaluaciones implements Serializable{
     
     
     
-    
-    
+    /**
+     * Establece el nombre de la evaluación.
+     * @param nombre nuevo nombre (5 a 20 caracteres).
+     * @throws IllegalArgumentException si el nombre no cumple las restricciones.
+     */
     // Setter para nombre
     public void setNombre(String nombre) {
         if (nombre == null || nombre.length() < 5 || nombre.length() > 20) {
@@ -91,6 +111,11 @@ public class Evaluaciones implements Serializable{
         this.nombre = nombre;
     }
 
+    /**
+     * Establece las instrucciones de la evaluación.
+     * @param instrucciones texto de instrucciones (5 a 400 caracteres).
+     * @throws IllegalArgumentException si las instrucciones no cumplen las restricciones.
+     */
     // Setter para instrucciones
     public void setInstrucciones(String instrucciones) {
         if (instrucciones == null || instrucciones.length() < 5 || instrucciones.length() > 400) {
@@ -99,6 +124,11 @@ public class Evaluaciones implements Serializable{
         this.instrucciones = instrucciones;
     }
 
+    /**
+     * Establece la lista de objetivos.
+     * @param objetivos lista de objetivos; no puede ser {@code null} y cada objetivo debe tener 10-40 caracteres.
+     * @throws IllegalArgumentException si la lista o algún objetivo es inválido.
+     */
     // Setter para objetivos
     public void setObjetivos(ArrayList<String> objetivos) {
         if (objetivos == null) {
@@ -112,6 +142,11 @@ public class Evaluaciones implements Serializable{
         this.objetivos = objetivos;
     }
 
+    /**
+     * Establece la duración de la evaluación en minutos.
+     * @param duracion duración en minutos (mínimo 1).
+     * @throws IllegalArgumentException si la duración es menor que 1.
+     */
     // Setter para duracion
     public void setDuracion(int duracion) {
         if (duracion < 1) {
@@ -121,35 +156,55 @@ public class Evaluaciones implements Serializable{
     }
     
     
+    /**
+     * Establece si las preguntas se deben aleatorizar.
+     * @param pregAl {@code true} para aleatorizar preguntas.
+     */
     public void setPregAl(boolean pregAl){
         this.pregAl=pregAl;
     }
     
+    /**
+     * Establece si las respuestas se deben aleatorizar.
+     * @param resAl {@code true} para aleatorizar respuestas.
+     */
     public void setResAl(boolean resAl){
         this.resAl=resAl;
     }
     
     
     
+    /** @return el grupo asociado a la evaluación. */
     public Grupos getGrupo(){
         return grupo;
     }
+    /** @return el nombre de la evaluación. */
     public String getNombre(){
         return nombre;
     }
     
     
+    /**
+     * Fija la hora de inicio (global) de la evaluación.
+     * @param horaInicio fecha y hora de inicio.
+     */
     public void setHoraDeInicio(LocalDateTime horaInicio){
         this.fechaInicio=horaInicio;
     }
+    /**
+     * Fija la hora de finalización (global) de la evaluación.
+     * @param horaFinal fecha y hora de finalización.
+     */
     public void setHoraDeFinal(LocalDateTime horaFinal){
         this.fechaFin=horaFinal;
     }
     
+    /** @return la fecha y hora de inicio (global). */
     public LocalDateTime getFechaInicio() {
         return fechaInicio;
     }
 
+    /** @return la fecha y hora de fin (global). */
     public LocalDateTime getFechaFin() {
         return fechaFin;
     }
@@ -157,20 +212,40 @@ public class Evaluaciones implements Serializable{
     
     
     
+    /**
+     * Establece la hora de inicio específica del estudiante.
+     * @param horaInicio fecha y hora de inicio del estudiante.
+     */
     public void setHoraDeInicioEv(LocalDateTime horaInicio){
         this.fechaInicioEv=horaInicio;
     }
+    /**
+     * Establece la hora de finalización específica del estudiante.
+     * @param horaFinal fecha y hora de finalización del estudiante.
+     */
     public void setHoraDeFinalEv(LocalDateTime horaFinal){
         this.fechaFinEv=horaFinal;
     }
     
+    /**
+     * Asocia un grupo a esta evaluación.
+     * @param g grupo a asociar.
+     */
     public void agregarGrupo(Grupos g){
         this.grupo=g;
 
     }
+    /**
+     * Establece el nombre del estudiante que realiza la evaluación.
+     * @param nombre nombre del estudiante.
+     */
     public void setNombreEst(String nombre){
         this.nombreEst=nombre;
     }
+    /**
+     * Devuelve los objetivos concatenados en una cadena separada por comas.
+     * @return cadena con los objetivos.
+     */
     public String getObjetivos() {
         String objs="";
         for (String obj: objetivos){
@@ -179,10 +254,15 @@ public class Evaluaciones implements Serializable{
         return objs;
     }
     
+    /** @return nombre del estudiante asociado (si lo hay). */
     public String getNombreEst(){
         return nombreEst;
     }
     
+    /**
+     * Calcula la suma total de puntos de todos los ejercicios.
+     * @return puntaje total de la evaluación.
+     */
     public double getPuntajeTotal() {
         puntajeTotal=0;
         for (Ejercicios e: ejercicios){
@@ -193,6 +273,10 @@ public class Evaluaciones implements Serializable{
         return puntajeTotal;
     }
 
+    /**
+     * Calcula la suma de los puntajes obtenidos por el estudiante en todos los ejercicios.
+     * @return puntaje total obtenido.
+     */
     public double getPuntajeTotalObtenido() {
         puntajeTotalObt=0;
         for (Ejercicios e: ejercicios){
@@ -201,37 +285,60 @@ public class Evaluaciones implements Serializable{
         return puntajeTotalObt;
     }
 
+    /**
+     * Calcula la nota final (porcentaje redondeado) tras verificar cada ejercicio.
+     * @return nota final como entero (0-100).
+     */
     public int getNota() {
         for (Ejercicios ej :ejercicios){
-        ej.verificar();
+        ej.verificar(); // Verifica cada ejercicio antes de calcular la nota
         }
         return (int) Math.round(getPuntajeTotalObtenido() * 100.0 / getPuntajeTotal());
     }
     
+    /** Mezcla aleatoriamente el orden de los ejercicios. */
     public void mezclarEjercicios() {
         Collections.shuffle(ejercicios);
     }
     
     
+    /** @return lista de ejercicios de la evaluación. */
     public ArrayList<Ejercicios> getEjercicios(){
         return ejercicios;
     }
     
     
+    /**
+     * Agrega un ejercicio a la evaluación.
+     * @param ejercicio ejercicio a agregar.
+     */
     public void agregarEjercicio(Ejercicios ejercicio){
         ejercicios.add(ejercicio);
     }
+    /**
+     * Elimina un ejercicio de la evaluación.
+     * @param ejercicio ejercicio a eliminar.
+     */
     public void eliminarEjercicio (Ejercicios ejercicio){
         ejercicios.remove(ejercicio);
     }
+    /** @return la identificación de la evaluación. */
     public int getIdentificacion(){
         return identificacion;
     }
+    /**
+     * Representación textual resumida de la evaluación.
+     * @return cadena descriptiva.
+     */
     public String toString(){
         return "Identificacion: "+identificacion+"\n"+"Nombre: "+nombre+"\n"+"Objetivos: "+this.getObjetivos()+"\n"+"Duracion: "+duracion+"\n"+"Aleatoriedad de preguntas: "+pregAl+"\n"+"Aleatoriedad de respuestas: "+resAl+"\n"+"Cantidad de preguntas: "+ejercicios.size()+"\n";
     }  
     
     
+    /**
+     * Construye un texto completo con los detalles de la evaluación y cada ejercicio.
+     * @return texto completo de la evaluación listo para mostrar o guardar.
+     */
     public String imprimir() {
     StringBuilder todo = new StringBuilder();
     for (Ejercicios ej :ejercicios){
@@ -262,15 +369,21 @@ public class Evaluaciones implements Serializable{
     return todo.toString();
 }
     
+    /** @return valor del campo duracion. */
     public int getDur(){
         return duracion;
     }
     
     
+    /** @return duración en segundos calculada a partir de timestamps. */
     public double getDuracion(){
         return (fin-inicio)/1000;
     }
     
+    /**
+     * Inicia la evaluación para el estudiante: configura ventana, temporizador y paneles.
+     * Muestra la primera pregunta al final del proceso.
+     */
     public void iniciar(){
         i = 0;
         this.setHoraDeInicioEv(LocalDateTime.now());
@@ -298,13 +411,13 @@ public class Evaluaciones implements Serializable{
 
         panelCentral = new JPanel(new CardLayout());
         if (pregAl==true){
-            mezclarEjercicios();
+            mezclarEjercicios(); // Si corresponde, aleatoriza preguntas
         }
         for(Ejercicios e: ejercicios){
             if(resAl){
-                e.aplicarRandom(new Random());
+                e.aplicarRandom(new Random()); // Aplica aleatoriedad en respuestas si está activada
             }else{
-                e.construirPanel();
+                e.construirPanel(); // Construye el panel del ejercicio tal cual
             } 
                 
             panelCentral.add(e,enunciado(e));
@@ -342,6 +455,9 @@ public class Evaluaciones implements Serializable{
     
     
     
+    /**
+     * Inicia la evaluación en modo profesor (similar a iniciar pero con diferencias en control).
+     */
     public void iniciarProfesor(){
         i =1;
         frame = new JFrame("Evaluación: "+nombre);
@@ -413,6 +529,11 @@ public class Evaluaciones implements Serializable{
     
     
     
+    /**
+     * Actualiza la etiqueta de tiempo restante cada segundo.
+     * Si el tiempo ha terminado, detiene el temporizador y finaliza según el modo.
+     * @param i indicador de modo (0 estudiante, 1 profesor, etc.).
+     */
     private void actualizarTiempo(int i) {
         LocalDateTime ahora = LocalDateTime.now();
 
@@ -448,11 +569,15 @@ public class Evaluaciones implements Serializable{
     
     
     
-
+    /** Devuelve el enunciado de un ejercicio (acceso directo al campo protegido). */
     private String enunciado(Ejercicios e){
         return e.enunciado;
     }
 
+    /**
+     * Muestra el ejercicio en la posición indicada; oculta los demás.
+     * @param idx índice del ejercicio a mostrar.
+     */
     private void mostrarEjercicio(int idx){
         if(idx<0 || idx>=ejercicios.size()) return;
         for(int i=0;i<ejercicios.size();i++) ejercicios.get(i).setVisible(i==idx);
@@ -465,6 +590,10 @@ public class Evaluaciones implements Serializable{
     private void mostrarSiguiente(){ mostrarEjercicio(indiceActual+1); }
     private void mostrarAnterior(){ mostrarEjercicio(indiceActual-1); }
 
+    /**
+     * Finaliza la evaluación en modo estudiante: registra tiempos, guarda evaluación en el grupo
+     * y reconstruye paneles si es necesario.
+     */
     private void finalizar(){
         i=2;
         this.setHoraDeFinalEv(LocalDateTime.now());
@@ -483,6 +612,9 @@ public class Evaluaciones implements Serializable{
         frame.dispose();
     }
     
+    /**
+     * Finaliza la evaluación en modo profesor: borra selecciones y cierra la ventana.
+     */
     private void finalizarProfesor(){
         i=2;
         fin = System.currentTimeMillis();
@@ -496,6 +628,11 @@ public class Evaluaciones implements Serializable{
     
     
     
+    /**
+     * Crea y devuelve una copia profunda (en la medida de los ejercicios) de la evaluación.
+     * La copia contiene copias de cada ejercicio mediante {@code e.copiar()}.
+     * @return nueva instancia de Evaluaciones con los ejercicios copiados.
+     */
     public Evaluaciones copiarEvaluacion(){
         Evaluaciones copia = new Evaluaciones(identificacion,nombre,instrucciones,objetivos,duracion,pregAl,resAl);
         copia.inicio = inicio;
@@ -516,14 +653,18 @@ public class Evaluaciones implements Serializable{
         this.fechaInicioEv=null;
         this.fechaFinEv=null;
         for(Ejercicios e: ejercicios){
-            copia.agregarEjercicio(e.copiar());
+            copia.agregarEjercicio(e.copiar()); // Agrega una copia de cada ejercicio
         }
         for (Ejercicios e :ejercicios){
-            e.borrarSeleccion();
+            e.borrarSeleccion(); // Limpia selecciones en la evaluación original
         }
         return copia;
     }
     
+    /**
+     * Muestra un reporte en una ventana con la información de la evaluación.
+     * Construye un JTextArea dentro de un JScrollPane y un botón Cerrar.
+     */
     public void imprimirReporte(){
         JFrame ventana = new JFrame("Información general");
             ventana.setSize(400, 300);
@@ -555,7 +696,6 @@ public class Evaluaciones implements Serializable{
 
             ventana.setVisible(true);
     }
-    
     
     
     

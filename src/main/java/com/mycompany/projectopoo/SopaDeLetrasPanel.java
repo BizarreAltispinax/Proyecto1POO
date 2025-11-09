@@ -14,7 +14,14 @@ import java.awt.event.*;
 import java.io.Serializable;
 import java.util.*;
 
-public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
+/**
+ * Clase que representa un panel interactivo para el ejercicio de "Sopa de Letras".
+ * Contiene la lógica para generar el tablero, colocar palabras, gestionar la interacción
+ * del usuario, verificar respuestas y calcular el puntaje obtenido.
+ * 
+ * Hereda de {@link Ejercicios} e implementa {@link Serializable}.
+ */
+public class SopaDeLetrasPanel extends Ejercicios implements Serializable {
     private char[][] tablero;
     private int filas, columnas;
     private Map<String, String> palabras; // palabra → definición
@@ -27,17 +34,16 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     private String llaveMasLarga = null;
     private boolean v = false;
 
+    // Direcciones posibles (vertical, horizontal y diagonales)
     private static final int[][] DIRECCIONES = {
-        {-1, 0},  // arriba
-        {1, 0},   // abajo
-        {0, -1},  // izquierda
-        {0, 1},   // derecha
-        {-1, -1}, // diagonal arriba-izquierda
-        {-1, 1},  // diagonal arriba-derecha
-        {1, -1},  // diagonal abajo-izquierda
-        {1, 1}    // diagonal abajo-derecha
+        {-1, 0}, {1, 0}, {0, -1}, {0, 1},
+        {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
     };
 
+    /**
+     * Constructor que inicializa el ejercicio con su enunciado, conjunto de palabras
+     * y puntaje máximo. Además, determina el tamaño del tablero según la palabra más larga.
+     */
     public SopaDeLetrasPanel(String enunciado, Map<String, String> palabras, int puntaje) {
         super(enunciado, puntaje);
         this.palabras = new LinkedHashMap<>(palabras);
@@ -49,44 +55,41 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         }
         this.filas = llaveMasLarga.length();
         this.columnas = llaveMasLarga.length();
-        
     }
-    public void setPalabras(Map<String, String> palabras){
-        this.palabras=palabras;
+
+    /** Asigna un nuevo conjunto de palabras a la sopa de letras. */
+    public void setPalabras(Map<String, String> palabras) {
+        this.palabras = palabras;
     }
 
     // ---------------------------------------------------
     // 🔹 Generación del tablero
     // ---------------------------------------------------
+
+    /** Genera el tablero con todas las palabras y llena los espacios vacíos. */
     private void generarTablero() {
         tablero = new char[filas][columnas];
         for (int i = 0; i < filas; i++)
             Arrays.fill(tablero[i], ' ');
-
         ArrayList<String> listaPalabras = new ArrayList<>(palabras.keySet());
-        
-
         colocarTodasLasPalabras(listaPalabras);
         llenarVacios();
     }
 
-    
+    /** Coloca todas las palabras, las primeras 8 en direcciones fijas y el resto aleatoriamente. */
     private void colocarTodasLasPalabras(ArrayList<String> palabras) {
-        
-
-        // 1️⃣ Colocar las primeras 8, una en cada dirección
         int limite = Math.min(DIRECCIONES.length, palabras.size());
         for (int i = 0; i < limite; i++) {
             String palabra = palabras.get(i);
             int[] dir = DIRECCIONES[i];
             colocarPalabraEnDireccion(palabra, dir);
         }
-
-        // 2️⃣ Colocar el resto aleatoriamente
         for (int i = DIRECCIONES.length; i < palabras.size(); i++) {
             colocarPalabra(palabras.get(i));
         }
     }
+
+    /** Coloca una palabra en la dirección especificada si hay espacio disponible. */
     private void colocarPalabraEnDireccion(String palabra, int[] dir) {
         palabra = palabra.toUpperCase();
         int intentos = 100;
@@ -101,13 +104,8 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
+
+    /** Coloca una palabra aleatoriamente en cualquier dirección válida. */
     private void colocarPalabra(String palabra) {
         palabra = palabra.toUpperCase();
         int intentos = 100;
@@ -123,6 +121,7 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         }
     }
 
+    /** Verifica si una palabra puede colocarse en una dirección sin chocar con otras. */
     private boolean puedeColocar(String palabra, int f, int c, int df, int dc) {
         for (int i = 0; i < palabra.length(); i++) {
             int nf = f + i * df, nc = c + i * dc;
@@ -133,6 +132,7 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         return true;
     }
 
+    /** Llena los espacios vacíos del tablero con letras aleatorias. */
     private void llenarVacios() {
         for (int i = 0; i < filas; i++)
             for (int j = 0; j < columnas; j++)
@@ -143,13 +143,13 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     // ---------------------------------------------------
     // 🧩 Construcción del panel
     // ---------------------------------------------------
+
+    /** Construye el panel visual de la sopa de letras con los botones y definiciones. */
     @Override
     public void construirPanel() {
         encontradas.clear();
         removeAll();
-        if (v==false){
-            random = new Random(1);
-        }
+        if (v == false) random = new Random(1);
         generarTablero();
 
         lblTitulo = new JLabel("<html><b>" + enunciado + "</b></html>", SwingConstants.CENTER);
@@ -163,8 +163,7 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
                 btn.setMargin(new Insets(0, 0, 0, 0));
                 btn.setFocusPainted(false);
                 int fi = i, co = j;
-                btn.addActionListener(e -> {seleccionarLetra(fi, co);
-                    });
+                btn.addActionListener(e -> { seleccionarLetra(fi, co); });
                 panelTablero.add(btn);
             }
         }
@@ -188,10 +187,11 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     // ---------------------------------------------------
     // 🧩 Interacción con el tablero
     // ---------------------------------------------------
+
     private java.util.List<Point> seleccionActual = new ArrayList<>();
 
+    /** Registra la selección de una letra y verifica si se forma una palabra. */
     private void seleccionarLetra(int fila, int col) {
-        
         seleccionActual.add(new Point(fila, col));
         if (seleccionActual.size() >= 2) {
             verificarSeleccion();
@@ -199,19 +199,13 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         }
     }
 
+    /** Verifica si la selección del usuario corresponde a una palabra válida. */
     private void verificarSeleccion() {
-        
         if (seleccionActual.size() < 2) return;
-
         Point inicio = seleccionActual.get(0);
         Point fin = seleccionActual.get(seleccionActual.size() - 1);
         String palabra = obtenerPalabra(inicio, fin);
-        
-        
-        
-        
         if (palabra != null && palabras.containsKey(palabra.toUpperCase())) {
-            
             encontradas.add(palabra.toUpperCase());
             actualizarDefiniciones();
             resaltarPalabra(inicio, fin);
@@ -219,36 +213,31 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         }
     }
 
+    /** Obtiene la palabra formada entre dos puntos del tablero. */
     private String obtenerPalabra(Point inicio, Point fin) {
-        
         int df = Integer.compare(fin.x, inicio.x);
         int dc = Integer.compare(fin.y, inicio.y);
         StringBuilder sb = new StringBuilder();
-
         int f = inicio.x, c = inicio.y;
         while (true) {
-            
             if (f < 0 || f >= filas || c < 0 || c >= columnas) break;
             sb.append(tablero[f][c]);
             if (f == fin.x && c == fin.y) break;
             f += df;
             c += dc;
         }
-        
         return sb.toString();
     }
 
+    /** Resalta visualmente las letras de una palabra encontrada. */
     private void resaltarPalabra(Point inicio, Point fin) {
         int df = Integer.compare(fin.x, inicio.x);
         int dc = Integer.compare(fin.y, inicio.y);
         int f = inicio.x, c = inicio.y;
         Component[] comps = panelTablero.getComponents();
-
         while (true) {
             int idx = f * columnas + c;
-            if (idx >= 0 && idx < comps.length) {
-                comps[idx].setBackground(Color.GREEN);
-            }
+            if (idx >= 0 && idx < comps.length) comps[idx].setBackground(Color.GREEN);
             if (f == fin.x && c == fin.y) break;
             f += df;
             c += dc;
@@ -258,6 +247,8 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
     // ---------------------------------------------------
     // 🧩 Actualizar definiciones y puntaje
     // ---------------------------------------------------
+
+    /** Actualiza el área de texto con las definiciones pendientes. */
     private void actualizarDefiniciones() {
         StringBuilder sb = new StringBuilder();
         for (String palabra : palabras.keySet()) {
@@ -268,6 +259,7 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         areaDefiniciones.setText(sb.toString());
     }
 
+    /** Calcula el puntaje obtenido según las palabras encontradas. */
     @Override
     public void verificar() {
         int total = palabras.size();
@@ -276,14 +268,16 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         puntajeObtenido = (int) (proporcion * puntaje);
     }
 
+    /** Aplica un generador aleatorio para cambiar el orden del tablero. */
     @Override
     public void aplicarRandom(Random r) {
         this.random = r;
         this.aleatoria = true;
-        v=true;
+        v = true;
         construirPanel();
     }
 
+    /** Devuelve el detalle de las palabras encontradas y el puntaje obtenido. */
     @Override
     public String detalle() {
         StringBuilder sb = new StringBuilder();
@@ -301,18 +295,20 @@ public class SopaDeLetrasPanel extends Ejercicios implements Serializable{
         sb.append("Puntaje obtenido: ").append(puntajeObtenido).append("/").append(puntaje).append("\n");
         return sb.toString();
     }
-    public void setAleatorio(boolean aleatorio){
-        this.aleatoria=aleatorio;
+
+    /** Define si el tablero debe generarse de forma aleatoria. */
+    public void setAleatorio(boolean aleatorio) {
+        this.aleatoria = aleatorio;
     }
-    
-    
-    public void borrarSeleccion(){
+
+    /** Limpia las palabras encontradas. */
+    public void borrarSeleccion() {
         this.encontradas.clear();
     }
-    
-    
-    public Ejercicios copiar(){
-        SopaDeLetrasPanel copia = new SopaDeLetrasPanel(enunciado, new LinkedHashMap<>(palabras),puntaje);
+
+    /** Crea una copia del ejercicio con su estado actual. */
+    public Ejercicios copiar() {
+        SopaDeLetrasPanel copia = new SopaDeLetrasPanel(enunciado, new LinkedHashMap<>(palabras), puntaje);
         copia.encontradas.addAll(encontradas);
         copia.setAleatorio(aleatoria);
         this.encontradas.clear();
