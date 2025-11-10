@@ -989,7 +989,7 @@ public class ProyectoPOO extends JFrame {
                        if (eva1 != null && eva1.getIdentificacion()==idInt) {
                            abrirFrameConsulta(eva1);
                        } else {
-                           JOptionPane.showMessageDialog(this, "Evaluación no encontrada.");
+                           //JOptionPane.showMessageDialog(this, "Evaluación no encontrada.");
                        }
                    }
                } else {
@@ -5229,7 +5229,7 @@ public class ProyectoPOO extends JFrame {
             
             // ---------- Panel de identificación ----------
             JPanel panelIdentificacion = new JPanel(new BorderLayout());
-            JLabel lblIdentificacion = new JLabel("Identificacion del estudiante: ", SwingConstants.CENTER);
+            JLabel lblIdentificacion = new JLabel("Identificacion del curso: ", SwingConstants.CENTER);
             lblIdentificacion.setFont(new Font("Arial", Font.BOLD, 16));
 
             JTextField txtIdentificacion = new JTextField();
@@ -6160,7 +6160,7 @@ public class ProyectoPOO extends JFrame {
                     this.dispose();
                     abrirProfesor(ventanaPrincipal,tipoUsuario,prof);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Evaluación no encontrada o sin fechas.");
+                    //JOptionPane.showMessageDialog(this, "Evaluación no encontrada o sin fechas.");
                 }
             }
             }else{
@@ -6352,7 +6352,7 @@ public class ProyectoPOO extends JFrame {
         this.claveBuscada = est.getNombre();
   
 
-        setTitle("Evaluaciones realizadas");
+        setTitle("Desempeño Personal");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new FlowLayout());
@@ -6422,7 +6422,7 @@ public class ProyectoPOO extends JFrame {
         }
         //Opcion si no se generan botones
         if (!hayBotones) {
-            add(new JLabel("No se encontraron evaluaciones disponibles para iniciar."));
+            add(new JLabel("No se encontraron evaluaciones realizadas para observar."));
             JButton btnSalir = new JButton("Salir");
             add(btnSalir);
             btnSalir.addActionListener(e ->{

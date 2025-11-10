@@ -621,6 +621,11 @@ public class Evaluaciones implements Serializable{
         JOptionPane.showMessageDialog(frame,"Evaluación finalizada en "+((fin-inicio)/1000)+" seg");
         for (Ejercicios e :ejercicios){
             e.borrarSeleccion();
+            if (e instanceof VerdaderoFalsoPanel) {
+                System.out.println("Es un ejercicio de VF");
+                ((VerdaderoFalsoPanel) e).setOpciones(new ArrayList<>(Arrays.asList("Verdadero", "Falso")));
+                ((VerdaderoFalsoPanel) e).setEsVerdad();
+            }
         }
         
         frame.dispose();

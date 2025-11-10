@@ -162,7 +162,14 @@ public class VerdaderoFalsoPanel extends Ejercicios implements Serializable {
     public void setOpciones(ArrayList<String> opciones) {
         this.opciones = new ArrayList<>(opciones);
     }
-
+    
+    
+    public void setEsVerdad(){
+        this.correcta = esVerdaderoE ? 0 : 1;
+    }
+    
+    
+    
     /**
      * Crea una copia del ejercicio Verdadero/Falso actual,
      * conservando los valores del enunciado, puntaje y selección.

@@ -368,7 +368,7 @@ public class Sistema implements Serializable {
     public void ReporteEstudiantesCurso() {
         Document documento = new Document();
         try {
-            PdfWriter.getInstance(documento, new FileOutputStream("ListaEstudiantes.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream("datos/matriculaycalificaciones/ListaEstudiantes.pdf"));
             documento.open();
             documento.add(new Paragraph("Lista de estudiantes:"));
             for (Cursos c : cursos) {
@@ -401,7 +401,7 @@ public class Sistema implements Serializable {
     public void ReporteEvaluacionesDetalle(int idEvaluacion) {
         Document documento = new Document();
         try {
-            PdfWriter.getInstance(documento, new FileOutputStream("DetalleEvaluacion.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream("datos/matriculaycalificaciones/DetalleEvaluacion.pdf"));
             documento.open();
             documento.add(new Paragraph("Detalle de la evaluacion: "));
             for (Evaluaciones e : evaluaciones) {
@@ -426,7 +426,7 @@ public class Sistema implements Serializable {
         switch (opcion) {
             case 1:
                 try {
-                    PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
+                    PdfWriter.getInstance(documento, new FileOutputStream("datos/matriculaycalificaciones/EstadisticaMatricula.pdf"));
                     documento.open();
                     for (Cursos c : cursos) {
                         for (Grupos g : c.getGrupos()) {
@@ -443,7 +443,7 @@ public class Sistema implements Serializable {
                 return;
             case 2:
                 try {
-                    PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
+                    PdfWriter.getInstance(documento, new FileOutputStream("datos/matriculaycalificaciones/EstadisticaMatricula.pdf"));
                     documento.open();
                     for (Cursos c : cursos) {
                         if (c.getIdentificacion().equals(idCurso)) {
@@ -461,7 +461,7 @@ public class Sistema implements Serializable {
             case 3:
                 int idG = Integer.parseInt(idGrupo);
                 try {
-                    PdfWriter.getInstance(documento, new FileOutputStream("EstadisticaMatricula.pdf"));
+                    PdfWriter.getInstance(documento, new FileOutputStream("datos/matriculaycalificaciones/EstadisticaMatricula.pdf"));
                     documento.open();
                     for (Cursos c : cursos) {
                         if (c.getIdentificacion().equals(idCurso)) {
